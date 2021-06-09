@@ -2,7 +2,6 @@
 [![npm downloads](https://img.shields.io/npm/dt/svelte-sitemap.svg)](https://npm.im/svelte-sitemap)
 [![Package License](https://img.shields.io/npm/l/svelte-sitemap.svg)](https://www.npmjs.com/svelte-sitemap)
 [![Build & Publish](https://github.com/bartholomej/svelte-sitemap/workflows/Build%20&%20Publish/badge.svg)](https://github.com/bartholomej/svelte-sitemap/actions)
-[![codecov](https://codecov.io/gh/bartholomej/svelte-sitemap/branch/master/graph/badge.svg?token=YQH9UoVrGP)](https://codecov.io/gh/bartholomej/svelte-sitemap)
 
 # Svelte static sitemap.xml generator [beta/wip]
 
@@ -44,7 +43,7 @@ import { createSitemap } from './src/index';
 createSitemap('https://example.com', { debug: true });
 ```
 
-## Exapmle
+## Example
 
 Highly recommended to use as `postbuild` hook in you `package.json`
 
