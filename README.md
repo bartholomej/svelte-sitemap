@@ -32,8 +32,7 @@ npm install svelte-sitemap --save-dev
 svelte-sitemap --domain https://example.com
 ```
 
-1. Scanning your `src/routes` folder
-2. Generating `static/sitemap.xml` file
+It scans your `src/routes/` folder and generates `static/sitemap.xml` file
 
 ### JavaScript
 
@@ -51,7 +50,6 @@ Highly recommended to use as `prebuild` hook in you `package.json`
 {
   "name": "my-project",
   "scripts": {
-    "build": "tsc",
     "prebuild": "svelte-sitemap --domain https://mydomain.com"
   }
 }
@@ -88,6 +86,10 @@ You can find and modify it in [`./demo.ts`](./demo.ts) file
 ```bash
 yarn demo
 ```
+
+## Related
+
+You can watch this related feature request: [https://github.com/sveltejs/kit/issues/1142](https://github.com/sveltejs/kit/issues/1142)
 
 ## Donation
 
