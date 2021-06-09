@@ -1,14 +1,14 @@
 [![npm version](https://badge.fury.io/js/svelte-sitemap.svg)](https://badge.fury.io/js/svelte-sitemap)
-[![npm downloads](https://img.shields.io/npm/dt/svelte-sitemap.svg)](https://npm.im/svelte-sitemap)
 [![Package License](https://img.shields.io/npm/l/svelte-sitemap.svg)](https://www.npmjs.com/svelte-sitemap)
 [![Build & Publish](https://github.com/bartholomej/svelte-sitemap/workflows/Build%20&%20Publish/badge.svg)](https://github.com/bartholomej/svelte-sitemap/actions)
 
-# Svelte static sitemap.xml generator [beta/wip]
+# Svelte static sitemap.xml generator [beta]
 
 > Small helper which scans your Svelte routes folder and generates static sitemap.xml
 >
 > - TypeScript, JavaScript, CLI version
 > - Useful options
+> - Workaround for [official SvelteKit issue](https://github.com/sveltejs/kit/issues/1142)
 
 ## Install
 
@@ -86,10 +86,6 @@ You can find and modify it in [`./demo.ts`](./demo.ts) file
 ```bash
 yarn demo
 ```
-
-## Related
-
-You can watch this related feature request: [https://github.com/sveltejs/kit/issues/1142](https://github.com/sveltejs/kit/issues/1142)
 
 ## Donation
 
