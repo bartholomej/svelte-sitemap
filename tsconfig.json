@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "lib": ["dom"],
+    "types": ["node", "jest"],
+    "baseUrl": "./src",
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "strictNullChecks": false,
+    "sourceMap": false,
+    "outDir": "./dist",
+    "strict": true,
+    "declaration": true,
+    "pretty": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "alwaysStrict": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true
+  },
+  "include": ["src", "index.ts"],
+  "exclude": ["dist/**/*", "*/tests/**/*"]
+}
