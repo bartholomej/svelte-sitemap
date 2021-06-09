@@ -45,14 +45,14 @@ createSitemap('https://example.com', { debug: true });
 
 ## Example
 
-Highly recommended to use as `postbuild` hook in you `package.json`
+Highly recommended to use as `prebuild` hook in you `package.json`
 
 ```json
 {
   "name": "my-project",
   "scripts": {
     "build": "tsc",
-    "postbuild": "svelte-sitemap --domain https://mydomain.com"
+    "prebuild": "svelte-sitemap --domain https://mydomain.com"
   }
 }
 ```
