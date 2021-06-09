@@ -1,7 +1,6 @@
-import { writeFile } from 'fs';
-import glob from 'glob';
+import fs, { writeFile } from 'fs';
 import { Options } from 'interfaces/global.interface';
-import { promisify } from 'util';
+import path from 'path';
 import xml from 'xml';
 
 interface Page {
@@ -12,61 +11,70 @@ interface Page {
 }
 const ROUTES = 'src/routes';
 
-const writeFileAsync = promisify(writeFile);
-
 /**
  * Main wrapper
  * @param {string} domain Your domain
  */
 export const buildSitemap = (domain: string, options: Options): void => {
-  gatherFiles(domain, options);
+  const files = getFiles(options);
+  assembleXML(files, domain, options);
+};
+
+const walkSync = (dir: string, filelist: string[] = []) => {
+  fs.readdirSync(dir).forEach((file) => {
+    filelist = fs.statSync(path.join(dir, file)).isDirectory()
+      ? walkSync(path.join(dir, file), filelist)
+      : filelist.concat(path.join(dir, file));
+  });
+  return filelist;
 };
 
 /**
  * Gathering files from subolders
- * @param {string} domain Your domain
+ * @param {string} options some options
  */
-const gatherFiles = (domain: string, opt: Options) => {
-  glob(`${ROUTES}/**/*`, (err: any, res: string[]): void => {
-    if (err) {
-      console.error('Error reading files', err);
-    } else {
-      if (!res?.length) {
-        console.error(
-          'No routes found in you project... Make sure you have this folder created:',
-          ROUTES
-        );
-        return;
-      }
-      const pages: Page[] = [];
-      res.forEach((route) => {
-        const splitted = route.split('/');
-        const routesCleaned = splitted.splice(2, 5).join('/');
-        // Excluding svelte files
-        const slug = routesCleaned.replace('/index.svelte', '').replace('.svelte', '');
-        if (slug !== 'index' && slug.includes('__') === false) {
-          pages.push({
-            lastModified: new Date().toISOString().slice(0, 10),
-            title: slug,
-            created: new Date().toISOString().slice(0, 10),
-            slug
-          });
-        }
+export const getFiles = (options: Options): Page[] => {
+  const pages: Page[] = [];
+
+  const paths = walkSync(ROUTES);
+
+  if (!paths?.length) {
+    console.error(
+      'No routes found in you project... Make sure you have this folder created:',
+      ROUTES
+    );
+    return [];
+  }
+
+  paths.forEach((route) => {
+    const splitted = route.split('/');
+
+    const routesCleaned = splitted.splice(2, 5).join('/');
+    // Excluding svelte files
+    const slug = routesCleaned.replace('/index.svelte', '').replace('.svelte', '');
+    if (slug !== 'index' && slug.includes('__') === false) {
+      pages.push({
+        lastModified: new Date().toISOString().slice(0, 10),
+        title: slug,
+        created: new Date().toISOString().slice(0, 10),
+        slug
       });
-      if (opt?.debug) {
-        console.log('pages', pages);
-      }
-      assembleXML(pages, domain, opt);
     }
   });
+
+  if (options?.debug) {
+    console.log('pages', pages);
+  }
+  return pages;
 };
+
 /**
  * Assemble xml and create file
  * @param {string[]} pages List of pages
  * @param {string} domain Your domain
  * @param {string} options Some useful options
  */
-export const assembleXML = async (pages: Page[], domain: string, options: Options) => {
+export const assembleXML = (pages: Page[], domain: string, options: Options) => {
   const indexItem = {
     // build index item
     url: [
@@ -130,6 +138,9 @@ export const assembleXML = async (pages: Page[], domain: string, options: Option
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>${xml(sitemapObject)}`;
 
-  await writeFileAsync('./static/sitemap.xml', sitemap, 'utf8');
-  console.log('\x1b[32m', `File './static/sitemap.xml' has been created.`, '\x1b[0m');
+  writeFile('./static/sitemap.xml', sitemap, (err) => {
+    if (!err) {
+      console.log('\x1b[32m', `File './static/sitemap.xml' has been created.`, '\x1b[0m');
+    }
+  });
 };
