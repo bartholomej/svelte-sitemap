@@ -10,7 +10,16 @@ let stop = false;
 
 const args = minimist(process.argv.slice(2), {
   string: ['domain', 'debug', 'version'],
-  alias: { d: 'domain', D: 'domain', h: 'help', H: 'help', v: 'version', V: 'version' },
+  alias: {
+    d: 'domain',
+    D: 'domain',
+    h: 'help',
+    H: 'help',
+    v: 'version',
+    V: 'version',
+    r: 'reset-time',
+    R: 'reset-time'
+  },
   unknown: (err: string) => {
     console.log('⚠ Those arguments are not supported:', err);
     console.log('Use: `svelte-sitemap --help` for more options.\n');
@@ -28,6 +37,7 @@ if (args.help || args.version === '' || args.version === true) {
   log('Options:');
   log('');
   log('  -d, --domain            Use your domain (eg. https://example.com)');
+  log('  -r, --reset-time        Set modified time to now');
   log('  -v, --version           Show version');
   log('  --debug                 Debug mode');
   log(' ');
@@ -47,7 +57,8 @@ if (args.help || args.version === '' || args.version === true) {
 } else {
   const domain = args.domain ? args.domain : undefined;
   const debug = args.debug === '' || args.debug === true ? true : false;
-  const options = { debug };
+  const resetTime = args['reset-time'] === '' || args['reset-time'] === true ? true : false;
+  const options = { debug, resetTime };
 
   createSitemap(domain, options);
 }

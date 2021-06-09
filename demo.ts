@@ -1,3 +1,3 @@
 import { createSitemap } from './src/index';
 
-createSitemap('https://example.com', { debug: true });
+createSitemap('https://example.com', { debug: true, resetTime: true });

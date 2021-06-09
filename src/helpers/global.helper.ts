@@ -5,10 +5,17 @@ import xml from 'xml';
 
 interface Page {
   title: string;
-  lastModified: string;
   slug: string;
+  lastModified: string;
   created: string;
 }
+
+interface File {
+  file: string;
+  created: number;
+  modified: number;
+}
+
 const ROUTES = 'src/routes';
 
 /**
@@ -20,11 +27,15 @@ export const buildSitemap = (domain: string, options: Options): void => {
   assembleXML(files, domain, options);
 };
 
-const walkSync = (dir: string, filelist: string[] = []) => {
+const walkSync = (dir: string, filelist: any[] = []) => {
   fs.readdirSync(dir).forEach((file) => {
+    const filePath = path.join(dir, file);
+    const created = fs.statSync(filePath).ctime;
+    const modified = fs.statSync(filePath).mtime;
+
     filelist = fs.statSync(path.join(dir, file)).isDirectory()
       ? walkSync(path.join(dir, file), filelist)
-      : filelist.concat(path.join(dir, file));
+      : filelist.concat({ file: filePath, created, modified });
   });
   return filelist;
 };
@@ -46,17 +57,21 @@ export const getFiles = (options: Options): Page[] => {
     return [];
   }
 
-  paths.forEach((route) => {
-    const splitted = route.split('/');
+  paths.forEach((route: File) => {
+    const fileRaw = route.file.split('/');
 
-    const routesCleaned = splitted.splice(2, 5).join('/');
+    const file = fileRaw.splice(2, 10).join('/');
     // Excluding svelte files
-    const slug = routesCleaned.replace('/index.svelte', '').replace('.svelte', '');
+    const slug = file.replace('/index.svelte', '').replace('.svelte', '');
     if (slug !== 'index' && slug.includes('__') === false) {
       pages.push({
-        lastModified: new Date().toISOString().slice(0, 10),
+        lastModified: (options.resetTime ? new Date() : new Date(route.modified))
+          .toISOString()
+          .slice(0, 10),
         title: slug,
-        created: new Date().toISOString().slice(0, 10),
+        created: (options.resetTime ? new Date() : new Date(route.created))
+          .toISOString()
+          .slice(0, 10),
         slug
       });
     }
@@ -103,9 +118,9 @@ export const assembleXML = (pages: Page[], domain: string, options: Options) => 
       items: { url: [{ loc: string }, { lastmod: string }] }[],
       item: {
         title: string;
+        slug: string;
         lastModified?: string;
         created: string;
-        slug: string;
       }
     ) => {
       // build page items

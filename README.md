@@ -57,12 +57,13 @@ Highly recommended to use as `prebuild` hook in you `package.json`
 
 ## Options
 
-| Option        | Description                | default               | example                   |
-| ------------- | -------------------------- | --------------------- | ------------------------- |
-| -h, --help    | Display this usage info    | -                     | -                         |
-| -v, --version | Show version               | -                     | -                         |
-| -d, --domain  | Use your domain (required) | `https://example.com` | `-d https://mydomain.com` |
-| --debug       | Show some useful logs      | -                     | `--debug`                 |
+| Option           | Description                  | default               | example                   |
+| ---------------- | ---------------------------- | --------------------- | ------------------------- |
+| -d, --domain     | Use your domain (required)   | `https://example.com` | `-d https://mydomain.com` |
+| -r, --reset-time | Set lastModified time to now | false                 | `-r`                      |
+| -h, --help       | Display this usage info      | -                     | -                         |
+| -v, --version    | Show version                 | -                     | -                         |
+| --debug          | Show some useful logs        | -                     | `--debug`                 |
 
 ## Development
 

@@ -4,5 +4,6 @@ export interface Arguments {
 }
 
 export interface Options {
-  debug: boolean;
+  debug?: boolean;
+  resetTime?: boolean;
 }
