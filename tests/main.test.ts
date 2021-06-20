@@ -1,47 +1,126 @@
-import { getFiles } from '../src/helpers/global.helper';
+import { buildSitemap } from '../src/helpers/global.helper';
+import { PagesJson } from '../src/interfaces/global.interface';
 
-// User Ratings
-describe('Create default sitemap', () => {
-  test('Default sitemap', () => {
-    const files = getFiles({ debug: false });
+const sortbyPage = (json: PagesJson[]) => json.sort((a, b) => a.page.localeCompare(b.page));
 
-    expect(files).toMatchObject([
-      {
-        lastModified: '2021-06-09',
-        title: 'homepage',
-        created: '2021-06-09',
-        slug: 'homepage'
-      },
-      {
-        lastModified: '2021-06-09',
-        title: 'page1',
-        created: '2021-06-09',
-        slug: 'page1'
-      },
-      {
-        lastModified: '2021-06-09',
-        title: 'page1/subpage1',
-        created: '2021-06-09',
-        slug: 'page1/subpage1'
-      },
-      {
-        lastModified: '2021-06-09',
-        title: 'page2',
-        created: '2021-06-09',
-        slug: 'page2'
-      },
-      {
-        lastModified: '2021-06-09',
-        title: 'page2/subpage2',
-        created: '2021-06-09',
-        slug: 'page2/subpage2'
-      },
-      {
-        lastModified: '2021-06-09',
-        title: 'page2/subpage2/subsubpage2',
-        created: '2021-06-09',
-        slug: 'page2/subpage2/subsubpage2'
-      }
-    ]);
+// Sitemap
+describe('Create JSON model', () => {
+  test('Default sitemap', async () => {
+    const json = await buildSitemap('https://example.com');
+
+    expect(sortbyPage(json)).toMatchObject(
+      sortbyPage([
+        {
+          page: 'https://example.com/',
+          changeFreq: '',
+          lastMod: ''
+        },
+        {
+          page: 'https://example.com/page1/',
+          changeFreq: '',
+          lastMod: ''
+        },
+        {
+          page: 'https://example.com/page2/',
+          changeFreq: '',
+          lastMod: ''
+        },
+        {
+          page: 'https://example.com/page1/subpage1/',
+          changeFreq: '',
+          lastMod: ''
+        },
+        {
+          page: 'https://example.com/page2/subpage2/',
+          changeFreq: '',
+          lastMod: ''
+        },
+        {
+          page: 'https://example.com/page2/subpage2/subsubpage2/',
+          changeFreq: '',
+          lastMod: ''
+        }
+      ])
+    );
+  });
+
+  test('Sitemap with frequency', async () => {
+    const json = await buildSitemap('https://example.com', { changeFreq: 'daily' });
+
+    expect(sortbyPage(json)).toMatchObject(
+      sortbyPage([
+        {
+          page: 'https://example.com/',
+          changeFreq: 'daily',
+          lastMod: ''
+        },
+        {
+          page: 'https://example.com/page1/',
+          changeFreq: 'daily',
+          lastMod: ''
+        },
+        {
+          page: 'https://example.com/page2/',
+          changeFreq: 'daily',
+          lastMod: ''
+        },
+        {
+          page: 'https://example.com/page1/subpage1/',
+          changeFreq: 'daily',
+          lastMod: ''
+        },
+        {
+          page: 'https://example.com/page2/subpage2/',
+          changeFreq: 'daily',
+          lastMod: ''
+        },
+        {
+          page: 'https://example.com/page2/subpage2/subsubpage2/',
+          changeFreq: 'daily',
+          lastMod: ''
+        }
+      ])
+    );
+  });
+
+  test('Sitemap with frequency', async () => {
+    const json = await buildSitemap('https://example.com', { resetTime: true });
+
+    const today = new Date().toISOString().split('T')[0];
+
+    expect(sortbyPage(json)).toMatchObject(
+      sortbyPage([
+        {
+          page: 'https://example.com/',
+          changeFreq: '',
+          lastMod: today
+        },
+        {
+          page: 'https://example.com/page1/',
+          changeFreq: '',
+          lastMod: today
+        },
+        {
+          page: 'https://example.com/page2/',
+          changeFreq: '',
+          lastMod: today
+        },
+        {
+          page: 'https://example.com/page1/subpage1/',
+          changeFreq: '',
+          lastMod: today
+        },
+        {
+          page: 'https://example.com/page2/subpage2/',
+          changeFreq: '',
+          lastMod: today
+        },
+        {
+          page: 'https://example.com/page2/subpage2/subsubpage2/',
+          changeFreq: '',
+          lastMod: today
+        }
+      ])
+    );
   });
 });

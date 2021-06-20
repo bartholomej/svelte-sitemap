@@ -5,5 +5,14 @@ export interface Arguments {
 
 export interface Options {
   debug?: boolean;
+  changeFreq?: ChangeFreq;
   resetTime?: boolean;
 }
+
+export interface PagesJson {
+  page: string;
+  changeFreq?: ChangeFreq;
+  lastMod?: string;
+}
+
+type ChangeFreq = 'weekly' | 'daily' | string;
