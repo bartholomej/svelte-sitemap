@@ -3,11 +3,11 @@ import fs from 'fs';
 import { create } from 'xmlbuilder2';
 import { Options, PagesJson } from '../interfaces/global.interface';
 
-const PATH_BUILD = './src/build/';
+const PATH_BUILD = 'build/';
 
 const getUrl = (url: string, domain: string) => {
   const slash = domain.split('/').pop() ? '/' : '';
-  const trimmed = url.slice(12).replace('index.html', '');
+  const trimmed = url.split(PATH_BUILD).pop().replace('index.html', '');
   return `${domain}${slash}${trimmed}`;
 };
 
@@ -41,5 +41,5 @@ export const writeSitemap = (items: PagesJson[]): void => {
   }
   const xml = sitemap.end({ prettyPrint: true });
 
-  fs.writeFileSync(`${PATH_BUILD}/sitemap.xml`, xml);
+  fs.writeFileSync(`${PATH_BUILD}sitemap.xml`, xml);
 };
