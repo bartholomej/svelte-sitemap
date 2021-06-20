@@ -17,7 +17,7 @@
     "lint": "eslint ./src/**/**/* --fix",
     "test": "jest",
     "test:coverage": "jest --collect-coverage",
-    "postinstall": "npx husky install",
+    "postinstall": "npx husky install && cp -r ./src/build ./build",
     "postversion": "git push && git push --follow-tags",
     "publish:next": "yarn && yarn build && npm publish --folder dist --tag beta",
     "release:beta": "npm version prerelease -m \"chore(update): prelease %s β\"",
