@@ -26,8 +26,7 @@
     "release:major": "git checkout master && npm version major -m \"chore(update): major release %s 💥 \""
   },
   "dependencies": {
-    "minimist": "^1.2.5",
-    "xml": "^1.0.1"
+    "minimist": "^1.2.5"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.13.0",
@@ -41,6 +40,7 @@
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
+    "fast-glob": "^3.2.5",
     "glob": "^7.1.7",
     "husky": "^6.0.0",
     "jest": "^27.0.4",
@@ -50,7 +50,8 @@
     "rimraf": "^3.0.2",
     "ts-jest": "^27.0.3",
     "ts-node": "^10.0.0",
-    "typescript": "^4.3.2"
+    "typescript": "^4.3.2",
+    "xmlbuilder2": "^2.4.1"
   },
   "repository": {
     "url": "git+https://github.com/bartholomej/svelte-sitemap.git",
