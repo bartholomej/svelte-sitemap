@@ -15,4 +15,4 @@ export interface PagesJson {
   lastMod?: string;
 }
 
-type ChangeFreq = 'weekly' | 'daily' | string;
+export type ChangeFreq = 'weekly' | 'daily' | string;

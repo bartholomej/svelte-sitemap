@@ -3,13 +3,14 @@
 import minimist from 'minimist';
 import { version } from './package.json';
 import { createSitemap } from './src/index';
+import { ChangeFreq, Options } from './src/interfaces/global.interface';
 
 const REPO_URL = 'https://github.com/bartholomej/svelte-sitemap';
 
 let stop = false;
 
 const args = minimist(process.argv.slice(2), {
-  string: ['domain', 'debug', 'version'],
+  string: ['domain', 'debug', 'version', 'change-freq'],
   alias: {
     d: 'domain',
     D: 'domain',
@@ -18,7 +19,9 @@ const args = minimist(process.argv.slice(2), {
     v: 'version',
     V: 'version',
     r: 'reset-time',
-    R: 'reset-time'
+    R: 'reset-time',
+    c: 'change-freq',
+    C: 'change-freq'
   },
   unknown: (err: string) => {
     console.log('⚠ Those arguments are not supported:', err);
@@ -38,6 +41,7 @@ if (args.help || args.version === '' || args.version === true) {
   log('');
   log('  -d, --domain            Use your domain (eg. https://example.com)');
   log('  -r, --reset-time        Set modified time to now');
+  log('  -c, --change-freq       Set change frequency `weekly` | `daily` | ...');
   log('  -v, --version           Show version');
   log('  --debug                 Debug mode');
   log(' ');
@@ -55,10 +59,12 @@ if (args.help || args.version === '' || args.version === true) {
 } else if (stop) {
   // Do nothing if there is something suspicious
 } else {
-  const domain = args.domain ? args.domain : undefined;
-  const debug = args.debug === '' || args.debug === true ? true : false;
-  const resetTime = args['reset-time'] === '' || args['reset-time'] === true ? true : false;
-  const options = { debug, resetTime };
+  const domain: string = args.domain ? args.domain : undefined;
+  const debug: boolean = args.debug === '' || args.debug === true ? true : false;
+  const resetTime: boolean =
+    args['reset-time'] === '' || args['reset-time'] === true ? true : false;
+  const changeFreq: ChangeFreq = args['change-freq'];
+  const options: Options = { debug, resetTime, changeFreq };
 
   createSitemap(domain, options);
 }
