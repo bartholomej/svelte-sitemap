@@ -8,7 +8,7 @@
 >
 > - TypeScript, JavaScript, CLI version
 > - Useful options
-> - Workaround for [official SvelteKit issue](https://github.com/sveltejs/kit/issues/1142)
+> - Workaround for [this official SvelteKit issue](https://github.com/sveltejs/kit/issues/1142)
 
 ## Install
 
@@ -87,6 +87,12 @@ You can find and modify it in [`./demo.ts`](./demo.ts) file
 ```bash
 yarn demo
 ```
+
+## Credits
+
+- svelte-sitemap is workaround for [this official SvelteKit issue](https://github.com/sveltejs/kit/issues/1142)
+- Brand new version is inspired by [Richard's article](https://r-bt.com/learning/sveltekit-sitemap/)
+- Thanks to [@auderer](https://github.com/auderer) because [his issue](https://github.com/bartholomej/svelte-sitemap/issues/1) change the direction of this library
 
 ## Donation
 
