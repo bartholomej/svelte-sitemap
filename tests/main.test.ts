@@ -1,4 +1,4 @@
-import { buildSitemap } from '../src/helpers/global.helper';
+import { prepareData } from '../src/helpers/global.helper';
 import { PagesJson } from '../src/interfaces/global.interface';
 
 const sortbyPage = (json: PagesJson[]) => json.sort((a, b) => a.page.localeCompare(b.page));
@@ -6,7 +6,7 @@ const sortbyPage = (json: PagesJson[]) => json.sort((a, b) => a.page.localeCompa
 // Sitemap
 describe('Create JSON model', () => {
   test('Default sitemap', async () => {
-    const json = await buildSitemap('https://example.com');
+    const json = await prepareData('https://example.com');
 
     expect(sortbyPage(json)).toMatchObject(
       sortbyPage([
@@ -45,7 +45,7 @@ describe('Create JSON model', () => {
   });
 
   test('Sitemap with frequency', async () => {
-    const json = await buildSitemap('https://example.com', { changeFreq: 'daily' });
+    const json = await prepareData('https://example.com', { changeFreq: 'daily' });
 
     expect(sortbyPage(json)).toMatchObject(
       sortbyPage([
@@ -84,7 +84,7 @@ describe('Create JSON model', () => {
   });
 
   test('Sitemap with frequency', async () => {
-    const json = await buildSitemap('https://example.com', { resetTime: true });
+    const json = await prepareData('https://example.com', { resetTime: true });
 
     const today = new Date().toISOString().split('T')[0];
 
