@@ -33,7 +33,7 @@ npm install svelte-sitemap --save-dev
 svelte-sitemap --domain https://example.com
 ```
 
-It scans your `src/routes/` folder and generates `static/sitemap.xml` file
+It scans your routes in `build/` folder and generates `build/sitemap.xml` file
 
 ### JavaScript
 
