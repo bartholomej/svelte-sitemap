@@ -2,12 +2,13 @@
 [![Package License](https://img.shields.io/npm/l/svelte-sitemap.svg)](https://www.npmjs.com/svelte-sitemap)
 [![Build & Publish](https://github.com/bartholomej/svelte-sitemap/workflows/Build%20&%20Publish/badge.svg)](https://github.com/bartholomej/svelte-sitemap/actions)
 
-# Svelte static sitemap.xml generator [beta]
+# Svelte static sitemap.xml generator
 
-> Small helper which scans your Svelte routes folder and generates static sitemap.xml
+> Small helper which scans your Svelte routes and generates static sitemap.xml
 >
 > - TypeScript, JavaScript, CLI version
 > - Useful options
+> - Compatible with Svelte `adapter-static`
 > - Workaround for [this official SvelteKit issue](https://github.com/sveltejs/kit/issues/1142)
 
 ## Install
@@ -92,7 +93,7 @@ yarn demo
 
 - svelte-sitemap is workaround for [this official SvelteKit issue](https://github.com/sveltejs/kit/issues/1142)
 - Brand new version is inspired by [Richard's article](https://r-bt.com/learning/sveltekit-sitemap/)
-- Thanks to [@auderer](https://github.com/auderer) because [his issue](https://github.com/bartholomej/svelte-sitemap/issues/1) change the direction of this library
+- Thanks to [@auderer](https://github.com/auderer) because [his issue](https://github.com/bartholomej/svelte-sitemap/issues/1) changed the direction of this library
 
 ## Donation
 
