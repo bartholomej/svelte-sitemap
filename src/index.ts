@@ -1,6 +1,6 @@
 import { prepareData, writeSitemap } from './helpers/global.helper';
 import { Options } from './interfaces/global.interface';
-import { APP_NAME, DOMAIN } from './vars';
+import { APP_NAME, DOMAIN, OUT_DIR } from './vars';
 
 export const createSitemap = async (domain: string = DOMAIN, options?: Options) => {
   if (options?.debug) {
@@ -14,10 +14,12 @@ export const createSitemap = async (domain: string = DOMAIN, options?: Options) 
   }
 
   if (json.length) {
-    writeSitemap(json);
+    writeSitemap(json, options.outDir);
   } else {
     console.error(
-      `ERROR ${APP_NAME}: Make sure you are using this script as 'postbuild' so 'build' folder was sucefully created before this script`
+      `ERROR ${APP_NAME}: Make sure you are using this script as 'postbuild' so '${
+        options.outDir ?? OUT_DIR
+      }' folder was sucefully created before this script`
     );
   }
 };

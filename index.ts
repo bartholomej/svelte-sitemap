@@ -10,7 +10,7 @@ const REPO_URL = 'https://github.com/bartholomej/svelte-sitemap';
 let stop = false;
 
 const args = minimist(process.argv.slice(2), {
-  string: ['domain', 'debug', 'version', 'change-freq'],
+  string: ['domain', 'debug', 'version', 'change-freq', 'out-dir'],
   alias: {
     d: 'domain',
     D: 'domain',
@@ -18,6 +18,8 @@ const args = minimist(process.argv.slice(2), {
     H: 'help',
     v: 'version',
     V: 'version',
+    O: 'out-dir',
+    o: 'out-dir',
     r: 'reset-time',
     R: 'reset-time',
     c: 'change-freq',
@@ -40,6 +42,7 @@ if (args.help || args.version === '' || args.version === true) {
   log('Options:');
   log('');
   log('  -d, --domain            Use your domain (eg. https://example.com)');
+  log('  -o, --out-dir           Custom output dir');
   log('  -r, --reset-time        Set modified time to now');
   log('  -c, --change-freq       Set change frequency `weekly` | `daily` | ...');
   log('  -v, --version           Show version');
@@ -64,7 +67,8 @@ if (args.help || args.version === '' || args.version === true) {
   const resetTime: boolean =
     args['reset-time'] === '' || args['reset-time'] === true ? true : false;
   const changeFreq: ChangeFreq = args['change-freq'];
-  const options: Options = { debug, resetTime, changeFreq };
+  const outDir: string = args['out-dir'];
+  const options: Options = { debug, resetTime, changeFreq, outDir };
 
   createSitemap(domain, options);
 }
