@@ -7,6 +7,7 @@ export interface Options {
   debug?: boolean;
   changeFreq?: ChangeFreq;
   resetTime?: boolean;
+  outDir?: string;
 }
 
 export interface PagesJson {

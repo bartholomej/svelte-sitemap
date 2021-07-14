@@ -61,6 +61,7 @@ Highly recommended to use as `postbuild` hook in you `package.json`
 | Option           | Description                  | default               | example                   |
 | ---------------- | ---------------------------- | --------------------- | ------------------------- |
 | -d, --domain     | Use your domain (required)   | `https://example.com` | `-d https://mydomain.com` |
+| -o, --out-dir    | Set custum build folder      | `build`               | `-o dist`                 |
 | -r, --reset-time | Set lastModified time to now | false                 | `-r`                      |
 | -h, --help       | Display this usage info      | -                     | -                         |
 | -v, --version    | Show version                 | -                     | -                         |
