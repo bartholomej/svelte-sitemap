@@ -26,6 +26,7 @@
     "release:major": "git checkout master && npm version major -m \"chore(update): major release %s 💥 \""
   },
   "dependencies": {
+    "fast-glob": "^3.2.7",
     "minimist": "^1.2.5",
     "xmlbuilder2": "^2.4.1"
   },
@@ -41,8 +42,6 @@
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
-    "fast-glob": "^3.2.7",
-    "glob": "^7.1.7",
     "husky": "^7.0.1",
     "jest": "^27.0.6",
     "npm-prepare-dist": "^0.3.0",
