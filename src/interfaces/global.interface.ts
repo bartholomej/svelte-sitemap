@@ -8,6 +8,7 @@ export interface Options {
   changeFreq?: ChangeFreq;
   resetTime?: boolean;
   outDir?: string;
+  attribution?: boolean;
 }
 
 export interface PagesJson {

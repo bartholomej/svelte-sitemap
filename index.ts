@@ -11,6 +11,8 @@ let stop = false;
 
 const args = minimist(process.argv.slice(2), {
   string: ['domain', 'debug', 'version', 'change-freq', 'out-dir'],
+  boolean: ['attribution', 'reset-time'],
+  default: { attribution: true },
   alias: {
     d: 'domain',
     D: 'domain',
@@ -68,7 +70,9 @@ if (args.help || args.version === '' || args.version === true) {
     args['reset-time'] === '' || args['reset-time'] === true ? true : false;
   const changeFreq: ChangeFreq = args['change-freq'];
   const outDir: string = args['out-dir'];
-  const options: Options = { debug, resetTime, changeFreq, outDir };
+  const attribution: boolean =
+    args['attribution'] === '' || args['attribution'] === false ? false : true;
+  const options: Options = { debug, resetTime, changeFreq, outDir, attribution };
 
   createSitemap(domain, options);
 }

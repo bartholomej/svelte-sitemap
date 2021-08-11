@@ -14,7 +14,7 @@ export const createSitemap = async (domain: string = DOMAIN, options?: Options) 
   }
 
   if (json.length) {
-    writeSitemap(json, options.outDir);
+    writeSitemap(json, options);
   } else {
     console.error(
       `ERROR ${APP_NAME}: Make sure you are using this script as 'postbuild' so '${
