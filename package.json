@@ -1,6 +1,6 @@
 {
   "name": "svelte-sitemap",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Small helper which scans your Svelte routes folder and generates static sitemap.xml",
   "main": "./dist/index.js",
   "author": "BART! <bart@bartweb.cz>",
