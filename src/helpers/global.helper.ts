@@ -17,8 +17,9 @@ const getUrl = (url: string, domain: string, outDir: string = OUT_DIR) => {
 
 export async function prepareData(domain: string, options?: Options): Promise<PagesJson[]> {
   console.log(cliColors.cyanAndBold, `> Using ${APP_NAME}`);
-  const pages = await fg([`${options?.outDir ?? OUT_DIR}/**/*.html`]);
 
+  const ignore = prepareIgnored(options?.ignore);
+  const pages: string[] = await fg(`${options?.outDir ?? OUT_DIR}/**/*.html`, { ignore });
   const results: PagesJson[] = pages.map((page) => {
     return {
       page: getUrl(page, domain, options?.outDir),
@@ -59,4 +60,16 @@ export const writeSitemap = (items: PagesJson[], options: Options): void => {
   } catch (e) {
     console.error(cliColors.red, errorMsg(outDir), e);
   }
+};
+
+const prepareIgnored = (
+  ignored: string | string[],
+  outDir: string = OUT_DIR
+): string[] | undefined => {
+  let ignore: string[] | undefined;
+  if (ignored) {
+    ignore = Array.isArray(ignored) ? ignored : [ignored];
+    ignore = ignore.map((ignoredPage) => `${outDir}/${ignoredPage}`);
+  }
+  return ignore;
 };

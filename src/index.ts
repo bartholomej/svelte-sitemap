@@ -3,7 +3,7 @@ import { cliColors, errorMsg } from './helpers/vars.helper';
 import { Options } from './interfaces/global.interface';
 import { DOMAIN, OUT_DIR } from './vars';
 
-export const createSitemap = async (domain: string = DOMAIN, options?: Options) => {
+export const createSitemap = async (domain: string = DOMAIN, options?: Options): Promise<void> => {
   if (options?.debug) {
     console.log('OPTIONS', options);
   }
