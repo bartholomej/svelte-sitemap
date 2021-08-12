@@ -4,6 +4,7 @@ import { create } from 'xmlbuilder2';
 import { version } from '../../package.json';
 import { Options, PagesJson } from '../interfaces/global.interface';
 import { APP_NAME, OUT_DIR } from '../vars';
+import { cliColors, errorMsg, successMsg } from './vars.helper';
 
 const getUrl = (url: string, domain: string, outDir: string = OUT_DIR) => {
   const slash = domain.split('/').pop() ? '/' : '';
@@ -15,6 +16,7 @@ const getUrl = (url: string, domain: string, outDir: string = OUT_DIR) => {
 };
 
 export async function prepareData(domain: string, options?: Options): Promise<PagesJson[]> {
+  console.log(cliColors.cyanAndBold, `> Using ${APP_NAME}`);
   const pages = await fg([`${options?.outDir ?? OUT_DIR}/**/*.html`]);
 
   const results: PagesJson[] = pages.map((page) => {
@@ -53,11 +55,8 @@ export const writeSitemap = (items: PagesJson[], options: Options): void => {
 
   try {
     fs.writeFileSync(`${outDir}/sitemap.xml`, xml);
-    console.log(`${APP_NAME}: sitemap.xml created. Check your '${outDir}' folder...`);
+    console.log(cliColors.green, successMsg(outDir));
   } catch (e) {
-    console.error(
-      `ERROR ${APP_NAME}: Make sure you are using this script as 'postbuild' so build folder was sucefully created before this script`,
-      e
-    );
+    console.error(cliColors.red, errorMsg(outDir), e);
   }
 };
