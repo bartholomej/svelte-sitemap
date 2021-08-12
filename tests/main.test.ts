@@ -124,3 +124,56 @@ describe('Create JSON model', () => {
     );
   });
 });
+
+test('Sitemap ignore **/page2', async () => {
+  const json = await prepareData('https://example.com', { ignore: '**/page2', debug: true });
+
+  expect(sortbyPage(json)).toMatchObject(
+    sortbyPage([
+      {
+        page: 'https://example.com/',
+        changeFreq: '',
+        lastMod: ''
+      },
+      {
+        page: 'https://example.com/page1/',
+        changeFreq: '',
+        lastMod: ''
+      },
+      {
+        page: 'https://example.com/page1/subpage1/',
+        changeFreq: '',
+        lastMod: ''
+      }
+    ])
+  );
+});
+
+test('Sitemap ignore Page1', async () => {
+  const json = await prepareData('https://example.com', { ignore: 'page1', debug: true });
+
+  expect(sortbyPage(json)).toMatchObject(
+    sortbyPage([
+      {
+        page: 'https://example.com/',
+        changeFreq: '',
+        lastMod: ''
+      },
+      {
+        page: 'https://example.com/page2/',
+        changeFreq: '',
+        lastMod: ''
+      },
+      {
+        page: 'https://example.com/page2/subpage2/',
+        changeFreq: '',
+        lastMod: ''
+      },
+      {
+        page: 'https://example.com/page2/subpage2/subsubpage2/',
+        changeFreq: '',
+        lastMod: ''
+      }
+    ])
+  );
+});

@@ -10,7 +10,7 @@ const REPO_URL = 'https://github.com/bartholomej/svelte-sitemap';
 let stop = false;
 
 const args = minimist(process.argv.slice(2), {
-  string: ['domain', 'debug', 'version', 'change-freq', 'out-dir'],
+  string: ['domain', 'debug', 'version', 'change-freq', 'out-dir', 'ignore'],
   boolean: ['attribution', 'reset-time'],
   default: { attribution: true },
   alias: {
@@ -25,7 +25,9 @@ const args = minimist(process.argv.slice(2), {
     r: 'reset-time',
     R: 'reset-time',
     c: 'change-freq',
-    C: 'change-freq'
+    C: 'change-freq',
+    i: 'ignore',
+    I: 'ignore'
   },
   unknown: (err: string) => {
     console.log('⚠ Those arguments are not supported:', err);
@@ -45,6 +47,7 @@ if (args.help || args.version === '' || args.version === true) {
   log('');
   log('  -d, --domain            Use your domain (eg. https://example.com)');
   log('  -o, --out-dir           Custom output dir');
+  log('  -i, --ignore            Exclude some pages or folders');
   log('  -r, --reset-time        Set modified time to now');
   log('  -c, --change-freq       Set change frequency `weekly` | `daily` | ...');
   log('  -v, --version           Show version');
@@ -70,9 +73,10 @@ if (args.help || args.version === '' || args.version === true) {
     args['reset-time'] === '' || args['reset-time'] === true ? true : false;
   const changeFreq: ChangeFreq = args['change-freq'];
   const outDir: string = args['out-dir'];
+  const ignore: string = args['ignore'];
   const attribution: boolean =
     args['attribution'] === '' || args['attribution'] === false ? false : true;
-  const options: Options = { debug, resetTime, changeFreq, outDir, attribution };
+  const options: Options = { debug, resetTime, changeFreq, outDir, attribution, ignore };
 
   createSitemap(domain, options);
 }

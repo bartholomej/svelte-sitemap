@@ -9,6 +9,7 @@ export interface Options {
   resetTime?: boolean;
   outDir?: string;
   attribution?: boolean;
+  ignore?: string | string[];
 }
 
 export interface PagesJson {
