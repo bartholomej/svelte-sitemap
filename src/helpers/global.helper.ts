@@ -6,12 +6,19 @@ import { Options, PagesJson } from '../interfaces/global.interface';
 import { APP_NAME, OUT_DIR } from '../vars';
 import { cliColors, errorMsg, successMsg } from './vars.helper';
 
-const getUrl = (url: string, domain: string, outDir: string = OUT_DIR) => {
-  const slash = domain.split('/').pop() ? '/' : '';
-  const trimmed = url
-    .split(outDir + '/')
+const getUrl = (url: string, domain: string, options: Options) => {
+  let slash = domain.split('/').pop() ? '/' : '';
+
+  let trimmed = url
+    .split(options?.outDir ?? OUT_DIR + '/')
     .pop()
     .replace('index.html', '');
+
+  // Remove trailing slashes
+  if (!options?.trailingSlashes) {
+    trimmed = trimmed.endsWith('/') ? trimmed.slice(0, -1) : trimmed;
+    slash = trimmed ? slash : '';
+  }
   return `${domain}${slash}${trimmed}`;
 };
 
@@ -22,7 +29,7 @@ export async function prepareData(domain: string, options?: Options): Promise<Pa
   const pages: string[] = await fg(`${options?.outDir ?? OUT_DIR}/**/*.html`, { ignore });
   const results: PagesJson[] = pages.map((page) => {
     return {
-      page: getUrl(page, domain, options?.outDir),
+      page: getUrl(page, domain, options),
       changeFreq: options?.changeFreq ?? '',
       lastMod: options?.resetTime ? new Date().toISOString().split('T')[0] : ''
     };

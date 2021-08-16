@@ -10,6 +10,7 @@ export interface Options {
   outDir?: string;
   attribution?: boolean;
   ignore?: string | string[];
+  trailingSlashes?: boolean;
 }
 
 export interface PagesJson {

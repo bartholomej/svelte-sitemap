@@ -10,9 +10,9 @@ const REPO_URL = 'https://github.com/bartholomej/svelte-sitemap';
 let stop = false;
 
 const args = minimist(process.argv.slice(2), {
-  string: ['domain', 'debug', 'version', 'change-freq', 'out-dir', 'ignore'],
-  boolean: ['attribution', 'reset-time'],
-  default: { attribution: true },
+  string: ['domain', 'out-dir', 'ignore', 'change-freq'],
+  boolean: ['attribution', 'reset-time', 'trailing-slashes', 'debug', 'version'],
+  default: { attribution: true, 'trailing-slashes': false, default: false },
   alias: {
     d: 'domain',
     D: 'domain',
@@ -48,6 +48,7 @@ if (args.help || args.version === '' || args.version === true) {
   log('  -d, --domain            Use your domain (eg. https://example.com)');
   log('  -o, --out-dir           Custom output dir');
   log('  -i, --ignore            Exclude some pages or folders');
+  log('  -t, --trailing-slashes  Do you like trailing slashes?');
   log('  -r, --reset-time        Set modified time to now');
   log('  -c, --change-freq       Set change frequency `weekly` | `daily` | ...');
   log('  -v, --version           Show version');
@@ -71,12 +72,22 @@ if (args.help || args.version === '' || args.version === true) {
   const debug: boolean = args.debug === '' || args.debug === true ? true : false;
   const resetTime: boolean =
     args['reset-time'] === '' || args['reset-time'] === true ? true : false;
+  const trailingSlashes: boolean =
+    args['trailing-slashes'] === '' || args['trailing-slashes'] === true ? true : false;
   const changeFreq: ChangeFreq = args['change-freq'];
   const outDir: string = args['out-dir'];
   const ignore: string = args['ignore'];
   const attribution: boolean =
     args['attribution'] === '' || args['attribution'] === false ? false : true;
-  const options: Options = { debug, resetTime, changeFreq, outDir, attribution, ignore };
+  const options: Options = {
+    debug,
+    resetTime,
+    changeFreq,
+    outDir,
+    attribution,
+    ignore,
+    trailingSlashes
+  };
 
   createSitemap(domain, options);
 }
