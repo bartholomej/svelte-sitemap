@@ -58,15 +58,16 @@ Highly recommended to use as `postbuild` hook in you `package.json`
 
 ## Options
 
-| Option           | Description                  | default               | example                                |
-| ---------------- | ---------------------------- | --------------------- | -------------------------------------- |
-| -d, --domain     | Use your domain (required)   | `https://example.com` | `-d https://mydomain.com`              |
-| -o, --out-dir    | Set custum build folder      | `build`               | `-o dist`                              |
-| -i, --ignore     | Ignore files or folders      | []                    | `-i '**/admin/**' -i 'my-secret-page'` |
-| -r, --reset-time | Set lastModified time to now | false                 | `-r`                                   |
-| -h, --help       | Display this usage info      | -                     | -                                      |
-| -v, --version    | Show version                 | -                     | -                                      |
-| --debug          | Show some useful logs        | -                     | `--debug`                              |
+| Option                 | Description                  | default               | example                                |
+| ---------------------- | ---------------------------- | --------------------- | -------------------------------------- |
+| -d, --domain           | Use your domain (required)   | `https://example.com` | `-d https://mydomain.com`              |
+| -o, --out-dir          | Set custum build folder      | `build`               | `-o dist`                              |
+| -i, --ignore           | Ignore files or folders      | []                    | `-i '**/admin/**' -i 'my-secret-page'` |
+| -t, --trailing-slashes | Add trailing slashes         | false                 | `--trailing-slashes`                   |
+| -r, --reset-time       | Set lastModified time to now | false                 | `-r`                                   |
+| -h, --help             | Display this usage info      | -                     | -                                      |
+| -v, --version          | Show version                 | -                     | -                                      |
+| --debug                | Show some useful logs        | -                     | `--debug`                              |
 
 ## FAQ
 
