@@ -83,7 +83,7 @@ describe('Create JSON model', () => {
     );
   });
 
-  test('Sitemap with frequency', async () => {
+  test('Sitemap with reset time', async () => {
     const json = await prepareData('https://example.com', { resetTime: true });
 
     const today = new Date().toISOString().split('T')[0];
@@ -210,6 +210,45 @@ test('Add trailing slashes', async () => {
       },
       {
         page: 'https://example.com/page2/subpage2/subsubpage2/',
+        changeFreq: '',
+        lastMod: ''
+      }
+    ])
+  );
+});
+
+test('Output dir', async () => {
+  const json = await prepareData('https://example.com', { outDir: 'build' });
+
+  expect(sortbyPage(json)).toMatchObject(
+    sortbyPage([
+      {
+        page: 'https://example.com',
+        changeFreq: '',
+        lastMod: ''
+      },
+      {
+        page: 'https://example.com/page1',
+        changeFreq: '',
+        lastMod: ''
+      },
+      {
+        page: 'https://example.com/page2',
+        changeFreq: '',
+        lastMod: ''
+      },
+      {
+        page: 'https://example.com/page1/subpage1',
+        changeFreq: '',
+        lastMod: ''
+      },
+      {
+        page: 'https://example.com/page2/subpage2',
+        changeFreq: '',
+        lastMod: ''
+      },
+      {
+        page: 'https://example.com/page2/subpage2/subsubpage2',
         changeFreq: '',
         lastMod: ''
       }

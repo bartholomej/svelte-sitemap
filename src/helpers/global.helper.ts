@@ -10,7 +10,7 @@ const getUrl = (url: string, domain: string, options: Options) => {
   let slash = domain.split('/').pop() ? '/' : '';
 
   let trimmed = url
-    .split(options?.outDir ?? OUT_DIR + '/')
+    .split((options?.outDir ?? OUT_DIR) + '/')
     .pop()
     .replace('index.html', '');
 
