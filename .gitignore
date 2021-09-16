@@ -60,5 +60,8 @@ typings/
 # next.js build output
 .next
 /dist
-/build
 .DS_Store
+
+## For testing purpose
+/build
+/public
