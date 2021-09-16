@@ -25,7 +25,7 @@ const getUrl = (url: string, domain: string, options: Options) => {
 export async function prepareData(domain: string, options?: Options): Promise<PagesJson[]> {
   console.log(cliColors.cyanAndBold, `> Using ${APP_NAME}`);
 
-  const ignore = prepareIgnored(options?.ignore);
+  const ignore = prepareIgnored(options?.ignore, options?.outDir);
   const pages: string[] = await fg(`${options?.outDir ?? OUT_DIR}/**/*.html`, { ignore });
   const results: PagesJson[] = pages.map((page) => {
     return {
