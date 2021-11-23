@@ -2,7 +2,7 @@
 [![Package License](https://img.shields.io/npm/l/svelte-sitemap.svg)](https://www.npmjs.com/svelte-sitemap)
 [![Build & Publish](https://github.com/bartholomej/svelte-sitemap/workflows/Build%20&%20Publish/badge.svg)](https://github.com/bartholomej/svelte-sitemap/actions)
 
-# Svelte static sitemap.xml generator
+# Svelte `sitemap.xml` generator
 
 > Small helper which scans your Svelte routes and generates static sitemap.xml
 >
@@ -13,45 +13,49 @@
 
 ## Install
 
-via yarn
+via `yarn` or `npm`
 
 ```bash
 yarn add svelte-sitemap --dev
-```
-
-via npm
-
-```bash
-npm install svelte-sitemap --save-dev
+# npm install svelte-sitemap --save-dev
 ```
 
 ## Usage
 
-### CLI
+### CLI method (recommended)
+
+Run in your project root folder to see how it works.
+
+I recommend using it as a **postbuild hook**. See this [example](#example).
 
 ```bash
-svelte-sitemap --domain https://example.com
+yarn svelte-sitemap --domain https://example.com
+# npm run svelte-sitemap --domain https://example.com
 ```
 
 It scans your routes in `build/` folder and generates `build/sitemap.xml` file
 
-### JavaScript
+### TypeScript or JavaScript method (optional)
 
-```javascript
-import { createSitemap } from './src/index';
+Sometimes it can be useful to call the script directly from JavaScript or TypeScript. Of course there is also this option, but in most cases you will need the [CLI method](#cli-method-recommended) as a postbuild hook.
+
+```typescript
+import { createSitemap } from 'svelte-sitemap/src/index.js';
 
 createSitemap('https://example.com', { debug: true });
 ```
 
+And now you can run your script like this: `node my-script.js`
+
 ## Example
 
-Highly recommended to use as `postbuild` hook in you `package.json`
+Highly recommended to use as `postbuild` hook in your `package.json`
 
 ```json
 {
   "name": "my-project",
   "scripts": {
-    "postbuild": "svelte-sitemap --domain https://mydomain.com"
+    "postbuild": "npm run svelte-sitemap --domain https://mydomain.com"
   }
 }
 ```
@@ -76,7 +80,7 @@ Highly recommended to use as `postbuild` hook in you `package.json`
 > Let's say we want to ignore all `admin` folders and subfolders + just one exact page `pages/my-secret-page`
 
 ```bash
-svelte-sitemap --domain https://www.example.com --ignore 'pages/my-secret-page' --ignore '**/admin/**'
+npm run svelte-sitemap --domain https://www.example.com --ignore 'pages/my-secret-page' --ignore '**/admin/**'
 ```
 
 ## Development
