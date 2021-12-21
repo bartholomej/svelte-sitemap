@@ -30,7 +30,7 @@ I recommend using it as a **postbuild hook**. See this [example](#example).
 
 ```bash
 yarn svelte-sitemap --domain https://example.com
-# npm run svelte-sitemap --domain https://example.com
+# npx svelte-sitemap --domain https://example.com
 ```
 
 It scans your routes in `build/` folder and generates `build/sitemap.xml` file
@@ -55,7 +55,7 @@ Highly recommended to use as `postbuild` hook in your `package.json`
 {
   "name": "my-project",
   "scripts": {
-    "postbuild": "npm run svelte-sitemap --domain https://mydomain.com"
+    "postbuild": "npx svelte-sitemap --domain https://mydomain.com"
   }
 }
 ```
@@ -80,7 +80,7 @@ Highly recommended to use as `postbuild` hook in your `package.json`
 > Let's say we want to ignore all `admin` folders and subfolders + just one exact page `pages/my-secret-page`
 
 ```bash
-npm run svelte-sitemap --domain https://www.example.com --ignore 'pages/my-secret-page' --ignore '**/admin/**'
+npx svelte-sitemap --domain https://www.example.com --ignore 'pages/my-secret-page' --ignore '**/admin/**'
 ```
 
 ## Development
