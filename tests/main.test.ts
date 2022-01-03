@@ -20,32 +20,32 @@ describe('Create JSON model', () => {
       sortbyPage([
         {
           page: 'https://example.com',
-          changeFreq: '',
+          changeFreq: null,
           lastMod: ''
         },
         {
           page: 'https://example.com/page1',
-          changeFreq: '',
+          changeFreq: null,
           lastMod: ''
         },
         {
           page: 'https://example.com/page2',
-          changeFreq: '',
+          changeFreq: null,
           lastMod: ''
         },
         {
           page: 'https://example.com/page1/subpage1',
-          changeFreq: '',
+          changeFreq: null,
           lastMod: ''
         },
         {
           page: 'https://example.com/page2/subpage2',
-          changeFreq: '',
+          changeFreq: null,
           lastMod: ''
         },
         {
           page: 'https://example.com/page2/subpage2/subsubpage2',
-          changeFreq: '',
+          changeFreq: null,
           lastMod: ''
         }
       ])
@@ -103,32 +103,32 @@ describe('Create JSON model', () => {
       sortbyPage([
         {
           page: 'https://example.com',
-          changeFreq: '',
+          changeFreq: null,
           lastMod: today
         },
         {
           page: 'https://example.com/page1',
-          changeFreq: '',
+          changeFreq: null,
           lastMod: today
         },
         {
           page: 'https://example.com/page2',
-          changeFreq: '',
+          changeFreq: null,
           lastMod: today
         },
         {
           page: 'https://example.com/page1/subpage1',
-          changeFreq: '',
+          changeFreq: null,
           lastMod: today
         },
         {
           page: 'https://example.com/page2/subpage2',
-          changeFreq: '',
+          changeFreq: null,
           lastMod: today
         },
         {
           page: 'https://example.com/page2/subpage2/subsubpage2',
-          changeFreq: '',
+          changeFreq: null,
           lastMod: today
         }
       ])
@@ -147,17 +147,17 @@ test('Sitemap ignore **/page2', async () => {
     sortbyPage([
       {
         page: 'https://example.com',
-        changeFreq: '',
+        changeFreq: null,
         lastMod: ''
       },
       {
         page: 'https://example.com/page1',
-        changeFreq: '',
+        changeFreq: null,
         lastMod: ''
       },
       {
         page: 'https://example.com/page1/subpage1',
-        changeFreq: '',
+        changeFreq: null,
         lastMod: ''
       }
     ])
@@ -175,22 +175,22 @@ test('Sitemap ignore Page1', async () => {
     sortbyPage([
       {
         page: 'https://example.com',
-        changeFreq: '',
+        changeFreq: null,
         lastMod: ''
       },
       {
         page: 'https://example.com/page2',
-        changeFreq: '',
+        changeFreq: null,
         lastMod: ''
       },
       {
         page: 'https://example.com/page2/subpage2',
-        changeFreq: '',
+        changeFreq: null,
         lastMod: ''
       },
       {
         page: 'https://example.com/page2/subpage2/subsubpage2',
-        changeFreq: '',
+        changeFreq: null,
         lastMod: ''
       }
     ])
@@ -207,32 +207,32 @@ test('Add trailing slashes', async () => {
     sortbyPage([
       {
         page: 'https://example.com/',
-        changeFreq: '',
+        changeFreq: null,
         lastMod: ''
       },
       {
         page: 'https://example.com/page1/',
-        changeFreq: '',
+        changeFreq: null,
         lastMod: ''
       },
       {
         page: 'https://example.com/page2/',
-        changeFreq: '',
+        changeFreq: null,
         lastMod: ''
       },
       {
         page: 'https://example.com/page1/subpage1/',
-        changeFreq: '',
+        changeFreq: null,
         lastMod: ''
       },
       {
         page: 'https://example.com/page2/subpage2/',
-        changeFreq: '',
+        changeFreq: null,
         lastMod: ''
       },
       {
         page: 'https://example.com/page2/subpage2/subsubpage2/',
-        changeFreq: '',
+        changeFreq: null,
         lastMod: ''
       }
     ])
@@ -250,17 +250,17 @@ test('Add trailing slashes and ignore page2', async () => {
     sortbyPage([
       {
         page: 'https://example.com/',
-        changeFreq: '',
+        changeFreq: null,
         lastMod: ''
       },
       {
         page: 'https://example.com/page1/',
-        changeFreq: '',
+        changeFreq: null,
         lastMod: ''
       },
       {
         page: 'https://example.com/page1/subpage1/',
-        changeFreq: '',
+        changeFreq: null,
         lastMod: ''
       }
     ])
@@ -281,32 +281,32 @@ test('Add trailing slashes + ignore subpage2 + reset time', async () => {
     sortbyPage([
       {
         page: 'https://example.com/',
-        changeFreq: '',
+        changeFreq: null,
         lastMod: today
       },
       {
         page: 'https://example.com/page1/',
-        changeFreq: '',
+        changeFreq: null,
         lastMod: today
       },
       {
         page: 'https://example.com/page2/',
-        changeFreq: '',
+        changeFreq: null,
         lastMod: today
       },
       {
         page: 'https://example.com/page1/subpage1/',
-        changeFreq: '',
+        changeFreq: null,
         lastMod: today
       },
       {
         page: 'https://example.com/page2/subpage2/',
-        changeFreq: '',
+        changeFreq: null,
         lastMod: today
       },
       {
         page: 'https://example.com/page2/subpage2/subsubpage2/',
-        changeFreq: '',
+        changeFreq: null,
         lastMod: today
       }
     ])

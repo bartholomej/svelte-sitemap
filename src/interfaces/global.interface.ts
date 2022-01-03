@@ -19,4 +19,7 @@ export interface PagesJson {
   lastMod?: string;
 }
 
-export type ChangeFreq = 'weekly' | 'daily' | string;
+/**
+ * Specs: https://www.sitemaps.org/protocol.html
+ */
+export type ChangeFreq = 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never';

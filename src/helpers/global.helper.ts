@@ -30,7 +30,7 @@ export async function prepareData(domain: string, options?: Options): Promise<Pa
   const results: PagesJson[] = pages.map((page) => {
     return {
       page: getUrl(page, domain, options),
-      changeFreq: options?.changeFreq ?? '',
+      changeFreq: options?.changeFreq ?? null,
       lastMod: options?.resetTime ? new Date().toISOString().split('T')[0] : ''
     };
   });
