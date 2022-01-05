@@ -2,7 +2,7 @@ import fg from 'fast-glob';
 import fs from 'fs';
 import { create } from 'xmlbuilder2';
 import { version } from '../../package.json';
-import { Options, PagesJson } from '../interfaces/global.interface';
+import { changeFreq, ChangeFreq, Options, PagesJson } from '../interfaces/global.interface';
 import { APP_NAME, OUT_DIR } from '../vars';
 import { cliColors, errorMsg, successMsg } from './vars.helper';
 
@@ -26,11 +26,12 @@ export async function prepareData(domain: string, options?: Options): Promise<Pa
   console.log(cliColors.cyanAndBold, `> Using ${APP_NAME}`);
 
   const ignore = prepareIgnored(options?.ignore, options?.outDir);
+  const changeFreq = prepareChangeFreq(options);
   const pages: string[] = await fg(`${options?.outDir ?? OUT_DIR}/**/*.html`, { ignore });
   const results: PagesJson[] = pages.map((page) => {
     return {
       page: getUrl(page, domain, options),
-      changeFreq: options?.changeFreq ?? null,
+      changeFreq: changeFreq,
       lastMod: options?.resetTime ? new Date().toISOString().split('T')[0] : ''
     };
   });
@@ -79,4 +80,20 @@ const prepareIgnored = (
     ignore = ignore.map((ignoredPage) => `${outDir}/${ignoredPage}`);
   }
   return ignore;
+};
+
+const prepareChangeFreq = (options: Options): ChangeFreq => {
+  let result: ChangeFreq = null;
+
+  if (options?.changeFreq) {
+    if (changeFreq.includes(options.changeFreq)) {
+      result = options.changeFreq;
+    } else {
+      console.log(
+        cliColors.red,
+        `  × Option \`--change-freq ${options.changeFreq}\` is not a valid value. See docs: https://github.com/bartholomej/svelte-sitemap#options`
+      );
+    }
+  }
+  return result;
 };

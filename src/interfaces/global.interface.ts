@@ -19,7 +19,17 @@ export interface PagesJson {
   lastMod?: string;
 }
 
+export const changeFreq = [
+  'always',
+  'hourly',
+  'daily',
+  'weekly',
+  'monthly',
+  'yearly',
+  'never'
+] as const;
+
 /**
  * Specs: https://www.sitemaps.org/protocol.html
  */
-export type ChangeFreq = 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never';
+export type ChangeFreq = typeof changeFreq[number];

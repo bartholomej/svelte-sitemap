@@ -164,6 +164,49 @@ test('Sitemap ignore **/page2', async () => {
   );
 });
 
+test('Sitemap bad cahngeFreq', async () => {
+  const json = await prepareData('https://example.com', {
+    ...options,
+    changeFreq: 'veryverybadchoice' as unknown as any,
+    debug: true
+  });
+
+  expect(sortbyPage(json)).toMatchObject(
+    sortbyPage([
+      {
+        page: 'https://example.com',
+        changeFreq: null,
+        lastMod: ''
+      },
+      {
+        page: 'https://example.com/page1',
+        changeFreq: null,
+        lastMod: ''
+      },
+      {
+        page: 'https://example.com/page2',
+        changeFreq: null,
+        lastMod: ''
+      },
+      {
+        page: 'https://example.com/page1/subpage1',
+        changeFreq: null,
+        lastMod: ''
+      },
+      {
+        page: 'https://example.com/page2/subpage2',
+        changeFreq: null,
+        lastMod: ''
+      },
+      {
+        page: 'https://example.com/page2/subpage2/subsubpage2',
+        changeFreq: null,
+        lastMod: ''
+      }
+    ])
+  );
+});
+
 test('Sitemap ignore Page1', async () => {
   const json = await prepareData('https://example.com', {
     ...options,

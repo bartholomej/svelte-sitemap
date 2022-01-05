@@ -39,7 +39,7 @@ const args = minimist(process.argv.slice(2), {
 
 if (args.help || args.version === '' || args.version === true) {
   const log = args.help ? console.log : console.error;
-  log('Static Sitemap generator for SvelteKit');
+  log('Svelte `sitemap.xml` generator');
   log('');
   log(`svelte-sitemap ${version} (check updates: ${REPO_URL})`);
   log('');
