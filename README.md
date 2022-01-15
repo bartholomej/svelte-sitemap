@@ -60,7 +60,7 @@ Highly recommended to use as `postbuild` hook in your `package.json`
 }
 ```
 
-## Options
+## ⚙️ Options
 
 | Option                 | Description                                                                                                                     | default               | example                                |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------- | --------------------- | -------------------------------------- |
@@ -74,7 +74,7 @@ Highly recommended to use as `postbuild` hook in your `package.json`
 | -v, --version          | Show version                                                                                                                    | -                     | `-h`                                   |
 | --debug                | Show some useful logs                                                                                                           | -                     | `--debug`                              |
 
-## FAQ
+## 🙋 FAQ
 
 #### How to exclude directory?
 
@@ -84,11 +84,13 @@ Highly recommended to use as `postbuild` hook in your `package.json`
 npx svelte-sitemap --domain https://www.example.com --ignore 'pages/my-secret-page' --ignore '**/admin/**'
 ```
 
-## Development
+## 🤝 Contributing
 
 I welcome you to customize this according to your needs ;)
 
 Pull requests for any improvements would be great!
+
+Feel free to check [issues page](https://github.com/bartholomej/svelte-sitemap/issues).
 
 ### Developing and debugging this library
 
@@ -107,17 +109,19 @@ You can find and modify it in [`./demo.ts`](./demo.ts) file
 yarn demo
 ```
 
-## Credits
+## 🙏 Credits
 
 - svelte-sitemap is workaround for [this official SvelteKit issue](https://github.com/sveltejs/kit/issues/1142)
 - Brand new version is inspired by [Richard's article](https://r-bt.com/learning/sveltekit-sitemap/)
 - Thanks to [@auderer](https://github.com/auderer) because [his issue](https://github.com/bartholomej/svelte-sitemap/issues/1) changed the direction of this library
 
-## Donation
+## ⭐️ Show your support
 
-If this project have helped you save time please consider [making a donation](https://github.com/sponsors/bartholomej) for some 🍺 or 🍵 ;)
+Give a ⭐️ if this project helped you!
 
-## Privacy Policy
+Or if you are brave enough consider [making a donation](https://github.com/sponsors/bartholomej) for some 🍺 or 🍵 ;)
+
+## 🕵️ Privacy Policy
 
 I DO NOT STORE ANY DATA. PERIOD.
 
@@ -125,9 +129,9 @@ I physically can't. I have nowhere to store it. I don't even have a server datab
 
 That's why, with this library, what happens on your device stays on your device till disappear.
 
-## License
+## 📝 License
 
-Copyright &copy; 2021 [Lukas Bartak](http://bartweb.cz)
+Copyright &copy; 2022 [Lukas Bartak](http://bartweb.cz)
 
 Proudly powered by nature 🗻, wind 💨, tea 🍵 and beer 🍺 ;)
 
