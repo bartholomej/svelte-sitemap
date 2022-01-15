@@ -40,7 +40,7 @@ export async function prepareData(domain: string, options?: Options): Promise<Pa
 }
 
 export const writeSitemap = (items: PagesJson[], options: Options): void => {
-  const sitemap = create({ version: '1.0' }).ele('urlset', {
+  const sitemap = create({ version: '1.0', encoding: 'UTF-8' }).ele('urlset', {
     xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9'
   });
   if (options?.attribution) {
