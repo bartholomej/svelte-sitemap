@@ -2,8 +2,14 @@ import fg from 'fast-glob';
 import fs from 'fs';
 import { create } from 'xmlbuilder2';
 import { version } from '../../package.json';
-import { changeFreq, ChangeFreq, Options, PagesJson } from '../interfaces/global.interface';
-import { APP_NAME, OUT_DIR } from '../vars';
+import {
+  changeFreq,
+  ChangeFreq,
+  Options,
+  OptionsSvelteSitemap,
+  PagesJson
+} from '../interfaces/global.interface';
+import { OUT_DIR } from '../vars';
 import {
   cliColors,
   errorMsgFolder,
@@ -40,15 +46,13 @@ export const removeHtml = (fileName: string) => {
 };
 
 export async function prepareData(domain: string, options?: Options): Promise<PagesJson[]> {
-  console.log(cliColors.cyanAndBold, `> Using ${APP_NAME}`);
-
   const FOLDER = options?.outDir ?? OUT_DIR;
 
   const ignore = prepareIgnored(options?.ignore, options?.outDir);
   const changeFreq = prepareChangeFreq(options);
   const pages: string[] = await fg(`${FOLDER}/**/*.html`, { ignore });
 
-  const results = pages.map((page) => {
+  const results: PagesJson[] = pages.map((page) => {
     return {
       page: getUrl(page, domain, options),
       changeFreq: changeFreq,
@@ -130,4 +134,15 @@ const prepareChangeFreq = (options: Options): ChangeFreq => {
     }
   }
   return result;
+};
+
+export const mergeOptions = (obj1: any, obj2: any): OptionsSvelteSitemap => {
+  const answer: any = {};
+  for (const key in obj1) {
+    if (answer[key] === undefined || answer[key] === null) answer[key] = obj1[key];
+  }
+  for (const key in obj2) {
+    if (answer[key] === undefined || answer[key] === null) answer[key] = obj2[key];
+  }
+  return answer;
 };
