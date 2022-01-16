@@ -13,6 +13,10 @@ export interface Options {
   trailingSlashes?: boolean;
 }
 
+export interface OptionsSvelteSitemap extends Options {
+  domain: string;
+}
+
 export interface PagesJson {
   page: string;
   changeFreq?: ChangeFreq;
