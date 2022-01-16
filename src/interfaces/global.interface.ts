@@ -14,6 +14,10 @@ export interface Options {
   additional?: string[];
 }
 
+export interface OptionsSvelteSitemap extends Options {
+  domain: string;
+}
+
 export interface PagesJson {
   page: string;
   changeFreq?: ChangeFreq;
