@@ -11,10 +11,3 @@ export const CHUNK = {
 };
 
 export const CONFIG_FILE = 'svelte-sitemap.cjs';
-
-// export const OPTIONS: Options = {
-//   domain: DOMAIN,
-//   resetTime: false,
-//   debug: false,
-//   changeFreq: 'weekly'
-// };
