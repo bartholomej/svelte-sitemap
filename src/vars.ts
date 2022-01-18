@@ -9,7 +9,8 @@ export const OUT_DIR = 'build';
 export const CHUNK = {
   maxSize: 50_000
 };
-export const CONFIG_FILE = 'svelte-sitemap.js';
+
+export const CONFIG_FILE = 'svelte-sitemap.cjs';
 
 // export const OPTIONS: Options = {
 //   domain: DOMAIN,

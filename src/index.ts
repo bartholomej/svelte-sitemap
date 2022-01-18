@@ -7,7 +7,7 @@ export const createSitemap = async (options: OptionsSvelteSitemap): Promise<void
   if (options?.debug) {
     console.log('OPTIONS', options);
   }
-  console.log('OPTIONS', options);
+
   const json = await prepareData(options.domain, options);
 
   if (options?.debug) {

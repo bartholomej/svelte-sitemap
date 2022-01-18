@@ -47,7 +47,7 @@ File `my-script.js`:
 ```typescript
 import { createSitemap } from 'svelte-sitemap/src/index.js';
 
-createSitemap('https://example.com', { debug: true });
+createSitemap({ domain: 'https://example.com', debug: true });
 ```
 
 And now you can run your script like this: `node my-script.js`
