@@ -5,7 +5,7 @@ export const cliColors = {
 };
 
 export const successMsg = (outDir: string) =>
-  `  ✔ done. Check your new sitemap here: ./${outDir}/sitemap.xml`;
+  `  ✔ Done! Check your new sitemap here: ./${outDir}/sitemap.xml`;
 
 export const errorMsg = (outDir: string) =>
   `  × Make sure you are using this script as 'postbuild' so '${outDir}' folder was successfully created before running this script. See https://github.com/bartholomej/svelte-sitemap#readme`;
