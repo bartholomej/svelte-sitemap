@@ -2,17 +2,19 @@
 
 import minimist from 'minimist';
 import { version } from './package.json';
-import { loadConfig } from './src/helpers/config';
-import { mergeOptions } from './src/helpers/global.helper';
+import { loadConfig, withDefaultConfig } from './src/helpers/config';
+import { cliColors } from './src/helpers/vars.helper';
 import { createSitemap } from './src/index';
 import { ChangeFreq, OptionsSvelteSitemap } from './src/interfaces/global.interface';
-import { CONFIG_FILE } from './src/vars';
+import { APP_NAME, CONFIG_FILE } from './src/vars';
+
+console.log(cliColors.cyanAndBold, `> Using ${APP_NAME}`);
 
 const REPO_URL = 'https://github.com/bartholomej/svelte-sitemap';
 
 let stop = false;
 
-// Load svelte-sitemap.js
+// Load svelte-sitemap.cjs
 const config = loadConfig(CONFIG_FILE);
 
 const args = minimist(process.argv.slice(2), {
@@ -92,7 +94,7 @@ if (args.help || args.version === '' || args.version === true) {
   const attribution: boolean =
     args['attribution'] === '' || args['attribution'] === false ? false : true;
 
-  const options: OptionsSvelteSitemap = {
+  const optionsCli: OptionsSvelteSitemap = {
     debug,
     resetTime,
     changeFreq,
@@ -103,5 +105,18 @@ if (args.help || args.version === '' || args.version === true) {
     trailingSlashes
   };
 
-  createSitemap(mergeOptions(options, config));
+  // Config file is preferred
+  if (config && Object.keys(config).length === 0) {
+    console.log(
+      cliColors.cyanAndBold,
+      `  ✔ Using CLI options. Config file ${CONFIG_FILE} not found.`
+    );
+    createSitemap(optionsCli);
+  } else {
+    console.log(
+      cliColors.green,
+      `  ✔ Loading config from ${CONFIG_FILE}. CLI options are ignored now.`
+    );
+    createSitemap(withDefaultConfig(config));
+  }
 }

@@ -4,7 +4,7 @@ import { loadFile } from './file';
 
 export const loadConfig = (path: string): OptionsSvelteSitemap => {
   const baseConfig = loadFile<OptionsSvelteSitemap>(path);
-  return withDefaultConfig(baseConfig!);
+  return baseConfig!;
 };
 
 export const defaultConfig: OptionsSvelteSitemap = {

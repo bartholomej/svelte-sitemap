@@ -2,13 +2,7 @@ import fg from 'fast-glob';
 import fs from 'fs';
 import { create } from 'xmlbuilder2';
 import { version } from '../../package.json';
-import {
-  changeFreq,
-  ChangeFreq,
-  Options,
-  OptionsSvelteSitemap,
-  PagesJson
-} from '../interfaces/global.interface';
+import { changeFreq, ChangeFreq, Options, PagesJson } from '../interfaces/global.interface';
 import { OUT_DIR } from '../vars';
 import {
   cliColors,
@@ -134,15 +128,4 @@ const prepareChangeFreq = (options: Options): ChangeFreq => {
     }
   }
   return result;
-};
-
-export const mergeOptions = (obj1: any, obj2: any): OptionsSvelteSitemap => {
-  const answer: any = {};
-  for (const key in obj1) {
-    if (answer[key] === undefined || answer[key] === null) answer[key] = obj1[key];
-  }
-  for (const key in obj2) {
-    if (answer[key] === undefined || answer[key] === null) answer[key] = obj2[key];
-  }
-  return answer;
 };
