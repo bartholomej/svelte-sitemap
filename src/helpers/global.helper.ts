@@ -4,7 +4,13 @@ import { create } from 'xmlbuilder2';
 import { version } from '../../package.json';
 import { changeFreq, ChangeFreq, Options, PagesJson } from '../interfaces/global.interface';
 import { APP_NAME, OUT_DIR } from '../vars';
-import { cliColors, errorMsg, successMsg } from './vars.helper';
+import {
+  cliColors,
+  errorMsgFolder,
+  errorMsgHtmlFiles,
+  errorMsgWrite,
+  successMsg
+} from './vars.helper';
 
 const getUrl = (url: string, domain: string, options: Options) => {
   let slash = domain.split('/').pop() ? '/' : '';
@@ -36,10 +42,13 @@ export const removeHtml = (fileName: string) => {
 export async function prepareData(domain: string, options?: Options): Promise<PagesJson[]> {
   console.log(cliColors.cyanAndBold, `> Using ${APP_NAME}`);
 
+  const FOLDER = options?.outDir ?? OUT_DIR;
+
   const ignore = prepareIgnored(options?.ignore, options?.outDir);
   const changeFreq = prepareChangeFreq(options);
-  const pages: string[] = await fg(`${options?.outDir ?? OUT_DIR}/**/*.html`, { ignore });
-  const results: PagesJson[] = pages.map((page) => {
+  const pages: string[] = await fg(`${FOLDER}/**/*.html`, { ignore });
+
+  const results = pages.map((page) => {
     return {
       page: getUrl(page, domain, options),
       changeFreq: changeFreq,
@@ -47,8 +56,22 @@ export async function prepareData(domain: string, options?: Options): Promise<Pa
     };
   });
 
+  detectErrors({
+    folder: !fs.existsSync(FOLDER),
+    htmlFiles: !pages.length
+  });
+
   return results;
 }
+
+export const detectErrors = ({ folder, htmlFiles }: { folder: boolean; htmlFiles: boolean }) => {
+  if (folder && htmlFiles) {
+    console.error(cliColors.red, errorMsgFolder(OUT_DIR));
+  } else if (htmlFiles) {
+    // If no page exists, then the static adapter is probably not used
+    console.error(cliColors.red, errorMsgHtmlFiles(OUT_DIR));
+  }
+};
 
 export const writeSitemap = (items: PagesJson[], options: Options): void => {
   const sitemap = create({ version: '1.0', encoding: 'UTF-8' }).ele('urlset', {
@@ -77,7 +100,7 @@ export const writeSitemap = (items: PagesJson[], options: Options): void => {
     fs.writeFileSync(`${outDir}/sitemap.xml`, xml);
     console.log(cliColors.green, successMsg(outDir));
   } catch (e) {
-    console.error(cliColors.red, errorMsg(outDir), e);
+    console.error(cliColors.red, errorMsgWrite(outDir), e);
   }
 };
 

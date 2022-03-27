@@ -1,5 +1,5 @@
 import { prepareData, writeSitemap } from './helpers/global.helper';
-import { cliColors, errorMsg } from './helpers/vars.helper';
+import { cliColors, errorMsgWrite } from './helpers/vars.helper';
 import { Options } from './interfaces/global.interface';
 import { DOMAIN, OUT_DIR } from './vars';
 
@@ -17,6 +17,6 @@ export const createSitemap = async (domain: string = DOMAIN, options?: Options):
   if (json.length) {
     writeSitemap(json, options);
   } else {
-    console.error(cliColors.red, errorMsg(options.outDir ?? OUT_DIR));
+    console.error(cliColors.red, errorMsgWrite(options.outDir ?? OUT_DIR));
   }
 };
