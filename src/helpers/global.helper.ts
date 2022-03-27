@@ -14,12 +14,23 @@ const getUrl = (url: string, domain: string, options: Options) => {
     .pop()
     .replace('index.html', '');
 
-  // Remove trailing slashes
-  if (!options?.trailingSlashes) {
+  trimmed = removeHtml(trimmed);
+
+  // Add all traling slashes
+  if (options?.trailingSlashes) {
+    trimmed = trimmed.length && !trimmed.endsWith('/') ? trimmed + '/' : trimmed;
+  } else {
     trimmed = trimmed.endsWith('/') ? trimmed.slice(0, -1) : trimmed;
     slash = trimmed ? slash : '';
   }
   return `${domain}${slash}${trimmed}`;
+};
+
+export const removeHtml = (fileName: string) => {
+  if (fileName?.endsWith('.html')) {
+    return fileName.slice(0, -5);
+  }
+  return fileName;
 };
 
 export async function prepareData(domain: string, options?: Options): Promise<PagesJson[]> {
