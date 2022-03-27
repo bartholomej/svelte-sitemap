@@ -19,12 +19,22 @@ describe('Create JSON model', () => {
     expect(sortbyPage(json)).toMatchObject(
       sortbyPage([
         {
+          page: 'https://example.com/flat.html',
+          changeFreq: null,
+          lastMod: ''
+        },
+        {
           page: 'https://example.com',
           changeFreq: null,
           lastMod: ''
         },
         {
           page: 'https://example.com/page1',
+          changeFreq: null,
+          lastMod: ''
+        },
+        {
+          page: 'https://example.com/page1/flat1.html',
           changeFreq: null,
           lastMod: ''
         },
@@ -61,12 +71,22 @@ describe('Create JSON model', () => {
     expect(sortbyPage(json)).toMatchObject(
       sortbyPage([
         {
+          page: 'https://example.com/flat.html',
+          changeFreq: 'daily',
+          lastMod: ''
+        },
+        {
           page: 'https://example.com',
           changeFreq: 'daily',
           lastMod: ''
         },
         {
           page: 'https://example.com/page1',
+          changeFreq: 'daily',
+          lastMod: ''
+        },
+        {
+          page: 'https://example.com/page1/flat1.html',
           changeFreq: 'daily',
           lastMod: ''
         },
@@ -102,12 +122,22 @@ describe('Create JSON model', () => {
     expect(sortbyPage(json)).toMatchObject(
       sortbyPage([
         {
+          page: 'https://example.com/flat.html',
+          changeFreq: null,
+          lastMod: today
+        },
+        {
           page: 'https://example.com',
           changeFreq: null,
           lastMod: today
         },
         {
           page: 'https://example.com/page1',
+          changeFreq: null,
+          lastMod: today
+        },
+        {
+          page: 'https://example.com/page1/flat1.html',
           changeFreq: null,
           lastMod: today
         },
@@ -146,12 +176,22 @@ test('Sitemap ignore **/page2', async () => {
   expect(sortbyPage(json)).toMatchObject(
     sortbyPage([
       {
+        page: 'https://example.com/flat.html',
+        changeFreq: null,
+        lastMod: ''
+      },
+      {
         page: 'https://example.com',
         changeFreq: null,
         lastMod: ''
       },
       {
         page: 'https://example.com/page1',
+        changeFreq: null,
+        lastMod: ''
+      },
+      {
+        page: 'https://example.com/page1/flat1.html',
         changeFreq: null,
         lastMod: ''
       },
@@ -174,12 +214,22 @@ test('Sitemap bad cahngeFreq', async () => {
   expect(sortbyPage(json)).toMatchObject(
     sortbyPage([
       {
+        page: 'https://example.com/flat.html',
+        changeFreq: null,
+        lastMod: ''
+      },
+      {
         page: 'https://example.com',
         changeFreq: null,
         lastMod: ''
       },
       {
         page: 'https://example.com/page1',
+        changeFreq: null,
+        lastMod: ''
+      },
+      {
+        page: 'https://example.com/page1/flat1.html',
         changeFreq: null,
         lastMod: ''
       },
@@ -217,6 +267,11 @@ test('Sitemap ignore Page1', async () => {
   expect(sortbyPage(json)).toMatchObject(
     sortbyPage([
       {
+        page: 'https://example.com/flat.html',
+        changeFreq: null,
+        lastMod: ''
+      },
+      {
         page: 'https://example.com',
         changeFreq: null,
         lastMod: ''
@@ -249,12 +304,22 @@ test('Add trailing slashes', async () => {
   expect(sortbyPage(json)).toMatchObject(
     sortbyPage([
       {
+        page: 'https://example.com/flat.html',
+        changeFreq: null,
+        lastMod: ''
+      },
+      {
         page: 'https://example.com/',
         changeFreq: null,
         lastMod: ''
       },
       {
         page: 'https://example.com/page1/',
+        changeFreq: null,
+        lastMod: ''
+      },
+      {
+        page: 'https://example.com/page1/flat1.html',
         changeFreq: null,
         lastMod: ''
       },
@@ -292,7 +357,17 @@ test('Add trailing slashes and ignore page2', async () => {
   expect(sortbyPage(json)).toMatchObject(
     sortbyPage([
       {
+        page: 'https://example.com/flat.html',
+        changeFreq: null,
+        lastMod: ''
+      },
+      {
         page: 'https://example.com/',
+        changeFreq: null,
+        lastMod: ''
+      },
+      {
+        page: 'https://example.com/page1/flat1.html',
         changeFreq: null,
         lastMod: ''
       },
@@ -323,12 +398,22 @@ test('Add trailing slashes + ignore subpage2 + reset time', async () => {
   expect(sortbyPage(json)).toMatchObject(
     sortbyPage([
       {
+        page: 'https://example.com/flat.html',
+        changeFreq: null,
+        lastMod: today
+      },
+      {
         page: 'https://example.com/',
         changeFreq: null,
         lastMod: today
       },
       {
         page: 'https://example.com/page1/',
+        changeFreq: null,
+        lastMod: today
+      },
+      {
+        page: 'https://example.com/page1/flat1.html',
         changeFreq: null,
         lastMod: today
       },
