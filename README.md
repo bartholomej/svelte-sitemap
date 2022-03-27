@@ -4,11 +4,11 @@
 
 # Svelte `sitemap.xml` generator
 
-> Small helper which scans your Svelte routes and generates static sitemap.xml
+> Small helper which scans your Svelte routes and generates _sitemap.xml_
 >
+> - Designed for Svelte `adapter-static` with `prerender` option
 > - TypeScript, JavaScript, CLI version
 > - Useful options
-> - Compatible with Svelte `adapter-static`
 > - Workaround for [this official SvelteKit issue](https://github.com/sveltejs/kit/issues/1142)
 
 ## Install
