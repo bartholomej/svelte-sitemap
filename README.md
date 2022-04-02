@@ -20,19 +20,24 @@ npm install svelte-sitemap --save-dev
 
 ## Usage
 
-### CLI method (recommended)
+> Use this library as a `postbuild` hook in your `package.json` file.
 
-Use this script as a **postbuild hook**. See this [example](#example).
+File: `package.json`
 
-```bash
-npx svelte-sitemap --domain https://example.com
+```json
+{
+  "name": "my-awesome-project",
+  "scripts": {
+    "postbuild": "npx svelte-sitemap --domain https://myawesomedomain.com"
+  }
+}
 ```
 
-It scans your routes in `build/` folder and generates `build/sitemap.xml` file
+It scans your routes in `build/` folder and generates `build/sitemap.xml` file.
 
-### Alternative: TypeScript or JavaScript method
+### Alternative usage: TypeScript or JavaScript method
 
-Sometimes it can be useful to call the script directly from JavaScript or TypeScript. Of course there is also this option, but in most cases you will need the [CLI method](#cli-method-recommended) as a postbuild hook.
+> Sometimes it can be useful to call the script directly from JavaScript or TypeScript. Of course there is also this option, but in most cases you will need the [CLI method](#cli-method-recommended) as a postbuild hook.
 
 File `my-script.js`:
 
@@ -44,32 +49,19 @@ createSitemap('https://example.com', { debug: true });
 
 And now you can run your script like this: `node my-script.js`
 
-## Example
-
-Use this library as a `postbuild` hook in your `package.json`
-
-```json
-{
-  "name": "my-project",
-  "scripts": {
-    "postbuild": "npx svelte-sitemap --domain https://mydomain.com"
-  }
-}
-```
-
 ## ⚙️ Options
 
-| Option                 | Description                                                                                                                     | default               | example                                |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------- | --------------------- | -------------------------------------- |
-| -d, --domain           | Use your domain **[required]**                                                                                                  | `https://example.com` | `-d https://mydomain.com`              |
-| -o, --out-dir          | Set custum build folder                                                                                                         | `build`               | `-o dist`                              |
-| -i, --ignore           | Ignore files or folders                                                                                                         | []                    | `-i '**/admin/**' -i 'my-secret-page'` |
-| -t, --trailing-slashes | Add trailing slashes                                                                                                            | false                 | `--trailing-slashes`                   |
-| -r, --reset-time       | Set lastModified time to now                                                                                                    | false                 | `-r`                                   |
-| -c, --change-freq      | Set change frequency [Option](https://github.com/bartholomej/svelte-sitemap/blob/master/src/interfaces/global.interface.ts#L22) | -                     | `--change-freq daily`                  |
-| -h, --help             | Display this usage info                                                                                                         | -                     | `-v`                                   |
-| -v, --version          | Show version                                                                                                                    | -                     | `-h`                                   |
-| --debug                | Show some useful logs                                                                                                           | -                     | `--debug`                              |
+| Option                     | Description                                                                                                                     | Default | Example                                |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------- | -------------------------------------- |
+| `--domain`, `-d`           | Use your domain **[required]**                                                                                                  | -       | `-d https://mydomain.com`              |
+| `--out-dir`, `-o`          | Set custom build folder                                                                                                         | `build` | `-o dist`                              |
+| `--ignore`, `-i`           | Ignore files or folders                                                                                                         | []      | `-i '**/admin/**' -i 'my-secret-page'` |
+| `--trailing-slashes`, `-t` | Add trailing slashes                                                                                                            | false   | `--trailing-slashes`                   |
+| `--reset-time`, `-r`       | Set lastModified time to now                                                                                                    | false   | `-r`                                   |
+| `--change-freq`, `-c`      | Set change frequency [Option](https://github.com/bartholomej/svelte-sitemap/blob/master/src/interfaces/global.interface.ts#L22) | -       | `--change-freq daily`                  |
+| `--help`, `-h`             | Display this usage info                                                                                                         | -       | `-v`                                   |
+| `--version`, `-v`          | Show version                                                                                                                    | -       | `-h`                                   |
+| `--debug`                  | Show some useful logs                                                                                                           | -       | `--debug`                              |
 
 ## 🙋 FAQ
 
@@ -80,6 +72,12 @@ Use this library as a `postbuild` hook in your `package.json`
 ```bash
 npx svelte-sitemap --domain https://www.example.com --ignore 'pages/my-secret-page' --ignore '**/admin/**'
 ```
+
+### Ping Google Search Console
+
+> Every time I deploy a new version, I want to inform Google that there is a new update.
+
+See this [discussion](https://github.com/bartholomej/svelte-sitemap/issues/23) with very useful tips.
 
 ### Error: Missing folder
 
