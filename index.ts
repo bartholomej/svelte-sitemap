@@ -27,7 +27,9 @@ const args = minimist(process.argv.slice(2), {
     c: 'change-freq',
     C: 'change-freq',
     i: 'ignore',
-    I: 'ignore'
+    I: 'ignore',
+    t: 'trailing-slashes',
+    T: 'trailing-slashes'
   },
   unknown: (err: string) => {
     console.log('⚠ Those arguments are not supported:', err);
