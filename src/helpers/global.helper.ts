@@ -3,7 +3,7 @@ import fs from 'fs';
 import { create } from 'xmlbuilder2';
 import { version } from '../../package.json';
 import { changeFreq, ChangeFreq, Options, PagesJson } from '../interfaces/global.interface';
-import { APP_NAME, OUT_DIR } from '../vars';
+import { OUT_DIR } from '../vars';
 import {
   cliColors,
   errorMsgFolder,
@@ -40,15 +40,13 @@ export const removeHtml = (fileName: string) => {
 };
 
 export async function prepareData(domain: string, options?: Options): Promise<PagesJson[]> {
-  console.log(cliColors.cyanAndBold, `> Using ${APP_NAME}`);
-
   const FOLDER = options?.outDir ?? OUT_DIR;
 
   const ignore = prepareIgnored(options?.ignore, options?.outDir);
   const changeFreq = prepareChangeFreq(options);
   const pages: string[] = await fg(`${FOLDER}/**/*.html`, { ignore });
 
-  const results = pages.map((page) => {
+  const results: PagesJson[] = pages.map((page) => {
     return {
       page: getUrl(page, domain, options),
       changeFreq: changeFreq,
