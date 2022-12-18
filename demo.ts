@@ -1,3 +1,3 @@
 import { createSitemap } from './src/index';
 
-createSitemap('https://example.com/', { debug: false, resetTime: true });
+createSitemap({ domain: 'https://bartweb.cz', debug: false, resetTime: true, outDir: 'build' });
