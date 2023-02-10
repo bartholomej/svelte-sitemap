@@ -15,8 +15,8 @@ export const createSitemap = async (domain: string = DOMAIN, options?: Options):
   }
 
   if (json.length) {
-    writeSitemap(json, options);
+    writeSitemap(json, options, domain);
   } else {
-    console.error(cliColors.red, errorMsgWrite(options.outDir ?? OUT_DIR));
+    console.error(cliColors.red, errorMsgWrite(options.outDir ?? OUT_DIR, 'sitemap.xml'));
   }
 };
