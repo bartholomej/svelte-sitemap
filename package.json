@@ -22,7 +22,8 @@
     "test:coverage": "jest --collect-coverage",
     "postinstall": "npx husky install && cp -r ./src/build/ ./build",
     "postversion": "git push && git push --follow-tags",
-    "publish:next": "yarn && yarn build && cd dist && npm publish --tag next",
+    "publish:next": "yarn && yarn build && yarn test && cd dist && npm publish --tag next",
+    "publish:beta": "yarn && yarn build && yarn test && cd dist && npm publish --tag beta",
     "release:beta": "npm version prerelease -m \"chore(update): prelease %s β\"",
     "release:patch": "git checkout master && npm version patch -m \"chore(update): patch release %s 🐛 \"",
     "release:minor": "git checkout master && npm version minor -m \"chore(update): release %s 🚀\"",
@@ -54,6 +55,10 @@
     "ts-jest": "^29.0.3",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.4"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "repository": {
     "url": "git+https://github.com/bartholomej/svelte-sitemap.git",
