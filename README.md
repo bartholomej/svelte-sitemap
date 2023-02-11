@@ -9,7 +9,9 @@
 > - Designed for SvelteKit `adapter-static` with `prerender` option (SSG)
 > - TypeScript, JavaScript, CLI version
 > - Useful [options](#%EF%B8%8F-options) for customizing your sitemap
+> - Support for [submiting sitemap](#ping-google-search-console) to Google Search Console
 > - Support for Google [sitemap index](https://developers.google.com/search/docs/crawling-indexing/sitemaps/large-sitemaps). _Useful for large sites (more than 50K pages)_
+> - Also compatible with [Vercel hosting](#vercel-apdatper)
 > - Workaround for [this official SvelteKit issue](https://github.com/sveltejs/kit/issues/1142)
 
 ## Install
@@ -85,7 +87,16 @@ See this [discussion](https://github.com/bartholomej/svelte-sitemap/issues/23) w
 > × Folder 'build/' doesn't exist. Make sure you are using this library as 'postbuild' so 'build/' folder was successfully created before running this script.
 
 - Make sure your output folder exists. If it has other name than the default `build`, you can use the `outDir` `(--out-dir)` option.
-- If you are using Vercel hosting and adapter-vercel, look at [this solution](https://github.com/bartholomej/svelte-sitemap/issues/16#issuecomment-961414454).
+
+#### Vercel apdatper
+
+- If you are using Vercel hosting and `adapter-vercel` you'll probably want to use it like this:
+
+```bash
+npx svelte-sitemap --out-dir .vercel/output/static --domain https://www.example.com
+```
+
+Or check out [other solutions](https://github.com/bartholomej/svelte-sitemap/issues/16#issuecomment-961414454) and join the discussion.
 
 ### Error: Missing html files
 
