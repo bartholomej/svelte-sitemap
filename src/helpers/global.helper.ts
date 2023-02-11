@@ -4,7 +4,7 @@ import { create } from 'xmlbuilder2';
 import { XMLBuilder } from 'xmlbuilder2/lib/interfaces';
 import { version } from '../../package.json';
 import { changeFreq, ChangeFreq, Options, PagesJson } from '../interfaces/global.interface';
-import { APP_NAME, CHUNK_SIZE, OUT_DIR } from '../vars';
+import { APP_NAME, CHUNK, OUT_DIR } from '../vars';
 import {
   cliColors,
   errorMsgFolder,
@@ -77,22 +77,22 @@ export const detectErrors = ({ folder, htmlFiles }: { folder: boolean; htmlFiles
 export const writeSitemap = (items: PagesJson[], options: Options, domain: string): void => {
   const outDir = options?.outDir ?? OUT_DIR;
 
-  if (items?.length <= CHUNK_SIZE) {
+  if (items?.length <= CHUNK.maxSize) {
     createFile(items, options, outDir);
   } else {
     // If the number of pages is greater than the chunk size, then we split the sitemap into multiple files
     // and create an index file that links to all of them
     // https://support.google.com/webmasters/answer/183668?hl=en
-    const numberOfChunks = Math.ceil(items.length / CHUNK_SIZE);
+    const numberOfChunks = Math.ceil(items.length / CHUNK.maxSize);
 
     console.log(
       cliColors.cyanAndBold,
       `> Oh, your site is huge! Writing sitemap in chunks of ${numberOfChunks} pages and its index sitemap.xml`
     );
 
-    for (let i = 0; i < items.length; i += CHUNK_SIZE) {
-      const chunk = items.slice(i, i + CHUNK_SIZE);
-      createFile(chunk, options, outDir, i / CHUNK_SIZE + 1);
+    for (let i = 0; i < items.length; i += CHUNK.maxSize) {
+      const chunk = items.slice(i, i + CHUNK.maxSize);
+      createFile(chunk, options, outDir, i / CHUNK.maxSize + 1);
     }
     createIndexFile(numberOfChunks, outDir, options, domain);
   }

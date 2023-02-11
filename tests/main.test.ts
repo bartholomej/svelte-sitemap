@@ -1,5 +1,7 @@
-import { prepareData } from '../src/helpers/global.helper';
+import { existsSync, mkdirSync, readFileSync, rmdirSync } from 'fs';
+import { prepareData, writeSitemap } from '../src/helpers/global.helper';
 import { PagesJson } from '../src/interfaces/global.interface';
+import { CHUNK } from '../src/vars';
 
 const options: { outDir?: string } = {};
 
@@ -294,149 +296,217 @@ test('Sitemap ignore Page1', async () => {
     ])
   );
 });
+describe('Trailing slashes', () => {
+  test('Add trailing slashes', async () => {
+    const json = await prepareData('https://example.com/', {
+      ...options,
+      trailingSlashes: true
+    });
 
-test('Add trailing slashes', async () => {
-  const json = await prepareData('https://example.com/', {
-    ...options,
-    trailingSlashes: true
+    expect(sortbyPage(json)).toMatchObject(
+      sortbyPage([
+        {
+          page: 'https://example.com/flat/',
+          changeFreq: null,
+          lastMod: ''
+        },
+        {
+          page: 'https://example.com/',
+          changeFreq: null,
+          lastMod: ''
+        },
+        {
+          page: 'https://example.com/page1/',
+          changeFreq: null,
+          lastMod: ''
+        },
+        {
+          page: 'https://example.com/page1/flat1/',
+          changeFreq: null,
+          lastMod: ''
+        },
+        {
+          page: 'https://example.com/page2/',
+          changeFreq: null,
+          lastMod: ''
+        },
+        {
+          page: 'https://example.com/page1/subpage1/',
+          changeFreq: null,
+          lastMod: ''
+        },
+        {
+          page: 'https://example.com/page2/subpage2/',
+          changeFreq: null,
+          lastMod: ''
+        },
+        {
+          page: 'https://example.com/page2/subpage2/subsubpage2/',
+          changeFreq: null,
+          lastMod: ''
+        }
+      ])
+    );
   });
 
-  expect(sortbyPage(json)).toMatchObject(
-    sortbyPage([
-      {
-        page: 'https://example.com/flat/',
-        changeFreq: null,
-        lastMod: ''
-      },
-      {
-        page: 'https://example.com/',
-        changeFreq: null,
-        lastMod: ''
-      },
-      {
-        page: 'https://example.com/page1/',
-        changeFreq: null,
-        lastMod: ''
-      },
-      {
-        page: 'https://example.com/page1/flat1/',
-        changeFreq: null,
-        lastMod: ''
-      },
-      {
-        page: 'https://example.com/page2/',
-        changeFreq: null,
-        lastMod: ''
-      },
-      {
-        page: 'https://example.com/page1/subpage1/',
-        changeFreq: null,
-        lastMod: ''
-      },
-      {
-        page: 'https://example.com/page2/subpage2/',
-        changeFreq: null,
-        lastMod: ''
-      },
-      {
-        page: 'https://example.com/page2/subpage2/subsubpage2/',
-        changeFreq: null,
-        lastMod: ''
-      }
-    ])
-  );
+  test('Add trailing slashes and ignore page2', async () => {
+    const json = await prepareData('https://example.com/', {
+      ...options,
+      trailingSlashes: true,
+      ignore: 'page2'
+    });
+
+    expect(sortbyPage(json)).toMatchObject(
+      sortbyPage([
+        {
+          page: 'https://example.com/flat/',
+          changeFreq: null,
+          lastMod: ''
+        },
+        {
+          page: 'https://example.com/',
+          changeFreq: null,
+          lastMod: ''
+        },
+        {
+          page: 'https://example.com/page1/flat1/',
+          changeFreq: null,
+          lastMod: ''
+        },
+        {
+          page: 'https://example.com/page1/',
+          changeFreq: null,
+          lastMod: ''
+        },
+        {
+          page: 'https://example.com/page1/subpage1/',
+          changeFreq: null,
+          lastMod: ''
+        }
+      ])
+    );
+  });
+
+  test('Add trailing slashes + ignore subpage2 + reset time', async () => {
+    const json = await prepareData('https://example.com/', {
+      ...options,
+      trailingSlashes: true,
+      ignore: 'subppage2',
+      resetTime: true
+    });
+
+    const today = new Date().toISOString().split('T')[0];
+
+    expect(sortbyPage(json)).toMatchObject(
+      sortbyPage([
+        {
+          page: 'https://example.com/flat/',
+          changeFreq: null,
+          lastMod: today
+        },
+        {
+          page: 'https://example.com/',
+          changeFreq: null,
+          lastMod: today
+        },
+        {
+          page: 'https://example.com/page1/',
+          changeFreq: null,
+          lastMod: today
+        },
+        {
+          page: 'https://example.com/page1/flat1/',
+          changeFreq: null,
+          lastMod: today
+        },
+        {
+          page: 'https://example.com/page2/',
+          changeFreq: null,
+          lastMod: today
+        },
+        {
+          page: 'https://example.com/page1/subpage1/',
+          changeFreq: null,
+          lastMod: today
+        },
+        {
+          page: 'https://example.com/page2/subpage2/',
+          changeFreq: null,
+          lastMod: today
+        },
+        {
+          page: 'https://example.com/page2/subpage2/subsubpage2/',
+          changeFreq: null,
+          lastMod: today
+        }
+      ])
+    );
+  });
 });
 
-test('Add trailing slashes and ignore page2', async () => {
-  const json = await prepareData('https://example.com/', {
-    ...options,
-    trailingSlashes: true,
-    ignore: 'page2'
+describe('Creating files', () => {
+  const json = [
+    {
+      page: 'https://example.com/flat/'
+    },
+    {
+      page: 'https://example.com/'
+    },
+    {
+      page: 'https://example.com/page1/'
+    },
+    {
+      page: 'https://example.com/page1/flat1/'
+    },
+    {
+      page: 'https://example.com/page2/'
+    },
+    {
+      page: 'https://example.com/page1/subpage1/'
+    },
+    {
+      page: 'https://example.com/page2/subpage2/'
+    },
+    {
+      page: 'https://example.com/page2/subpage2/subsubpage2/'
+    }
+  ];
+
+  if (existsSync('build-test')) {
+    rmdirSync('build-test', { recursive: true });
+  }
+
+  test('Sitemap.xml was created and contains right data', async () => {
+    mkdirSync('build-test');
+    writeSitemap(json, { outDir: 'build-test' }, 'example.com');
+
+    expect(existsSync('build-test/sitemap.xml')).toBe(true);
+    const fileContent = readFileSync('build-test/sitemap.xml', { encoding: 'utf-8' });
+    expect(fileContent).toContain('https://example.com/flat/');
+    expect((fileContent.match(/<url>/g) || []).length).toEqual(8);
+
+    rmdirSync('build-test', { recursive: true });
   });
 
-  expect(sortbyPage(json)).toMatchObject(
-    sortbyPage([
-      {
-        page: 'https://example.com/flat/',
-        changeFreq: null,
-        lastMod: ''
-      },
-      {
-        page: 'https://example.com/',
-        changeFreq: null,
-        lastMod: ''
-      },
-      {
-        page: 'https://example.com/page1/flat1/',
-        changeFreq: null,
-        lastMod: ''
-      },
-      {
-        page: 'https://example.com/page1/',
-        changeFreq: null,
-        lastMod: ''
-      },
-      {
-        page: 'https://example.com/page1/subpage1/',
-        changeFreq: null,
-        lastMod: ''
-      }
-    ])
-  );
-});
+  test('Sitemap.xml and sub sitemaps for large pages was created and contains right data', async () => {
+    CHUNK.maxSize = 5;
 
-test('Add trailing slashes + ignore subpage2 + reset time', async () => {
-  const json = await prepareData('https://example.com/', {
-    ...options,
-    trailingSlashes: true,
-    ignore: 'subppage2',
-    resetTime: true
+    mkdirSync('build-test');
+    writeSitemap(json, { outDir: 'build-test' }, 'https://example.com');
+
+    expect(existsSync('build-test/sitemap.xml')).toBe(true);
+    const fileContent = readFileSync('build-test/sitemap.xml', { encoding: 'utf-8' });
+
+    expect(fileContent).toContain('https://example.com/sitemap-1.xml');
+    expect((fileContent.match(/<sitemap>/g) || []).length).toEqual(2);
+
+    expect(existsSync('build-test/sitemap-1.xml')).toBe(true);
+    expect(existsSync('build-test/sitemap-2.xml')).toBe(true);
+
+    const fileContent2 = readFileSync('build-test/sitemap-2.xml', { encoding: 'utf-8' });
+    expect(fileContent2).toContain('https://example.com/page2/subpage2/subsubpage2/');
+    expect((fileContent2.match(/<url>/g) || []).length).toEqual(3);
+
+    rmdirSync('build-test', { recursive: true });
   });
-
-  const today = new Date().toISOString().split('T')[0];
-
-  expect(sortbyPage(json)).toMatchObject(
-    sortbyPage([
-      {
-        page: 'https://example.com/flat/',
-        changeFreq: null,
-        lastMod: today
-      },
-      {
-        page: 'https://example.com/',
-        changeFreq: null,
-        lastMod: today
-      },
-      {
-        page: 'https://example.com/page1/',
-        changeFreq: null,
-        lastMod: today
-      },
-      {
-        page: 'https://example.com/page1/flat1/',
-        changeFreq: null,
-        lastMod: today
-      },
-      {
-        page: 'https://example.com/page2/',
-        changeFreq: null,
-        lastMod: today
-      },
-      {
-        page: 'https://example.com/page1/subpage1/',
-        changeFreq: null,
-        lastMod: today
-      },
-      {
-        page: 'https://example.com/page2/subpage2/',
-        changeFreq: null,
-        lastMod: today
-      },
-      {
-        page: 'https://example.com/page2/subpage2/subsubpage2/',
-        changeFreq: null,
-        lastMod: today
-      }
-    ])
-  );
 });

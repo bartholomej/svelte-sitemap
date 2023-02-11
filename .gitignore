@@ -65,3 +65,4 @@ typings/
 ## For testing purpose
 /build
 /public
+/build-test
