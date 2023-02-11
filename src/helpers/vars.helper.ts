@@ -4,11 +4,11 @@ export const cliColors = {
   red: '\x1b[31m%s\x1b[0m'
 };
 
-export const successMsg = (outDir: string) =>
-  `  ✔ done. Check your new sitemap here: ./${outDir}/sitemap.xml`;
+export const successMsg = (outDir: string, filename: string) =>
+  `  ✔ done. Check your new sitemap here: ./${outDir}/${filename}`;
 
-export const errorMsgWrite = (outDir: string) =>
-  `  × File '${outDir}/sitemap.xml' could not be created.`;
+export const errorMsgWrite = (outDir: string, filename: string) =>
+  `  × File '${outDir}/${filename}' could not be created.`;
 
 export const errorMsgFolder = (outDir: string) =>
   `  × Folder '${outDir}/' doesn't exist.\n    Make sure you are using this library as 'postbuild' so '${outDir}/' folder was successfully created before running this script. See https://github.com/bartholomej/svelte-sitemap#readme`;

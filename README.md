@@ -6,9 +6,10 @@
 
 > Small helper which scans your Svelte routes and generates _sitemap.xml_
 >
-> - Designed for Svelte `adapter-static` with `prerender` option (SSG)
+> - Designed for SvelteKit `adapter-static` with `prerender` option (SSG)
 > - TypeScript, JavaScript, CLI version
-> - Useful options
+> - Useful [options](#%EF%B8%8F-options) for customizing your sitemap
+> - Support for Google [sitemap index](https://developers.google.com/search/docs/crawling-indexing/sitemaps/large-sitemaps). _Useful for large sites (more than 50K pages)_
 > - Workaround for [this official SvelteKit issue](https://github.com/sveltejs/kit/issues/1142)
 
 ## Install
@@ -139,7 +140,7 @@ yarn demo
 
 ## 📝 License
 
-Copyright &copy; 2022 [Lukas Bartak](http://bartweb.cz)
+Copyright &copy; 2023 [Lukas Bartak](http://bartweb.cz)
 
 Proudly powered by nature 🗻, wind 💨, tea 🍵 and beer 🍺 ;)
 
