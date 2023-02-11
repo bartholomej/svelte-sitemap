@@ -1,22 +1,10 @@
-import { existsSync, mkdirSync, readFileSync, rmdirSync } from 'fs';
-import { prepareData, writeSitemap } from '../src/helpers/global.helper';
-import { PagesJson } from '../src/interfaces/global.interface';
-import { CHUNK } from '../src/vars';
-
-const options: { outDir?: string } = {};
-
-const cliArgs = process.argv.filter((x) => x.startsWith('--outDir='))[0];
-if (cliArgs?.split('=')[1]) {
-  options.outDir = cliArgs?.split('=')[1];
-}
-console.log('JEST OPTIONS:', options);
-
-const sortbyPage = (json: PagesJson[]) => json.sort((a, b) => a.page.localeCompare(b.page));
+import { prepareData } from '../src/helpers/global.helper';
+import { optionsTest, sortbyPage } from './utils-test';
 
 // Sitemap
 describe('Create JSON model', () => {
   test('Default sitemap', async () => {
-    const json = await prepareData('https://example.com', { ...options });
+    const json = await prepareData('https://example.com', { ...optionsTest });
 
     expect(sortbyPage(json)).toMatchObject(
       sortbyPage([
@@ -66,7 +54,7 @@ describe('Create JSON model', () => {
 
   test('Sitemap with frequency', async () => {
     const json = await prepareData('https://example.com', {
-      ...options,
+      ...optionsTest,
       changeFreq: 'daily'
     });
 
@@ -117,7 +105,7 @@ describe('Create JSON model', () => {
   });
 
   test('Sitemap with reset time', async () => {
-    const json = await prepareData('https://example.com', { ...options, resetTime: true });
+    const json = await prepareData('https://example.com', { ...optionsTest, resetTime: true });
 
     const today = new Date().toISOString().split('T')[0];
 
@@ -170,7 +158,7 @@ describe('Create JSON model', () => {
 
 test('Sitemap ignore **/page2', async () => {
   const json = await prepareData('https://example.com', {
-    ...options,
+    ...optionsTest,
     ignore: '**/page2',
     debug: true
   });
@@ -208,7 +196,7 @@ test('Sitemap ignore **/page2', async () => {
 
 test('Sitemap bad cahngeFreq', async () => {
   const json = await prepareData('https://example.com', {
-    ...options,
+    ...optionsTest,
     changeFreq: 'veryverybadchoice' as unknown as any,
     debug: true
   });
@@ -261,7 +249,7 @@ test('Sitemap bad cahngeFreq', async () => {
 
 test('Sitemap ignore Page1', async () => {
   const json = await prepareData('https://example.com', {
-    ...options,
+    ...optionsTest,
     ignore: 'page1',
     debug: true
   });
@@ -299,7 +287,7 @@ test('Sitemap ignore Page1', async () => {
 describe('Trailing slashes', () => {
   test('Add trailing slashes', async () => {
     const json = await prepareData('https://example.com/', {
-      ...options,
+      ...optionsTest,
       trailingSlashes: true
     });
 
@@ -351,7 +339,7 @@ describe('Trailing slashes', () => {
 
   test('Add trailing slashes and ignore page2', async () => {
     const json = await prepareData('https://example.com/', {
-      ...options,
+      ...optionsTest,
       trailingSlashes: true,
       ignore: 'page2'
     });
@@ -389,7 +377,7 @@ describe('Trailing slashes', () => {
 
   test('Add trailing slashes + ignore subpage2 + reset time', async () => {
     const json = await prepareData('https://example.com/', {
-      ...options,
+      ...optionsTest,
       trailingSlashes: true,
       ignore: 'subppage2',
       resetTime: true
@@ -441,72 +429,5 @@ describe('Trailing slashes', () => {
         }
       ])
     );
-  });
-});
-
-describe('Creating files', () => {
-  const json = [
-    {
-      page: 'https://example.com/flat/'
-    },
-    {
-      page: 'https://example.com/'
-    },
-    {
-      page: 'https://example.com/page1/'
-    },
-    {
-      page: 'https://example.com/page1/flat1/'
-    },
-    {
-      page: 'https://example.com/page2/'
-    },
-    {
-      page: 'https://example.com/page1/subpage1/'
-    },
-    {
-      page: 'https://example.com/page2/subpage2/'
-    },
-    {
-      page: 'https://example.com/page2/subpage2/subsubpage2/'
-    }
-  ];
-
-  if (existsSync('build-test')) {
-    rmdirSync('build-test', { recursive: true });
-  }
-
-  test('Sitemap.xml was created and contains right data', async () => {
-    mkdirSync('build-test');
-    writeSitemap(json, { outDir: 'build-test' }, 'example.com');
-
-    expect(existsSync('build-test/sitemap.xml')).toBe(true);
-    const fileContent = readFileSync('build-test/sitemap.xml', { encoding: 'utf-8' });
-    expect(fileContent).toContain('https://example.com/flat/');
-    expect((fileContent.match(/<url>/g) || []).length).toEqual(8);
-
-    rmdirSync('build-test', { recursive: true });
-  });
-
-  test('Sitemap.xml and sub sitemaps for large pages was created and contains right data', async () => {
-    CHUNK.maxSize = 5;
-
-    mkdirSync('build-test');
-    writeSitemap(json, { outDir: 'build-test' }, 'https://example.com');
-
-    expect(existsSync('build-test/sitemap.xml')).toBe(true);
-    const fileContent = readFileSync('build-test/sitemap.xml', { encoding: 'utf-8' });
-
-    expect(fileContent).toContain('https://example.com/sitemap-1.xml');
-    expect((fileContent.match(/<sitemap>/g) || []).length).toEqual(2);
-
-    expect(existsSync('build-test/sitemap-1.xml')).toBe(true);
-    expect(existsSync('build-test/sitemap-2.xml')).toBe(true);
-
-    const fileContent2 = readFileSync('build-test/sitemap-2.xml', { encoding: 'utf-8' });
-    expect(fileContent2).toContain('https://example.com/page2/subpage2/subsubpage2/');
-    expect((fileContent2.match(/<url>/g) || []).length).toEqual(3);
-
-    rmdirSync('build-test', { recursive: true });
   });
 });
