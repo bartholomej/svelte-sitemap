@@ -49,7 +49,7 @@ const getPriority = (pageUrl: string) => {
     return '1.0';
   }
   if (PRIOR == 0) {
-    return null;
+    return '0.0';
   }
   return String(Math.round(PRIOR * 10) / 10);
 };
