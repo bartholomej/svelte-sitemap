@@ -11,12 +11,14 @@ export interface Options {
   attribution?: boolean;
   ignore?: string | string[];
   trailingSlashes?: boolean;
+  priority?: boolean;
 }
 
 export interface PagesJson {
   page: string;
   changeFreq?: ChangeFreq;
   lastMod?: string;
+  priority?: string;
 }
 
 export const changeFreq = [
@@ -32,4 +34,4 @@ export const changeFreq = [
 /**
  * Specs: https://www.sitemaps.org/protocol.html
  */
-export type ChangeFreq = typeof changeFreq[number];
+export type ChangeFreq = (typeof changeFreq)[number];

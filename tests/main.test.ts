@@ -430,4 +430,64 @@ describe('Trailing slashes', () => {
       ])
     );
   });
+
+  test('Default sitemap + add priority', async () => {
+    const json = await prepareData('https://example.com', {
+      ...optionsTest,
+      priority: true
+    });
+
+    expect(sortbyPage(json)).toMatchObject(
+      sortbyPage([
+        {
+          page: 'https://example.com/flat',
+          changeFreq: null,
+          lastMod: '',
+          priority: '0.8'
+        },
+        {
+          page: 'https://example.com',
+          changeFreq: null,
+          lastMod: '',
+          priority: '1.0'
+        },
+        {
+          page: 'https://example.com/page1',
+          changeFreq: null,
+          lastMod: '',
+          priority: '0.8'
+        },
+        {
+          page: 'https://example.com/page1/flat1',
+          changeFreq: null,
+          lastMod: '',
+          priority: '0.6'
+        },
+        {
+          page: 'https://example.com/page2',
+          changeFreq: null,
+          lastMod: '',
+          priority: '0.8'
+        },
+        {
+          page: 'https://example.com/page1/subpage1',
+          changeFreq: null,
+          lastMod: '',
+          priority: '0.6'
+        },
+        {
+          page: 'https://example.com/page2/subpage2',
+          changeFreq: null,
+          lastMod: '',
+          priority: '0.6'
+        },
+        {
+          page: 'https://example.com/page2/subpage2/subsubpage2',
+          changeFreq: null,
+          lastMod: '',
+          priority: '0.4'
+        }
+      ])
+    );
+  });
 });

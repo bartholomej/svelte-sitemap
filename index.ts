@@ -11,8 +11,8 @@ let stop = false;
 
 const args = minimist(process.argv.slice(2), {
   string: ['domain', 'out-dir', 'ignore', 'change-freq'],
-  boolean: ['attribution', 'reset-time', 'trailing-slashes', 'debug', 'version'],
-  default: { attribution: true, 'trailing-slashes': false, default: false },
+  boolean: ['attribution', 'reset-time', 'trailing-slashes', 'debug', 'version', 'priority'],
+  default: { attribution: true, 'trailing-slashes': false, default: false, priority: false },
   alias: {
     d: 'domain',
     D: 'domain',
@@ -29,7 +29,9 @@ const args = minimist(process.argv.slice(2), {
     i: 'ignore',
     I: 'ignore',
     t: 'trailing-slashes',
-    T: 'trailing-slashes'
+    T: 'trailing-slashes',
+    p: 'priority',
+    P: 'priority'
   },
   unknown: (err: string) => {
     console.log('⚠ Those arguments are not supported:', err);
@@ -53,6 +55,7 @@ if (args.help || args.version === '' || args.version === true) {
   log('  -t, --trailing-slashes  Do you like trailing slashes?');
   log('  -r, --reset-time        Set modified time to now');
   log('  -c, --change-freq       Set change frequency `weekly` | `daily` | …');
+  log('  -p, --priority          Set priorities based on the route');
   log('  -v, --version           Show version');
   log('  --debug                 Debug mode');
   log(' ');
@@ -81,6 +84,7 @@ if (args.help || args.version === '' || args.version === true) {
   const ignore: string = args['ignore'];
   const attribution: boolean =
     args['attribution'] === '' || args['attribution'] === false ? false : true;
+  const priority: boolean = args['priority'] === '' || args['priority'] === true ? true : false;
   const options: Options = {
     debug,
     resetTime,
@@ -88,7 +92,8 @@ if (args.help || args.version === '' || args.version === true) {
     outDir,
     attribution,
     ignore,
-    trailingSlashes
+    trailingSlashes,
+    priority
   };
 
   createSitemap(domain, options);
