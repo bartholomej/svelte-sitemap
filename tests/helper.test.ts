@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest';
 import { removeHtml } from '../src/helpers/global.helper';
 
 describe('Remove html', () => {
