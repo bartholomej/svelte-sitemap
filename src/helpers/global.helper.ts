@@ -33,6 +33,27 @@ const getUrl = (url: string, domain: string, options: Options) => {
   return `${domain}${slash}${trimmed}`;
 };
 
+const getPriority = (pageUrl: string) => {
+  let PRIOR = 1.0;
+  const url = new URL(pageUrl);
+  let sliced = url.pathname.split('/').slice(1);
+  sliced.forEach((slice) => {
+    if (slice != '') {
+      if (PRIOR >= 0.2) {
+        PRIOR -= 0.2;
+      }
+    }
+  });
+
+  if (PRIOR == 1) {
+    return '1.0';
+  }
+  if (PRIOR == 0) {
+    return '0.0';
+  }
+  return String(Math.round(PRIOR * 10) / 10);
+};
+
 export const removeHtml = (fileName: string) => {
   if (fileName?.endsWith('.html')) {
     return fileName.slice(0, -5);
@@ -50,10 +71,12 @@ export async function prepareData(domain: string, options?: Options): Promise<Pa
   const pages: string[] = await fg(`${FOLDER}/**/*.html`, { ignore });
 
   const results = pages.map((page) => {
+    const pageUrl = getUrl(page, domain, options);
     return {
-      page: getUrl(page, domain, options),
+      page: pageUrl,
       changeFreq: changeFreq,
-      lastMod: options?.resetTime ? new Date().toISOString().split('T')[0] : ''
+      lastMod: options?.resetTime ? new Date().toISOString().split('T')[0] : '',
+      priority: options?.priority ? getPriority(pageUrl) : null
     };
   });
 
@@ -115,6 +138,9 @@ const createFile = (
     }
     if (item.lastMod) {
       page.ele('lastmod').txt(item.lastMod);
+    }
+    if (item.priority) {
+      page.ele('priority').txt(item.priority);
     }
   }
 
