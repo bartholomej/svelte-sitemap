@@ -98,6 +98,25 @@ npx svelte-sitemap --out-dir .vercel/output/static --domain https://www.example.
 
 Or check out [other solutions](https://github.com/bartholomej/svelte-sitemap/issues/16#issuecomment-961414454) and join the discussion.
 
+#### Cloudflare adapter
+
+- If you're using `@sveltejs/adapter-cloudflare` to deploy your app to Cloudflare Pages, you'll need to add some options to your adapter in `svelte.config.js`:
+
+```diff
+-import adapter from '@sveltejs/adapter-auto';
++import adapter from '@sveltejs/adapter-cloudflare';
+
+/** @type {import('@sveltejs/kit').Config} */
+const config = {
+    kit: {
+-       adapter: adapter()
++       adapter: adapter({ routes: { include: ['/*'], exclude: ['<all>', '/sitemap.xml'] }})
+    }
+};
+
+export default config;
+```
+
 ### Error: Missing html files
 
 > × There is no static html file in your 'build/' folder. Are you sure you are using Svelte adapter-static with prerender option?
