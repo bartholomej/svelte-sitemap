@@ -13,7 +13,7 @@
     "build": "tsc",
     "postbuild": "npm-prepare-dist -s postinstall",
     "tsc": "tsc",
-    "demo": "ts-node demo",
+    "demo": "tsx demo",
     "lint": "eslint ./src/**/**/* --fix",
     "test": "jest",
     "test:outdir": "yarn outdir:prepare && yarn test --outDir='public' && yarn outdir:revert",
@@ -54,6 +54,7 @@
     "rimraf": "^5.0.5",
     "ts-jest": "^29.1.1",
     "ts-node": "^10.9.2",
+    "tsx": "^4.6.2",
     "typescript": "^5.3.3"
   },
   "publishConfig": {
