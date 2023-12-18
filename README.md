@@ -62,8 +62,8 @@ And now you can run your script like this: `node my-script.js`
 | `--trailing-slashes`, `-t` | Add trailing slashes                                                                                                            | false   | `--trailing-slashes`                   |
 | `--reset-time`, `-r`       | Set lastModified time to now                                                                                                    | false   | `-r`                                   |
 | `--change-freq`, `-c`      | Set change frequency [Option](https://github.com/bartholomej/svelte-sitemap/blob/master/src/interfaces/global.interface.ts#L22) | -       | `--change-freq daily`                  |
-| `--help`, `-h`             | Display this usage info                                                                                                         | -       | `-v`                                   |
-| `--version`, `-v`          | Show version                                                                                                                    | -       | `-h`                                   |
+| `--help`, `-h`             | Display this usage info                                                                                                         | -       | `-h`                                   |
+| `--version`, `-v`          | Show version                                                                                                                    | -       | `-v`                                   |
 | `--debug`                  | Show some useful logs                                                                                                           | -       | `--debug`                              |
 
 ## 🙋 FAQ
