@@ -1,8 +1,9 @@
 import { existsSync, mkdirSync, readFileSync, rmdirSync } from 'fs';
+import { describe, expect, test } from 'vitest';
 import { version } from '../package.json';
 import { writeSitemap } from '../src/helpers/global.helper';
 import { CHUNK } from '../src/vars';
-import { deleteFolderIfExist, TEST_FOLDER } from './utils-test';
+import { TEST_FOLDER, deleteFolderIfExist } from './utils-test';
 
 describe('Creating files', () => {
   const json = [
