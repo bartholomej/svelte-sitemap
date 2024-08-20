@@ -3,8 +3,8 @@
     "statusBar.background": "#000"
   },
   "editor.codeActionsOnSave": {
-    "source.organizeImports": true,
-    "source.fixAll.eslint": true
+    "source.organizeImports": "explicit",
+    "source.fixAll.eslint": "explicit"
   },
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
