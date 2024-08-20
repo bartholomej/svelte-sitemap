@@ -10,12 +10,6 @@ export const createSitemap = async (domain: string = DOMAIN, options?: Options):
 
   const json = await prepareData(domain, options);
 
-  options.additional.forEach((url) => {
-      json.push({
-          page: `${domain}${url}`,
-      });
-  });
-
   if (options?.debug) {
     console.log('RESULT', json);
   }
