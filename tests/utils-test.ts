@@ -3,10 +3,9 @@ import { PagesJson } from '../src/interfaces/global.interface';
 
 const options: { outDir?: string } = {};
 
-export const cliArgs = process.argv.filter((x) => x.startsWith('--outDir='))[0];
-if (cliArgs?.split('=')[1]) {
-  options.outDir = cliArgs?.split('=')[1];
-}
+export const processEnv = process.env;
+
+if (process.env.OUT_DIR) options.outDir = process.env.OUT_DIR;
 
 export const optionsTest = options;
 
