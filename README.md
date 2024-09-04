@@ -58,6 +58,7 @@ And now you can run your script like this: `node my-script.js`
 | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------- | -------------------------------------- |
 | `--domain`, `-d`           | Use your domain **[required]**                                                                                                  | -       | `-d https://mydomain.com`              |
 | `--out-dir`, `-o`          | Set custom build folder                                                                                                         | `build` | `-o dist`                              |
+| `--additional`, `-a`       | Additional pages outside of SvelteKit                                                                                           | -       | `-a my-page -a my-second-page`         |
 | `--ignore`, `-i`           | Ignore files or folders                                                                                                         | []      | `-i '**/admin/**' -i 'my-secret-page'` |
 | `--trailing-slashes`, `-t` | Add trailing slashes                                                                                                            | false   | `--trailing-slashes`                   |
 | `--reset-time`, `-r`       | Set lastModified time to now                                                                                                    | false   | `-r`                                   |
@@ -170,7 +171,7 @@ yarn demo
 
 ## 📝 License
 
-Copyright &copy; 2023 [Lukas Bartak](http://bartweb.cz)
+Copyright &copy; 2024 [Lukas Bartak](http://bartweb.cz)
 
 Proudly powered by nature 🗻, wind 💨, tea 🍵 and beer 🍺 ;)
 
