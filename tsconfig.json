@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es2017",
     "lib": ["dom"],
-    "types": ["node", "jest"],
+    "types": ["node"],
     "baseUrl": "./src",
     "esModuleInterop": true,
     "module": "commonjs",

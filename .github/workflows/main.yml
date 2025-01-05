@@ -30,7 +30,7 @@ jobs:
         run: yarn build
 
       - name: Run tests
-        run: yarn test --coverage true
+        run: yarn test:coverage
 
       - name: Run tests with outDir
         run: yarn test:outdir
