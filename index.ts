@@ -68,14 +68,14 @@ if (args.help || args.version === '' || args.version === true) {
   log('  --debug                 Debug mode');
   log(' ');
   process.exit(args.help ? 0 : 1);
-} else if (!config.domain && !args.domain) {
+} else if (!config?.domain && !args.domain) {
   console.log(
     `⚠ svelte-sitemap: --domain argument is required.\n\nSee instructions: ${REPO_URL}\n\nExample:\n\n  svelte-sitemap --domain https://mydomain.com\n`
   );
   process.exit(0);
 } else if (
   // (config.domain || args.domain) &&
-  !config.domain?.includes('http') &&
+  !config?.domain?.includes('http') &&
   !args.domain?.includes('http')
 ) {
   console.log(
@@ -87,7 +87,11 @@ if (args.help || args.version === '' || args.version === true) {
 } else {
   const domain: string = args.domain ? args.domain : undefined;
   const debug: boolean = args.debug === '' || args.debug === true ? true : false;
-  const additional = Array.isArray(args['additional']) ? args['additional'] : args.additional ? [args.additional] : [];
+  const additional = Array.isArray(args['additional'])
+    ? args['additional']
+    : args.additional
+      ? [args.additional]
+      : [];
   const resetTime: boolean =
     args['reset-time'] === '' || args['reset-time'] === true ? true : false;
   const trailingSlashes: boolean =
@@ -107,7 +111,7 @@ if (args.help || args.version === '' || args.version === true) {
     attribution,
     ignore,
     trailingSlashes,
-    additional,
+    additional
   };
 
   // Config file is preferred
