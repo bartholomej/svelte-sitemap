@@ -2,7 +2,7 @@ import { OptionsSvelteSitemap } from '../interfaces/global.interface';
 import { OUT_DIR } from './../vars';
 import { loadFile } from './file';
 
-export const loadConfig = (path: string): OptionsSvelteSitemap => {
+export const loadConfig = (path: string): OptionsSvelteSitemap | undefined => {
   const baseConfig = loadFile<OptionsSvelteSitemap>(path);
   return baseConfig!;
 };

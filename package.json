@@ -1,6 +1,6 @@
 {
   "name": "svelte-sitemap",
-  "version": "2.7.0",
+  "version": "3.0.0-next.8",
   "description": "Small helper which scans your Svelte routes folder and generates static sitemap.xml",
   "main": "./dist/index.js",
   "author": "BART! <bart@bartweb.cz>",
@@ -22,8 +22,8 @@
     "test:coverage": "vitest run --coverage",
     "postinstall": "cp -r ./src/build/ ./build",
     "postversion": "git push && git push --follow-tags",
-    "publish:next": "yarn && yarn build && yarn test && cd dist && npm publish --tag next",
-    "publish:beta": "yarn && yarn build && yarn test && cd dist && npm publish --tag beta",
+    "publish:next": "yarn && yarn build && yarn test run && cd dist && npm publish --tag next",
+    "publish:beta": "yarn && yarn build && yarn test run && cd dist && npm publish --tag beta",
     "release:beta": "npm version prerelease -m \"chore(update): prelease %s β\"",
     "release:patch": "git checkout master && npm version patch -m \"chore(update): patch release %s 🐛 \"",
     "release:minor": "git checkout master && npm version minor -m \"chore(update): release %s 🚀\"",
