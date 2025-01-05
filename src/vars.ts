@@ -1,10 +1,6 @@
-import { Options } from './interfaces/global.interface';
-
 export const APP_NAME = 'svelte-sitemap';
 
 export const DOMAIN = 'https://example.com';
-
-export const OPTIONS: Options = { resetTime: false, debug: false, changeFreq: 'weekly' };
 
 export const OUT_DIR = 'build';
 
@@ -13,3 +9,5 @@ export const OUT_DIR = 'build';
 export const CHUNK = {
   maxSize: 50_000
 };
+
+export const CONFIG_FILE = 'svelte-sitemap.cjs';

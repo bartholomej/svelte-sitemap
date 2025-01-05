@@ -2,12 +2,20 @@
 
 import minimist from 'minimist';
 import { version } from './package.json';
+import { loadConfig, withDefaultConfig } from './src/helpers/config';
+import { cliColors } from './src/helpers/vars.helper';
 import { createSitemap } from './src/index';
-import { ChangeFreq, Options } from './src/interfaces/global.interface';
+import { ChangeFreq, OptionsSvelteSitemap } from './src/interfaces/global.interface';
+import { APP_NAME, CONFIG_FILE } from './src/vars';
+
+console.log(cliColors.cyanAndBold, `> Using ${APP_NAME}`);
 
 const REPO_URL = 'https://github.com/bartholomej/svelte-sitemap';
 
 let stop = false;
+
+// Load svelte-sitemap.cjs
+const config = loadConfig(CONFIG_FILE);
 
 const args = minimist(process.argv.slice(2), {
   string: ['domain', 'out-dir', 'ignore', 'change-freq', 'additional'],
@@ -60,12 +68,16 @@ if (args.help || args.version === '' || args.version === true) {
   log('  --debug                 Debug mode');
   log(' ');
   process.exit(args.help ? 0 : 1);
-} else if (!args.domain) {
+} else if (!config?.domain && !args.domain) {
   console.log(
     `⚠ svelte-sitemap: --domain argument is required.\n\nSee instructions: ${REPO_URL}\n\nExample:\n\n  svelte-sitemap --domain https://mydomain.com\n`
   );
   process.exit(0);
-} else if (!args.domain.includes('http')) {
+} else if (
+  // (config.domain || args.domain) &&
+  !config?.domain?.includes('http') &&
+  !args.domain?.includes('http')
+) {
   console.log(
     `⚠ svelte-sitemap: --domain argument must starts with https://\n\nSee instructions: ${REPO_URL}\n\nExample:\n\n  svelte-sitemap --domain https://mydomain.com\n`
   );
@@ -75,7 +87,11 @@ if (args.help || args.version === '' || args.version === true) {
 } else {
   const domain: string = args.domain ? args.domain : undefined;
   const debug: boolean = args.debug === '' || args.debug === true ? true : false;
-  const additional = Array.isArray(args['additional']) ? args['additional'] : args.additional ? [args.additional] : [];
+  const additional = Array.isArray(args['additional'])
+    ? args['additional']
+    : args.additional
+      ? [args.additional]
+      : [];
   const resetTime: boolean =
     args['reset-time'] === '' || args['reset-time'] === true ? true : false;
   const trailingSlashes: boolean =
@@ -85,16 +101,31 @@ if (args.help || args.version === '' || args.version === true) {
   const ignore: string = args['ignore'];
   const attribution: boolean =
     args['attribution'] === '' || args['attribution'] === false ? false : true;
-  const options: Options = {
+
+  const optionsCli: OptionsSvelteSitemap = {
     debug,
     resetTime,
     changeFreq,
     outDir,
+    domain,
     attribution,
     ignore,
     trailingSlashes,
-    additional,
+    additional
   };
 
-  createSitemap(domain, options);
+  // Config file is preferred
+  if (config && Object.keys(config).length === 0) {
+    console.log(
+      cliColors.cyanAndBold,
+      `  ✔ Using CLI options. Config file ${CONFIG_FILE} not found.`
+    );
+    createSitemap(optionsCli);
+  } else {
+    console.log(
+      cliColors.green,
+      `  ✔ Loading config from ${CONFIG_FILE}. CLI options are ignored now.`
+    );
+    createSitemap(withDefaultConfig(config));
+  }
 }
