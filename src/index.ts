@@ -15,7 +15,7 @@ export const createSitemap = async (options: OptionsSvelteSitemap): Promise<void
   }
 
   if (json.length) {
-    writeSitemap(json, options, domain);
+    writeSitemap(json, options, options.domain);
   } else {
     console.error(cliColors.red, errorMsgWrite(options.outDir ?? OUT_DIR, 'sitemap.xml'));
   }
