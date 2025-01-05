@@ -49,6 +49,8 @@ export async function prepareData(domain: string, options?: Options): Promise<Pa
   const changeFreq = prepareChangeFreq(options);
   const pages: string[] = await fg(`${FOLDER}/**/*.html`, { ignore });
 
+  if (options.additional) pages.push(...options.additional);
+
   const results = pages.map((page) => {
     return {
       page: getUrl(page, domain, options),

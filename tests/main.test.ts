@@ -104,6 +104,58 @@ describe('Create JSON model', () => {
     );
   });
 
+  test('Sitemap with additional pages', async () => {
+    const json = await prepareData('https://example.com', {
+      ...optionsTest,
+      additional: ['my-page', 'my-page2']
+    });
+
+    expect(sortbyPage(json)).toMatchObject(
+      sortbyPage([
+        {
+          page: 'https://example.com/flat',
+          lastMod: ''
+        },
+        {
+          page: 'https://example.com',
+          lastMod: ''
+        },
+        {
+          page: 'https://example.com/page1',
+          lastMod: ''
+        },
+        {
+          page: 'https://example.com/page1/flat1',
+          lastMod: ''
+        },
+        {
+          page: 'https://example.com/page2',
+          lastMod: ''
+        },
+        {
+          page: 'https://example.com/page1/subpage1',
+          lastMod: ''
+        },
+        {
+          page: 'https://example.com/page2/subpage2',
+          lastMod: ''
+        },
+        {
+          page: 'https://example.com/page2/subpage2/subsubpage2',
+          lastMod: ''
+        },
+        {
+          lastMod: '',
+          page: 'https://example.com/my-page'
+        },
+        {
+          lastMod: '',
+          page: 'https://example.com/my-page2'
+        }
+      ])
+    );
+  });
+
   test('Sitemap with reset time', async () => {
     const json = await prepareData('https://example.com', { ...optionsTest, resetTime: true });
 
