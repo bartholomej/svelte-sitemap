@@ -1,15 +1,26 @@
 import { existsSync } from 'fs';
 import { resolve } from 'path';
+import { pathToFileURL } from 'url';
 
-export const loadFile = <T>(fileName: string, throwError = true): T => {
+const dynamicImport = new Function('specifier', 'return import(specifier)');
+
+export const loadFile = async <T>(fileName: string, throwError = true): Promise<T | null> => {
   const filePath = resolve(resolve(process.cwd(), fileName));
 
   if (existsSync(filePath)) {
-    return require(filePath);
+    try {
+      return require(filePath);
+    } catch (err: any) {
+      if (err.code === 'ERR_REQUIRE_ESM') {
+        const module = await dynamicImport(pathToFileURL(filePath).href);
+        return module.default || module;
+      }
+      throw err;
+    }
   }
 
   if (throwError) {
-    new Error(`${filePath} does not exist.`);
+    throw new Error(`${filePath} does not exist.`);
   }
   return null;
 };

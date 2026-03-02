@@ -10,4 +10,9 @@ export const CHUNK = {
   maxSize: 50_000
 };
 
-export const CONFIG_FILE = 'svelte-sitemap.cjs';
+export const CONFIG_FILES = [
+  'svelte-sitemap.js',
+  'svelte-sitemap.cjs',
+  'svelte-sitemap.mjs',
+  'svelte-sitemap.json'
+];

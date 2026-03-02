@@ -2,9 +2,14 @@ import { OptionsSvelteSitemap } from '../interfaces/global.interface';
 import { OUT_DIR } from './../vars';
 import { loadFile } from './file';
 
-export const loadConfig = (path: string): OptionsSvelteSitemap | undefined => {
-  const baseConfig = loadFile<OptionsSvelteSitemap>(path);
-  return baseConfig!;
+export const loadConfig = async (paths: string[]): Promise<OptionsSvelteSitemap | undefined> => {
+  for (const path of paths) {
+    const config = await loadFile<OptionsSvelteSitemap>(path, false);
+    if (config) {
+      return config;
+    }
+  }
+  return undefined;
 };
 
 export const defaultConfig: OptionsSvelteSitemap = {

@@ -25,12 +25,13 @@ npm install svelte-sitemap --save-dev
 
 ### Config file method (recommended)
 
-Create config file `svelte-sitemap.cjs` in the root of your project:
+Create config file `svelte-sitemap.js` (or `.cjs`, `.mjs`, `.json`) in the root of your project:
 
-`svelte-sitemap.cjs`
+`svelte-sitemap.js`
 
 ```js
-module.exports = {
+// svelte-sitemap.js
+export default {
   domain: 'https://www.example.com'
   // ...more options
 };
@@ -77,7 +78,7 @@ And now you can run your script like this: `node my-script.js`
 
 ## Example
 
-Use this library as a `postbuild` hook in your `package.json` with config file `svelte-sitemap.cjs` in your project root.
+Use this library as a `postbuild` hook in your `package.json` with config file `svelte-sitemap.js` in your project root.
 
 File: `package.json`
 
@@ -90,10 +91,10 @@ File: `package.json`
 }
 ```
 
-File: `svelte-sitemap.cjs`
+File: `svelte-sitemap.js`
 
-```typescript
-module.exports = {
+```javascript
+export default {
   domain: 'https://www.example.com',
   trailingSlashes: true
 };
