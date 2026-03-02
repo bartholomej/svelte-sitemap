@@ -8,7 +8,7 @@
   "scripts": {
     "start": "tsc -w",
     "prebuild": "rimraf dist",
-    "build": "tsc",
+    "build": "yarn prebuild && tsc && yarn postbuild",
     "postbuild": "npm-prepare-dist -s postinstall",
     "tsc": "tsc",
     "demo": "tsx demo",
