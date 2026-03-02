@@ -4,9 +4,7 @@
   "description": "Small helper which scans your Svelte routes folder and generates static sitemap.xml",
   "main": "./dist/index.js",
   "author": "BART! <bart@bartweb.cz>",
-  "bin": {
-    "svelte-sitemap": "index.js"
-  },
+  "bin": "index.js",
   "scripts": {
     "start": "tsc -w",
     "prebuild": "rimraf dist",
@@ -81,5 +79,6 @@
   "engines": {
     "node": ">= 14.17.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "packageManager": "yarn@4.12.0"
 }
