@@ -1,4 +1,4 @@
-name: Build & Publish
+name: 🚀 Publish to NPM
 
 on:
   push:
@@ -12,33 +12,29 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+    name: 🚀 Publish to NPM
 
     steps:
       - uses: actions/checkout@v6
+
+      - name: 📦 Enable Corepack
+        run: corepack enable
+
       - name: Use Node.js
         uses: actions/setup-node@v6
         with:
           node-version: 24
-          registry-url: 'https://registry.npmjs.org'
+          cache: 'yarn'
 
-      - name: Cache node modules
-        uses: actions/cache@v5
-        with:
-          path: node_modules
-          key: ${{ runner.OS }}-build-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.OS }}-build-${{ env.cache-name }}-
-            ${{ runner.OS }}-build-
-            ${{ runner.OS }}-
+      - name: 📦 Install dependencies
+        run: yarn install --immutable
 
-      - name: Install dependencies
-        run: yarn
-
-      - name: Build app
+      - name: 🏗️ Build app
         run: yarn build
 
-      - name: Run tests
-        run: yarn test --coverage true
+      - name: 🧪 Tests
+        run: yarn test:coverage
 
       - name: Run tests with outDir
         run: yarn test:outdir

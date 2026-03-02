@@ -1,35 +1,32 @@
-name: Build
+name: 🧪 Build and Test
 
 on: [push]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+    name: 🧪 Build and Test
 
     steps:
       - uses: actions/checkout@v6
+
+      - name: 📦 Enable Corepack
+        run: corepack enable
+
       - name: Use Node.js
         uses: actions/setup-node@v6
         with:
           node-version: 24
+          cache: 'yarn'
 
-      - name: Cache node modules
-        uses: actions/cache@v5
-        with:
-          path: node_modules
-          key: ${{ runner.OS }}-build-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.OS }}-build-${{ env.cache-name }}-
-            ${{ runner.OS }}-build-
-            ${{ runner.OS }}-
+      - name: 📦 Install dependencies
+        run: yarn install --immutable
 
-      - name: Install dependencies
-        run: yarn
-
-      - name: Build app
+      - name: 🏗️ Build app
         run: yarn build
 
-      - name: Run tests
+      - name: 🧪 Tests
         run: yarn test:coverage
 
       - name: Run tests with outDir
