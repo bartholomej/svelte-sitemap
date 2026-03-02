@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readFileSync, rmdirSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, rmSync } from 'fs';
 import { describe, expect, test } from 'vitest';
 import { version } from '../package.json';
 import { writeSitemap } from '../src/helpers/global.helper';
@@ -34,7 +34,7 @@ describe('Creating files', () => {
   ];
 
   if (existsSync(TEST_FOLDER)) {
-    rmdirSync(TEST_FOLDER, { recursive: true });
+    rmSync(TEST_FOLDER, { recursive: true, force: true });
   }
 
   test('Sitemap.xml was created and contains right data', async () => {
@@ -47,7 +47,7 @@ describe('Creating files', () => {
     expect(fileContent).toContain('https://example.com/flat/');
     expect((fileContent.match(/<url>/g) || []).length).toEqual(8);
 
-    rmdirSync(TEST_FOLDER, { recursive: true });
+    rmSync(TEST_FOLDER, { recursive: true, force: true });
   });
 
   test('Sitemap.xml is exact', async () => {
