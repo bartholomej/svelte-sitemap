@@ -1,17 +1,25 @@
 import fg from 'fast-glob';
 import fs from 'fs';
+import { createRequire } from 'module';
 import { create } from 'xmlbuilder2';
-import { XMLBuilder } from 'xmlbuilder2/lib/interfaces';
-import { version } from '../../package.json';
-import { changeFreq, ChangeFreq, Options, OptionsSvelteSitemap, PagesJson } from '../interfaces/global.interface';
-import { CHUNK, OUT_DIR } from '../vars';
+import type { XMLBuilder } from 'xmlbuilder2/lib/interfaces.js';
+import type {
+  ChangeFreq,
+  Options,
+  OptionsSvelteSitemap,
+  PagesJson
+} from '../interfaces/global.interface.js';
+import { changeFreq } from '../interfaces/global.interface.js';
+import { CHUNK, OUT_DIR } from '../vars.js';
 import {
   cliColors,
   errorMsgFolder,
   errorMsgHtmlFiles,
   errorMsgWrite,
   successMsg
-} from './vars.helper';
+} from './vars.helper.js';
+const require = createRequire(import.meta.url);
+const { version } = require('../../package.json');
 
 const getUrl = (url: string, domain: string, options: Options) => {
   let slash: '' | '/' = getSlash(domain);

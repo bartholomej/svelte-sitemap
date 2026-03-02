@@ -1,7 +1,7 @@
-import { prepareData, writeSitemap } from './helpers/global.helper';
-import { cliColors, errorMsgWrite } from './helpers/vars.helper';
-import { OptionsSvelteSitemap } from './interfaces/global.interface';
-import { OUT_DIR } from './vars';
+import { prepareData, writeSitemap } from './helpers/global.helper.js';
+import { cliColors, errorMsgWrite } from './helpers/vars.helper.js';
+import type { OptionsSvelteSitemap } from './interfaces/global.interface.js';
+import { OUT_DIR } from './vars.js';
 
 export const createSitemap = async (options: OptionsSvelteSitemap): Promise<void> => {
   if (options?.debug) {

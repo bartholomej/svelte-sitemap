@@ -1,8 +1,10 @@
 import { existsSync } from 'fs';
 import { createJiti } from 'jiti';
 import { resolve } from 'path';
+import { fileURLToPath } from 'url';
 
-const jiti = createJiti(__filename);
+const filename = fileURLToPath(import.meta.url);
+const jiti = createJiti(filename);
 
 export const loadFile = async <T>(fileName: string, throwError = true): Promise<T | null> => {
   const filePath = resolve(resolve(process.cwd(), fileName));

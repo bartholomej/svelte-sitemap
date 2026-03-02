@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 
 import minimist from 'minimist';
-import { version } from './package.json';
-import { loadConfig, withDefaultConfig } from './src/helpers/config';
-import { cliColors } from './src/helpers/vars.helper';
-import { createSitemap } from './src/index';
-import { ChangeFreq, OptionsSvelteSitemap } from './src/interfaces/global.interface';
-import { APP_NAME, CONFIG_FILES } from './src/vars';
+import { createRequire } from 'module';
+import { loadConfig, withDefaultConfig } from './src/helpers/config.js';
+import { cliColors } from './src/helpers/vars.helper.js';
+import { createSitemap } from './src/index.js';
+import type { ChangeFreq, OptionsSvelteSitemap } from './src/interfaces/global.interface.js';
+import { APP_NAME, CONFIG_FILES } from './src/vars.js';
+const require = createRequire(import.meta.url);
+const { version } = require('./package.json');
 
 const main = async () => {
   console.log(cliColors.cyanAndBold, `> Using ${APP_NAME}`);
