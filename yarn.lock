@@ -4537,6 +4537,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jiti@npm:^2.6.1":
+  version: 2.6.1
+  resolution: "jiti@npm:2.6.1"
+  bin:
+    jiti: lib/jiti-cli.mjs
+  checksum: 10c0/79b2e96a8e623f66c1b703b98ec1b8be4500e1d217e09b09e343471bbb9c105381b83edbb979d01cef18318cc45ce6e153571b6c83122170eefa531c64b6789b
+  languageName: node
+  linkType: hard
+
 "js-tokens@npm:^10.0.0":
   version: 10.0.0
   resolution: "js-tokens@npm:10.0.0"
@@ -5854,6 +5863,7 @@ __metadata:
     fast-glob: "npm:^3.3.3"
     husky: "npm:^9.1.7"
     jest: "npm:^30.2.0"
+    jiti: "npm:^2.6.1"
     minimist: "npm:^1.2.8"
     npm-prepare-dist: "npm:^0.5.0"
     prettier: "npm:^3.8.1"

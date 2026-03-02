@@ -11,8 +11,11 @@ export const CHUNK = {
 };
 
 export const CONFIG_FILES = [
-  'svelte-sitemap.js',
-  'svelte-sitemap.cjs',
-  'svelte-sitemap.mjs',
-  'svelte-sitemap.json'
+  'svelte-sitemap.config.js',
+  'svelte-sitemap.config.mjs',
+  'svelte-sitemap.config.cjs',
+  'svelte-sitemap.config.ts',
+  'svelte-sitemap.config.mts',
+  'svelte-sitemap.config.cts',
+  'svelte-sitemap.config.json'
 ];

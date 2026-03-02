@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "fast-glob": "^3.3.3",
+    "jiti": "^2.6.1",
     "minimist": "^1.2.8",
     "xmlbuilder2": "^4.0.3"
   },

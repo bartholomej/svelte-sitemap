@@ -25,16 +25,19 @@ npm install svelte-sitemap --save-dev
 
 ### Config file method (recommended)
 
-Create config file `svelte-sitemap.js` (or `.cjs`, `.mjs`, `.json`) in the root of your project:
+Create config file `svelte-sitemap.config.ts` (or `.js`, `.cjs`, `.mjs`, `.json`) in the root of your project:
 
-`svelte-sitemap.js`
+`svelte-sitemap.config.ts`
 
-```js
-// svelte-sitemap.js
-export default {
+```typescript
+import type { OptionsSvelteSitemap } from 'svelte-sitemap';
+
+const config: OptionsSvelteSitemap = {
   domain: 'https://www.example.com'
   // ...more options
 };
+
+export default config;
 ```
 
 Add `svelte-sitemap` as your postbuild script in `package.json` file:
@@ -78,7 +81,7 @@ And now you can run your script like this: `node my-script.js`
 
 ## Example
 
-Use this library as a `postbuild` hook in your `package.json` with config file `svelte-sitemap.js` in your project root.
+Use this library as a `postbuild` hook in your `package.json` with config file `svelte-sitemap.config.ts` in your project root.
 
 File: `package.json`
 
@@ -91,13 +94,17 @@ File: `package.json`
 }
 ```
 
-File: `svelte-sitemap.js`
+File: `svelte-sitemap.config.ts`
 
-```javascript
-export default {
+```typescript
+import type { OptionsSvelteSitemap } from 'svelte-sitemap';
+
+const config: OptionsSvelteSitemap = {
   domain: 'https://www.example.com',
   trailingSlashes: true
 };
+
+export default config;
 ```
 
 ## ⚙️ Options
