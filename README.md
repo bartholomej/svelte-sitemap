@@ -2,19 +2,20 @@
 [![Package License](https://img.shields.io/npm/l/svelte-sitemap.svg)](https://www.npmjs.com/svelte-sitemap)
 [![Build & Publish](https://github.com/bartholomej/svelte-sitemap/workflows/Build%20&%20Publish/badge.svg)](https://github.com/bartholomej/svelte-sitemap/actions)
 
-# Svelte `sitemap.xml` generator
+# 🗺️ Svelte `sitemap.xml` generator
 
-> Small helper which scans your Svelte routes and generates _sitemap.xml_
->
-> - Designed for SvelteKit `adapter-static` with `prerender` option (SSG)
-> - TypeScript, JavaScript, CLI version
-> - Useful [options](#%EF%B8%8F-options) for customizing your sitemap
-> - Support for [submiting sitemap](#ping-google-search-console) to Google Search Console
-> - Support for Google [sitemap index](https://developers.google.com/search/docs/crawling-indexing/sitemaps/large-sitemaps). _Useful for large sites (more than 50K pages)_
-> - Also compatible with [Vercel hosting](#vercel-adapter) and [Cloudflare](#cloudflare-adapter)
-> - Workaround for [this official SvelteKit issue](https://github.com/sveltejs/kit/issues/1142)
+**Generates `sitemap.xml` from your SvelteKit static routes — automatically, on every build.**
 
-## Install
+---
+
+- ➡️ Designed for SvelteKit `adapter-static` with `prerender` option (SSG)
+- 🔷 TypeScript, JavaScript, CLI version
+- 🔧 Useful [options](#%EF%B8%8F-options) for customizing your sitemap
+- 📡 [Ping](#-ping-google-search-console) Google Search Console after deploy
+- 🗂️ Support for [sitemap index](https://developers.google.com/search/docs/crawling-indexing/sitemaps/large-sitemaps) for large sites (50K+ pages)
+- ▲ 🟠 Works with [Vercel](#-vercel-adapter) and [Cloudflare](#-cloudflare-adapter) adapters and more...
+
+## 📦 Install
 
 ```bash
 npm install svelte-sitemap --save-dev
@@ -23,11 +24,11 @@ npm install svelte-sitemap --save-dev
 # bun add -d svelte-sitemap
 ```
 
-## Usage
+## 🚀 Usage
 
-There are three ways to use this library. Pick the one that suits you best.
+> There are three ways to use this library. Pick the one that suits you best.
 
-### Method 1: Config file (recommended)
+### ✨ Method 1: Config file (recommended)
 
 Create a config file `svelte-sitemap.config.ts` in the root of your project:
 
@@ -58,7 +59,7 @@ That's it. After every `build`, the sitemap is automatically generated in your `
 
 ---
 
-### Method 2: CLI (legacy)
+### ⌨️ Method 2: CLI (legacy)
 
 Pass options directly as CLI flags — no config file needed:
 
@@ -74,16 +75,18 @@ See all available flags in the [Options](#%EF%B8%8F-options) table below.
 
 ---
 
-### Method 3: JavaScript / TypeScript API
+### 🔧 Method 3: JavaScript / TypeScript API
 
 Sometimes it's useful to call the script directly from code:
 
 ```typescript
-// my-script.ts
+// my-script.js
 import { createSitemap } from 'svelte-sitemap/src/index.js';
 
 createSitemap({ domain: 'https://example.com', debug: true });
 ```
+
+Run your script:
 
 ```bash
 node my-script.js
@@ -93,7 +96,8 @@ node my-script.js
 
 ## ⚙️ Options
 
-Options are defined as **config file keys** (camelCase). The same options are also available as **CLI flags** for legacy use.
+Options are defined as **config file keys** (camelCase). Use it in your `svelte-sitemap.config.ts` file.
+_The same options are also available as **CLI flags** for legacy use._
 
 | Config key        | CLI flag                   | Description                                                                                                                      | Default | Example                                     |
 | ----------------- | -------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------- | ------------------------------------------- |
@@ -103,14 +107,14 @@ Options are defined as **config file keys** (camelCase). The same options are al
 | `ignore`          | `--ignore`, `-i`           | Ignore files or folders (glob patterns)                                                                                          | `[]`    | `ignore: ['**/admin/**', 'my-secret-page']` |
 | `trailingSlashes` | `--trailing-slashes`, `-t` | Add trailing slashes                                                                                                             | `false` | `trailingSlashes: true`                     |
 | `resetTime`       | `--reset-time`, `-r`       | Set lastModified time to now                                                                                                     | `false` | `resetTime: true`                           |
-| `changeFreq`      | `--change-freq`, `-c`      | Set change frequency [options](https://github.com/bartholomej/svelte-sitemap/blob/master/src/interfaces/global.interface.ts#L22) | -       | `changeFreq: 'daily'`                       |
+| `changeFreq`      | `--change-freq`, `-c`      | Set change frequency [options](https://github.com/bartholomej/svelte-sitemap/blob/master/src/interfaces/global.interface.ts#L23) | -       | `changeFreq: 'daily'`                       |
 | `debug`           | `--debug`                  | Show some useful logs                                                                                                            | -       | `debug: true`                               |
 | -                 | `--help`, `-h`             | Display usage info                                                                                                               | -       | -                                           |
 | -                 | `--version`, `-v`          | Show version                                                                                                                     | -       | -                                           |
 
 ## 🙋 FAQ
 
-### How to exclude a directory?
+### 🙈 How to exclude a directory?
 
 Use `ignore` with glob patterns. For example, to ignore all `admin` folders and one specific page:
 
@@ -126,14 +130,14 @@ const config: OptionsSvelteSitemap = {
 
 ---
 
-### Ping Google Search Console
+### 📡 Ping Google Search Console
 
 Every time you deploy a new version, you can inform Google that there's a new update.
 See this [discussion](https://github.com/bartholomej/svelte-sitemap/issues/23) with very useful tips.
 
 ---
 
-### Vercel adapter
+### ▲ Vercel adapter
 
 If you're using `adapter-vercel`, the output directory is different from the default `build/`:
 
@@ -151,7 +155,7 @@ Or check out [other solutions](https://github.com/bartholomej/svelte-sitemap/iss
 
 ---
 
-### Cloudflare adapter
+### 🟠 Cloudflare adapter
 
 If you're using `@sveltejs/adapter-cloudflare`, you need to exclude `sitemap.xml` from Cloudflare's routing in `svelte.config.js`:
 
@@ -172,7 +176,9 @@ export default config;
 
 ---
 
-### Error: Missing folder
+## 🐞 Common issues
+
+### ❌ Error: Missing folder
 
 ```
 × Folder 'build/' doesn't exist. Make sure you are using this library as 'postbuild'
@@ -183,14 +189,14 @@ Make sure the output folder exists. If your build outputs to a different folder 
 
 ---
 
-### Error: Missing html files
+### ❌ Error: Missing html files
 
 ```
 × There is no static html file in your 'build/' folder.
   Are you sure you are using Svelte adapter-static with prerender option?
 ```
 
-This library is intended for `adapter-static` with the `prerender` option (SSG). If there are no static HTML files in your build folder, my library won't work for you :/
+This library is intended for `adapter-static` with the `prerender` option (SSG). If there are no static HTML files in your build folder, this library won't work for you :'(
 
 ---
 
@@ -216,7 +222,7 @@ Pull requests for any improvements would be great!
 
 Feel free to check [issues page](https://github.com/bartholomej/svelte-sitemap/issues).
 
-### Developing and debugging this library
+### 🛠️ Developing and debugging this library
 
 ```bash
 git clone git@github.com:bartholomej/svelte-sitemap.git
