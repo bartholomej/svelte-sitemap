@@ -3,14 +3,13 @@ import fs from 'fs';
 import { createRequire } from 'module';
 import { create } from 'xmlbuilder2';
 import type { XMLBuilder } from 'xmlbuilder2/lib/interfaces.js';
+import { CHANGE_FREQ, CHUNK, OUT_DIR } from '../const.js';
 import type {
   ChangeFreq,
   Options,
   OptionsSvelteSitemap,
   PagesJson
 } from '../interfaces/global.interface.js';
-import { changeFreq } from '../interfaces/global.interface.js';
-import { CHUNK, OUT_DIR } from '../vars.js';
 import {
   cliColors,
   errorMsgFolder,
@@ -180,7 +179,7 @@ const prepareChangeFreq = (options: Options): ChangeFreq => {
   let result: ChangeFreq = null;
 
   if (options?.changeFreq) {
-    if (changeFreq.includes(options.changeFreq)) {
+    if (CHANGE_FREQ.includes(options.changeFreq)) {
       result = options.changeFreq;
     } else {
       console.log(

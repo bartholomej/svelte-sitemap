@@ -19,3 +19,13 @@ export const CONFIG_FILES = [
   'svelte-sitemap.config.cts',
   'svelte-sitemap.config.json'
 ];
+
+export const CHANGE_FREQ = [
+  'always',
+  'hourly',
+  'daily',
+  'weekly',
+  'monthly',
+  'yearly',
+  'never'
+] as const;

@@ -1,5 +1,5 @@
+import { OUT_DIR } from '../const.js';
 import type { OptionsSvelteSitemap } from '../interfaces/global.interface.js';
-import { OUT_DIR } from './../vars.js';
 import { loadFile } from './file.js';
 
 export const loadConfig = async (paths: string[]): Promise<OptionsSvelteSitemap | undefined> => {
