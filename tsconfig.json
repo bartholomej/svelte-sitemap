@@ -17,7 +17,8 @@
     "resolveJsonModule": true,
     "alwaysStrict": true,
     "noImplicitAny": true,
-    "noImplicitReturns": true
+    "noImplicitReturns": true,
+    "rootDir": "./src"
   },
   "include": ["src"],
   "exclude": ["dist/**/*", "*/tests/**/*", "svelte-sitemap.config.ts"]
