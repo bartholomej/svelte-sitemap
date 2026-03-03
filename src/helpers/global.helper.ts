@@ -1,15 +1,15 @@
 import fg from 'fast-glob';
 import fs from 'fs';
-import { createRequire } from 'module';
 import { create } from 'xmlbuilder2';
 import type { XMLBuilder } from 'xmlbuilder2/lib/interfaces.js';
+import pkg from '../../package.json' with { type: 'json' };
 import { CHANGE_FREQ, CHUNK, OUT_DIR } from '../const.js';
 import type {
   ChangeFreq,
   Options,
   OptionsSvelteSitemap,
   PagesJson
-} from '../interfaces/global.interface.js';
+} from '../dto/global.interface.js';
 import {
   cliColors,
   errorMsgFolder,
@@ -17,8 +17,8 @@ import {
   errorMsgWrite,
   successMsg
 } from './vars.helper.js';
-const require = createRequire(import.meta.url);
-const { version } = require('../../package.json');
+
+const version = pkg.version;
 
 const getUrl = (url: string, domain: string, options: Options) => {
   let slash: '' | '/' = getSlash(domain);

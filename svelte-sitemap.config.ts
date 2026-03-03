@@ -1,4 +1,4 @@
-import type { OptionsSvelteSitemap } from './src/interfaces/global.interface.js';
+import type { OptionsSvelteSitemap } from './src/dto/global.interface.js';
 
 const config: OptionsSvelteSitemap = {
   domain: 'https://www.example.com',

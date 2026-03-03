@@ -1,5 +1,5 @@
 import { existsSync, rmSync } from 'fs';
-import { PagesJson } from '../src/interfaces/global.interface';
+import { PagesJson } from '../src/dto/global.interface';
 
 const options: { outDir?: string } = {};
 
