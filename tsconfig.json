@@ -19,6 +19,6 @@
     "noImplicitAny": true,
     "noImplicitReturns": true
   },
-  "include": ["src", "index.ts"],
+  "include": ["src"],
   "exclude": ["dist/**/*", "*/tests/**/*", "svelte-sitemap.config.ts"]
 }

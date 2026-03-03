@@ -4,8 +4,9 @@
   "type": "module",
   "description": "Small helper which scans your Svelte routes folder and generates static sitemap.xml",
   "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "author": "BART! <bart@bartweb.cz>",
-  "bin": "index.js",
+  "bin": "cli.js",
   "scripts": {
     "start": "tsc -w",
     "prebuild": "rimraf dist",

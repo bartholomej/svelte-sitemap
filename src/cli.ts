@@ -2,13 +2,13 @@
 
 import minimist from 'minimist';
 import { createRequire } from 'module';
-import { loadConfig, withDefaultConfig } from './src/helpers/config.js';
-import { cliColors } from './src/helpers/vars.helper.js';
-import { createSitemap } from './src/index.js';
-import type { ChangeFreq, OptionsSvelteSitemap } from './src/interfaces/global.interface.js';
-import { APP_NAME, CONFIG_FILES } from './src/vars.js';
+import { loadConfig, withDefaultConfig } from './helpers/config.js';
+import { cliColors } from './helpers/vars.helper.js';
+import { createSitemap } from './index.js';
+import type { ChangeFreq, OptionsSvelteSitemap } from './interfaces/global.interface.js';
+import { APP_NAME, CONFIG_FILES } from './vars.js';
 const require = createRequire(import.meta.url);
-const { version } = require('./package.json');
+const { version } = require('../package.json');
 
 const main = async () => {
   console.log(cliColors.cyanAndBold, `> Using ${APP_NAME}`);
@@ -113,6 +113,10 @@ const main = async () => {
     };
 
     if (config === undefined || Object.keys(config).length === 0) {
+      console.log(
+        cliColors.yellow,
+        `  ℹ Hint: Configuration file is now the preferred method to set up svelte-sitemap. See ${REPO_URL}`
+      );
       console.log(cliColors.cyanAndBold, `  ✔ Using CLI options. Config file not found.`);
       createSitemap(optionsCli);
     } else {
