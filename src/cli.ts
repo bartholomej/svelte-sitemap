@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-
 import minimist from 'minimist';
 import pkg from '../package.json' with { type: 'json' };
 import { loadConfig, withDefaultConfig } from './helpers/config.js';
@@ -7,7 +6,7 @@ import { cliColors } from './helpers/vars.helper.js';
 import { createSitemap } from './index.js';
 import type { ChangeFreq, OptionsSvelteSitemap } from './interfaces/global.interface.js';
 import { APP_NAME, CONFIG_FILES } from './vars.js';
-const { version } = pkg;
+const version = pkg.version;
 
 const main = async () => {
   console.log(cliColors.cyanAndBold, `> Using ${APP_NAME}`);
