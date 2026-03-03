@@ -1,5 +1,5 @@
 import { OUT_DIR } from './const.js';
-import type { OptionsSvelteSitemap } from './dto/global.interface.js';
+import type { OptionsSvelteSitemap } from './dto/index.js';
 import { prepareData, writeSitemap } from './helpers/global.helper.js';
 import { cliColors, errorMsgWrite } from './helpers/vars.helper.js';
 

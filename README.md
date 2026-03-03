@@ -223,11 +223,10 @@ yarn demo
 - svelte-sitemap is workaround for [this official SvelteKit issue](https://github.com/sveltejs/kit/issues/1142)
 - Brand new version is inspired by [Richard's article](https://r-bt.com/learning/sveltekit-sitemap/)
 - Thanks to [@auderer](https://github.com/auderer) because [his issue](https://github.com/bartholomej/svelte-sitemap/issues/1) changed the direction of this library
-- Config files inspired by [next-sitemap](https://github.com/iamvishnusankar/next-sitemap)
 
 ## 📝 License
 
-Copyright &copy; 2024 [Lukas Bartak](http://bartweb.cz)
+Copyright &copy; 2026 [Lukas Bartak](http://bartweb.cz)
 
 Proudly powered by nature 🗻, wind 💨, tea 🍵 and beer 🍺 ;)
 

@@ -1,5 +1,7 @@
 export const APP_NAME = 'svelte-sitemap';
 
+export const REPO_URL = 'https://github.com/bartholomej/svelte-sitemap';
+
 export const DOMAIN = 'https://example.com';
 
 export const OUT_DIR = 'build';

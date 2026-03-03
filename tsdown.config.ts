@@ -1,6 +1,5 @@
 import { defineConfig } from 'tsdown';
 import { copyAndFixPackageJson } from './package-json-fix.rolldown';
-// import { copyAndFixPackageJson } from './package-json-fix.rolldown';
 
 const outDir = 'dist';
 

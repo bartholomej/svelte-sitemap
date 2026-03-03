@@ -4,12 +4,7 @@ import { create } from 'xmlbuilder2';
 import type { XMLBuilder } from 'xmlbuilder2/lib/interfaces.js';
 import pkg from '../../package.json' with { type: 'json' };
 import { CHANGE_FREQ, CHUNK, OUT_DIR } from '../const.js';
-import type {
-  ChangeFreq,
-  Options,
-  OptionsSvelteSitemap,
-  PagesJson
-} from '../dto/global.interface.js';
+import type { ChangeFreq, Options, OptionsSvelteSitemap, PagesJson } from './../dto/index.js';
 import {
   cliColors,
   errorMsgFolder,

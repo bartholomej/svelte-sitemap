@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import minimist from 'minimist';
-import pkg from '../package.json' with { type: 'json' };
-import { APP_NAME, CONFIG_FILES } from './const.js';
-import type { ChangeFreq, OptionsSvelteSitemap } from './dto/global.interface.js';
+import pkg from './../package.json' with { type: 'json' };
+import { APP_NAME, CONFIG_FILES, REPO_URL } from './const.js';
+import type { ChangeFreq, OptionsSvelteSitemap } from './dto/index.js';
 import { loadConfig, withDefaultConfig } from './helpers/config.js';
 import { cliColors } from './helpers/vars.helper.js';
 import { createSitemap } from './index.js';
@@ -10,8 +10,6 @@ const version = pkg.version;
 
 const main = async () => {
   console.log(cliColors.cyanAndBold, `> Using ${APP_NAME}`);
-
-  const REPO_URL = 'https://github.com/bartholomej/svelte-sitemap';
 
   let stop = false;
 
