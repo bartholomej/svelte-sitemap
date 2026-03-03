@@ -120,8 +120,48 @@ const main = async () => {
       console.log(cliColors.cyanAndBold, `  ✔ Using CLI options. Config file not found.`);
       createSitemap(optionsCli);
     } else {
-      console.log(cliColors.green, `  ✔ Loading config file. CLI options are ignored now.`);
-      createSitemap(withDefaultConfig(config));
+      let isOverridden = false;
+      const mergedOptions: OptionsSvelteSitemap = { ...withDefaultConfig(config) };
+
+      const checkOverride = (
+        cliKey: string,
+        flagNames: string[],
+        configKey: keyof OptionsSvelteSitemap
+      ) => {
+        const isPassed = flagNames.some(
+          (flag) =>
+            process.argv.includes(flag) || process.argv.some((a) => a.startsWith(flag + '='))
+        );
+        if (isPassed) {
+          if (config[configKey] !== undefined) {
+            console.log(
+              cliColors.yellow,
+              `  ⚠ Option '${cliKey}' is defined in both CLI and config file. CLI option takes precedence.`
+            );
+          }
+          // @ts-expect-error - dynamic assignment
+          mergedOptions[configKey] = optionsCli[configKey];
+          isOverridden = true;
+        }
+      };
+
+      checkOverride('domain', ['-d', '-D', '--domain'], 'domain');
+      checkOverride('out-dir', ['-o', '-O', '--out-dir'], 'outDir');
+      checkOverride('ignore', ['-i', '-I', '--ignore'], 'ignore');
+      checkOverride('additional', ['-a', '-A', '--additional'], 'additional');
+      checkOverride('reset-time', ['-r', '-R', '--reset-time'], 'resetTime');
+      checkOverride('change-freq', ['-c', '-C', '--change-freq'], 'changeFreq');
+      checkOverride('trailing-slashes', ['-t', '-T', '--trailing-slashes'], 'trailingSlashes');
+      checkOverride('attribution', ['--attribution', '--no-attribution'], 'attribution');
+      checkOverride('debug', ['--debug'], 'debug');
+
+      if (isOverridden) {
+        console.log(cliColors.green, `  ✔ Loading config file and applying CLI overrides.`);
+      } else {
+        console.log(cliColors.green, `  ✔ Loading config file.`);
+      }
+
+      createSitemap(mergedOptions);
     }
   }
 };
