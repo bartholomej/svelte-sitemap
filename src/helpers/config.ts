@@ -21,7 +21,8 @@ export const defaultConfig: OptionsSvelteSitemap = {
   attribution: true,
   ignore: null,
   trailingSlashes: false,
-  domain: null
+  domain: null,
+  transform: null
 };
 
 export const updateConfig = (
