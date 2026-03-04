@@ -97,7 +97,7 @@ const main = async () => {
       process.exit(0);
     }
 
-    if (!config.domain.includes('http')) {
+    if (!config.domain.startsWith('https://')) {
       console.log(
         cliColors.yellow,
         `  ⚠ svelte-sitemap: 'domain' property in your config file must start with https:// See instructions: ${REPO_URL}\n`
@@ -128,7 +128,7 @@ const main = async () => {
       process.exit(0);
     }
 
-    if (!args.domain.includes('http')) {
+    if (!args.domain.startsWith('https://')) {
       console.log(
         cliColors.red,
         `  ⚠ svelte-sitemap: --domain argument must start with https:// See instructions: ${REPO_URL}\n  Example:\n\n    svelte-sitemap --domain https://mydomain.com\n`

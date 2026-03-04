@@ -10,7 +10,7 @@
     "build": "tsdown --config-loader unrun",
     "demo": "tsx demo",
     "lint": "eslint ./src/**/**/* --fix",
-    "test": "vitest",
+    "test": "vitest --watch=false",
     "test:outdir": "yarn outdir:prepare && OUT_DIR='public' yarn test && yarn outdir:revert",
     "outdir:prepare": "mv build public",
     "outdir:revert": "mv public build",

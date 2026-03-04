@@ -81,7 +81,7 @@ Sometimes it's useful to call the script directly from code:
 
 ```typescript
 // my-script.js
-import { createSitemap } from 'svelte-sitemap/src/index.js';
+import { createSitemap } from 'svelte-sitemap';
 
 createSitemap({ domain: 'https://example.com', debug: true });
 ```
@@ -99,18 +99,18 @@ node my-script.js
 Options are defined as **config file keys** (camelCase). Use it in your `svelte-sitemap.config.ts` file.
 _The same options are also available as **CLI flags** for legacy use._
 
-| Config key        | CLI flag                   | Description                                                                                                                      | Default | Example                                     |
-| ----------------- | -------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------- | ------------------------------------------- |
-| `domain`          | `--domain`, `-d`           | Your domain **[required]**                                                                                                       | -       | `domain: 'https://mydomain.com'`            |
-| `outDir`          | `--out-dir`, `-o`          | Custom build folder                                                                                                              | `build` | `outDir: 'dist'`                            |
-| `additional`      | `--additional`, `-a`       | Additional pages outside of SvelteKit                                                                                            | -       | `additional: ['my-page', 'my-second-page']` |
-| `ignore`          | `--ignore`, `-i`           | Ignore files or folders (glob patterns)                                                                                          | `[]`    | `ignore: ['**/admin/**', 'my-secret-page']` |
-| `trailingSlashes` | `--trailing-slashes`, `-t` | Add trailing slashes                                                                                                             | `false` | `trailingSlashes: true`                     |
-| `resetTime`       | `--reset-time`, `-r`       | Set lastModified time to now                                                                                                     | `false` | `resetTime: true`                           |
-| `changeFreq`      | `--change-freq`, `-c`      | Set change frequency [options](https://github.com/bartholomej/svelte-sitemap/blob/master/src/interfaces/global.interface.ts#L23) | -       | `changeFreq: 'daily'`                       |
-| `debug`           | `--debug`                  | Show some useful logs                                                                                                            | -       | `debug: true`                               |
-| -                 | `--help`, `-h`             | Display usage info                                                                                                               | -       | -                                           |
-| -                 | `--version`, `-v`          | Show version                                                                                                                     | -       | -                                           |
+| Config key        | CLI flag                   | Description                                                                                                         | Default | Example                                     |
+| ----------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------- | ------------------------------------------- |
+| `domain`          | `--domain`, `-d`           | Your domain **[required]**                                                                                          | -       | `domain: 'https://mydomain.com'`            |
+| `outDir`          | `--out-dir`, `-o`          | Custom build folder                                                                                                 | `build` | `outDir: 'dist'`                            |
+| `additional`      | `--additional`, `-a`       | Additional pages outside of SvelteKit                                                                               | -       | `additional: ['my-page', 'my-second-page']` |
+| `ignore`          | `--ignore`, `-i`           | Ignore files or folders (glob patterns)                                                                             | `[]`    | `ignore: ['**/admin/**', 'my-secret-page']` |
+| `trailingSlashes` | `--trailing-slashes`, `-t` | Add trailing slashes                                                                                                | `false` | `trailingSlashes: true`                     |
+| `resetTime`       | `--reset-time`, `-r`       | Set lastModified time to now                                                                                        | `false` | `resetTime: true`                           |
+| `changeFreq`      | `--change-freq`, `-c`      | Set change frequency [options](https://github.com/bartholomej/svelte-sitemap/blob/master/src/dto/global.dto.ts#L23) | -       | `changeFreq: 'daily'`                       |
+| `debug`           | `--debug`                  | Show some useful logs                                                                                               | -       | `debug: true`                               |
+| -                 | `--help`, `-h`             | Display usage info                                                                                                  | -       | -                                           |
+| -                 | `--version`, `-v`          | Show version                                                                                                        | -       | -                                           |
 
 ## 🙋 FAQ
 

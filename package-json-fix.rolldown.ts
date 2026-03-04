@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { Plugin } from 'rolldown';
+import type { Plugin } from 'rolldown';
 
 export function copyAndFixPackageJson({
   outDir,
