@@ -67,21 +67,77 @@ const main = async () => {
     log('  --debug                 Debug mode');
     log(' ');
     process.exit(args.help ? 0 : 1);
-  } else if (!config?.domain && !args.domain) {
-    console.log(
-      `⚠ svelte-sitemap: --domain argument is required.\n\nSee instructions: ${REPO_URL}\n\nExample:\n\n  svelte-sitemap --domain https://mydomain.com\n`
-    );
-    process.exit(0);
-  } else if (!config?.domain?.includes('http') && !args.domain?.includes('http')) {
-    console.log(
-      `⚠ svelte-sitemap: --domain argument must starts with https://\n\nSee instructions: ${REPO_URL}\n\nExample:\n\n  svelte-sitemap --domain https://mydomain.com\n`
-    );
-    process.exit(0);
-  } else if (stop) {
-    console.error(cliColors.red, errorMsgGeneration);
-    process.exit(0);
+  } else if (config && Object.keys(config).length > 0) {
+    // --- CONFIG FILE PATH ---
+    const hasCliOptions = process.argv.slice(2).length > 0;
+    console.log(cliColors.green, `  ✔ Reading config file...`);
+
+    const allowedKeys = Object.keys(defaultConfig);
+    const invalidKeys = Object.keys(config).filter((key) => !allowedKeys.includes(key));
+    if (invalidKeys.length > 0) {
+      console.log(
+        cliColors.yellow,
+        `  ⚠ Invalid properties in config file, so I ignore them: ${invalidKeys.join(', ')}`
+      );
+    }
+
+    if (hasCliOptions) {
+      console.log(
+        cliColors.yellow,
+        `  ⚠ You have also set CLI options (arguments with '--'), but they are ignored because your config file 'svelte-sitemap.config.ts' is used.`
+      );
+    }
+
+    if (!config.domain) {
+      console.log(
+        cliColors.yellow,
+        `  ⚠ svelte-sitemap: 'domain' property is required in your config file. See instructions: ${REPO_URL}\n`
+      );
+      console.error(cliColors.red, errorMsgGeneration);
+      process.exit(0);
+    }
+
+    if (!config.domain.includes('http')) {
+      console.log(
+        cliColors.yellow,
+        `  ⚠ svelte-sitemap: 'domain' property in your config file must start with https:// See instructions: ${REPO_URL}\n`
+      );
+      console.error(cliColors.red, errorMsgGeneration);
+      process.exit(0);
+    }
+
+    try {
+      await createSitemap(withDefaultConfig(config));
+    } catch (err) {
+      console.error(cliColors.red, errorMsgGeneration, err);
+      process.exit(0);
+    }
   } else {
-    const domain: string = args.domain ? args.domain : undefined;
+    // --- CLI ARGUMENTS PATH ---
+    if (stop) {
+      console.error(cliColors.red, errorMsgGeneration);
+      process.exit(0);
+    }
+
+    if (!args.domain) {
+      console.log(
+        cliColors.red,
+        `  ⚠ svelte-sitemap: --domain argument is required. See instructions: ${REPO_URL}\n  Example:\n    svelte-sitemap --domain https://mydomain.com\n`
+      );
+      console.error(cliColors.red, errorMsgGeneration);
+      process.exit(0);
+    }
+
+    if (!args.domain.includes('http')) {
+      console.log(
+        cliColors.red,
+        `  ⚠ svelte-sitemap: --domain argument must start with https:// See instructions: ${REPO_URL}\n  Example:\n\n    svelte-sitemap --domain https://mydomain.com\n`
+      );
+      console.error(cliColors.red, errorMsgGeneration);
+      process.exit(0);
+    }
+
+    const domain: string = args.domain;
     const debug: boolean = args.debug === '' || args.debug === true ? true : false;
     const additional = Array.isArray(args['additional'])
       ? args['additional']
@@ -110,43 +166,16 @@ const main = async () => {
       additional
     };
 
-    if (config === undefined || Object.keys(config).length === 0) {
-      console.log(
-        cliColors.yellow,
-        `  ℹ Hint: Configuration file is now the preferred method to set up svelte-sitemap. See ${REPO_URL}?tab=readme-ov-file#-usage`
-      );
-      console.log(cliColors.cyanAndBold, `  ✔ Using CLI options. Config file not found.`);
-      try {
-        await createSitemap(optionsCli);
-      } catch (err) {
-        console.error(cliColors.red, errorMsgGeneration, err);
-        process.exit(0);
-      }
-    } else {
-      const hasCliOptions = process.argv.slice(2).length > 0;
-      console.log(cliColors.green, `  ✔ Reading config file...`);
-
-      const allowedKeys = Object.keys(defaultConfig);
-      const invalidKeys = Object.keys(config).filter((key) => !allowedKeys.includes(key));
-      if (invalidKeys.length > 0) {
-        console.log(
-          cliColors.yellow,
-          `  ⚠ Invalid properties in config file, so I ignore them: ${invalidKeys.join(', ')}`
-        );
-      }
-
-      if (hasCliOptions) {
-        console.log(
-          cliColors.yellow,
-          `  ⚠ You have also set CLI options (arguments with '--'), but they are ignored because your config file 'svelte-sitemap.config.ts' is used.`
-        );
-      }
-      try {
-        await createSitemap(withDefaultConfig(config));
-      } catch (err) {
-        console.error(cliColors.red, errorMsgGeneration, err);
-        process.exit(0);
-      }
+    console.log(
+      cliColors.yellow,
+      `  ℹ Hint: Configuration file is now the preferred method to set up svelte-sitemap. See ${REPO_URL}?tab=readme-ov-file#-usage`
+    );
+    console.log(cliColors.cyanAndBold, `  ✔ Using CLI options. Config file not found.`);
+    try {
+      await createSitemap(optionsCli);
+    } catch (err) {
+      console.error(cliColors.red, errorMsgGeneration, err);
+      process.exit(0);
     }
   }
 };
