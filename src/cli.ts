@@ -3,7 +3,7 @@ import minimist from 'minimist';
 import pkg from './../package.json' with { type: 'json' };
 import { APP_NAME, CONFIG_FILES, REPO_URL } from './const.js';
 import type { ChangeFreq, OptionsSvelteSitemap } from './dto/index.js';
-import { loadConfig, withDefaultConfig } from './helpers/config.js';
+import { defaultConfig, loadConfig, withDefaultConfig } from './helpers/config.js';
 import { cliColors } from './helpers/vars.helper.js';
 import { createSitemap } from './index.js';
 const version = pkg.version;
@@ -40,6 +40,7 @@ const main = async () => {
       A: 'additional'
     },
     unknown: (err: string) => {
+      if (config && Object.keys(config).length > 0) return false;
       console.log('⚠ Those arguments are not supported:', err);
       console.log('Use: `svelte-sitemap --help` for more options.\n');
       stop = true;
@@ -118,6 +119,16 @@ const main = async () => {
     } else {
       const hasCliOptions = process.argv.slice(2).length > 0;
       console.log(cliColors.green, `  ✔ Loading config file...`);
+
+      const allowedKeys = Object.keys(defaultConfig);
+      const invalidKeys = Object.keys(config).filter((key) => !allowedKeys.includes(key));
+      if (invalidKeys.length > 0) {
+        console.log(
+          cliColors.red,
+          `  ⚠ Invalid properties in config file: ${invalidKeys.join(', ')}`
+        );
+      }
+
       if (hasCliOptions) {
         console.log(
           cliColors.yellow,
