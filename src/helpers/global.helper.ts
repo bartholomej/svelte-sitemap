@@ -63,15 +63,56 @@ export async function prepareData(domain: string, options?: Options): Promise<Pa
   const changeFreq = prepareChangeFreq(options);
   const pages: string[] = await fg(`${FOLDER}/**/*.html`, { ignore });
 
-  if (options.additional) pages.push(...options.additional);
+  if (options?.additional) pages.push(...options.additional);
 
-  const results = pages.map((page) => {
-    return {
-      page: getUrl(page, domain, options),
-      changeFreq: changeFreq,
-      lastMod: options?.resetTime ? new Date().toISOString().split('T')[0] : ''
-    };
-  });
+  const results: PagesJson[] = [];
+
+  for (const page of pages) {
+    const url = getUrl(page, domain, options);
+    const pathUrl = getUrl(page, '', options);
+    const path = pathUrl.startsWith('/') ? pathUrl : `/${pathUrl}`;
+
+    let item: PagesJson | null = null;
+
+    if (options?.transform) {
+      item = await options.transform(options as OptionsSvelteSitemap, path);
+    } else {
+      item = {
+        loc: url,
+        page: url,
+        changeFreq: changeFreq,
+        changefreq: changeFreq,
+        lastMod: options?.resetTime ? new Date().toISOString().split('T')[0] : '',
+        lastmod: options?.resetTime ? new Date().toISOString().split('T')[0] : ''
+      };
+    }
+
+    if (item) {
+      if (!item.loc) item.loc = item.page;
+      if (!item.page) item.page = item.loc;
+
+      if (item.changefreq === undefined && item.changeFreq !== undefined)
+        item.changefreq = item.changeFreq;
+      if (item.changeFreq === undefined && item.changefreq !== undefined)
+        item.changeFreq = item.changefreq;
+
+      if (item.lastmod === undefined && item.lastMod !== undefined) item.lastmod = item.lastMod;
+      if (item.lastMod === undefined && item.lastmod !== undefined) item.lastMod = item.lastmod;
+
+      if (item.loc && !item.loc.startsWith('http')) {
+        const base = domain.endsWith('/') ? domain.slice(0, -1) : domain;
+        if (item.loc.startsWith('/')) {
+          item.loc = `${base}${item.loc}`;
+        } else {
+          const slash = getSlash(domain);
+          item.loc = `${domain}${slash}${item.loc}`;
+        }
+        item.page = item.loc;
+      }
+
+      results.push(item);
+    }
+  }
 
   detectErrors({
     folder: !fs.existsSync(FOLDER),
@@ -125,12 +166,34 @@ const createFile = (
 
   for (const item of items) {
     const page = sitemap.ele('url');
-    page.ele('loc').txt(item.page);
-    if (item.changeFreq) {
-      page.ele('changefreq').txt(item.changeFreq);
+    // fallbacks for backward compatibility
+    const loc = item.loc || item.page;
+    if (loc) {
+      page.ele('loc').txt(loc);
     }
-    if (item.lastMod) {
-      page.ele('lastmod').txt(item.lastMod);
+
+    const changefreq = item.changefreq || item.changeFreq;
+    if (changefreq) {
+      page.ele('changefreq').txt(changefreq);
+    }
+
+    const lastmod = item.lastmod || item.lastMod;
+    if (lastmod) {
+      page.ele('lastmod').txt(lastmod);
+    }
+
+    if (item.priority !== undefined && item.priority !== null) {
+      page.ele('priority').txt(item.priority.toString());
+    }
+
+    if (item.alternateRefs && Array.isArray(item.alternateRefs)) {
+      for (const ref of item.alternateRefs) {
+        page.ele('xhtml:link', {
+          rel: 'alternate',
+          hreflang: ref.hreflang,
+          href: ref.href
+        });
+      }
     }
   }
 
@@ -204,7 +267,8 @@ const getSlash = (domain: string) => (domain.split('/').pop() ? '/' : '');
 
 const createXml = (elementName: 'urlset' | 'sitemapindex'): XMLBuilder => {
   return create({ version: '1.0', encoding: 'UTF-8' }).ele(elementName, {
-    xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9'
+    xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9',
+    'xmlns:xhtml': 'http://www.w3.org/1999/xhtml'
   });
 };
 
