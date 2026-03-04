@@ -9,7 +9,7 @@ if (process.env.OUT_DIR) options.outDir = process.env.OUT_DIR;
 
 export const optionsTest = options;
 
-console.log('JEST OPTIONS:', optionsTest);
+console.log('TEST OPTIONS:', optionsTest);
 
 export const sortbyPage = (json: PagesJson[]) => json.sort((a, b) => a.page.localeCompare(b.page));
 
