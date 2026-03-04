@@ -6,7 +6,7 @@ export const cliColors = {
 };
 
 export const successMsg = (outDir: string, filename: string) =>
-  `  ✔ done. Check your new sitemap here: ./${outDir}/${filename}`;
+  `  ✔ Done. Check your new sitemap here: ./${outDir}/${filename}`;
 
 export const errorMsgWrite = (outDir: string, filename: string) =>
   `  × File '${outDir}/${filename}' could not be created.`;

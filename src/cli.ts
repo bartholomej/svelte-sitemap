@@ -111,12 +111,19 @@ const main = async () => {
     if (config === undefined || Object.keys(config).length === 0) {
       console.log(
         cliColors.yellow,
-        `  ℹ Hint: Configuration file is now the preferred method to set up svelte-sitemap. See ${REPO_URL}`
+        `  ℹ Hint: Configuration file is now the preferred method to set up svelte-sitemap. See ${REPO_URL}?tab=readme-ov-file#-usage`
       );
       console.log(cliColors.cyanAndBold, `  ✔ Using CLI options. Config file not found.`);
       createSitemap(optionsCli);
     } else {
-      console.log(cliColors.green, `  ✔ Loading config file. CLI options are ignored now.`);
+      const hasCliOptions = process.argv.slice(2).length > 0;
+      console.log(cliColors.green, `  ✔ Loading config file...`);
+      if (hasCliOptions) {
+        console.log(
+          cliColors.yellow,
+          `  ⚠ You have also set CLI options (arguments with '--'), but they are ignored because your config file 'svelte-sitemap.config.ts' is used.`
+        );
+      }
       createSitemap(withDefaultConfig(config));
     }
   }
