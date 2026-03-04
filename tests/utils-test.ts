@@ -1,5 +1,5 @@
-import { existsSync, rmdirSync } from 'fs';
-import { PagesJson } from '../src/interfaces/global.interface';
+import { existsSync, rmSync } from 'fs';
+import { PagesJson } from './../src/dto';
 
 const options: { outDir?: string } = {};
 
@@ -15,7 +15,7 @@ export const sortbyPage = (json: PagesJson[]) => json.sort((a, b) => a.page.loca
 
 export const deleteFolderIfExist = () => {
   if (existsSync('build-test')) {
-    rmdirSync('build-test', { recursive: true });
+    rmSync('build-test', { recursive: true, force: true });
   }
 };
 

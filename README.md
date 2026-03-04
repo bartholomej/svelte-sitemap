@@ -2,106 +2,162 @@
 [![Package License](https://img.shields.io/npm/l/svelte-sitemap.svg)](https://www.npmjs.com/svelte-sitemap)
 [![Build & Publish](https://github.com/bartholomej/svelte-sitemap/workflows/Build%20&%20Publish/badge.svg)](https://github.com/bartholomej/svelte-sitemap/actions)
 
-# Svelte `sitemap.xml` generator
+# 🗺️ Svelte `sitemap.xml` generator
 
-> Small helper which scans your Svelte routes and generates _sitemap.xml_
->
-> - Designed for SvelteKit `adapter-static` with `prerender` option (SSG)
-> - TypeScript, JavaScript, CLI version
-> - Useful [options](#%EF%B8%8F-options) for customizing your sitemap
-> - Support for [submiting sitemap](#ping-google-search-console) to Google Search Console
-> - Support for Google [sitemap index](https://developers.google.com/search/docs/crawling-indexing/sitemaps/large-sitemaps). _Useful for large sites (more than 50K pages)_
-> - Also compatible with [Vercel hosting](#vercel-apdatper)
-> - Workaround for [this official SvelteKit issue](https://github.com/sveltejs/kit/issues/1142)
+**Generates `sitemap.xml` from your SvelteKit static routes — automatically, on every build.**
 
-## Install
+---
+
+- ➡️ Designed for SvelteKit `adapter-static` with `prerender` option (SSG)
+- 🔷 TypeScript, JavaScript, CLI version
+- 🔧 Useful [options](#%EF%B8%8F-options) for customizing your sitemap
+- 📡 [Ping](#-ping-google-search-console) Google Search Console after deploy
+- 🗂️ Support for [sitemap index](https://developers.google.com/search/docs/crawling-indexing/sitemaps/large-sitemaps) for large sites (50K+ pages)
+- ▲ 🟠 Works with [Vercel](#-vercel-adapter) and [Cloudflare](#-cloudflare-adapter) adapters and more...
+
+## 📦 Install
 
 ```bash
 npm install svelte-sitemap --save-dev
 # yarn add svelte-sitemap --dev
+# pnpm add -D svelte-sitemap
+# bun add -d svelte-sitemap
 ```
 
-## Usage
+## 🚀 Usage
 
-> Use this library as a `postbuild` hook in your `package.json` file.
+> There are three ways to use this library. Pick the one that suits you best.
 
-File: `package.json`
+### ✨ Method 1: Config file (recommended)
+
+Create a config file `svelte-sitemap.config.ts` in the root of your project:
+
+```typescript
+// svelte-sitemap.config.ts
+import type { OptionsSvelteSitemap } from 'svelte-sitemap';
+
+const config: OptionsSvelteSitemap = {
+  domain: 'https://www.example.com',
+  trailingSlashes: true
+  // ...more options below
+};
+
+export default config;
+```
+
+Then add `svelte-sitemap` as a `postbuild` script in `package.json`:
 
 ```json
 {
-  "name": "my-awesome-project",
+  "scripts": {
+    "postbuild": "npx svelte-sitemap"
+  }
+}
+```
+
+That's it. After every `build`, the sitemap is automatically generated in your `build/` folder.
+
+---
+
+### ⌨️ Method 2: CLI (legacy)
+
+Pass options directly as CLI flags — no config file needed:
+
+```json
+{
   "scripts": {
     "postbuild": "npx svelte-sitemap --domain https://myawesomedomain.com"
   }
 }
 ```
 
-It scans your routes in `build/` folder and generates `build/sitemap.xml` file.
+See all available flags in the [Options](#%EF%B8%8F-options) table below.
 
-### Alternative usage: TypeScript or JavaScript method
+---
 
-> Sometimes it can be useful to call the script directly from JavaScript or TypeScript. Of course there is also this option, but in most cases you will need the [CLI method](#cli-method-recommended) as a postbuild hook.
+### 🔧 Method 3: JavaScript / TypeScript API
 
-File `my-script.js`:
+Sometimes it's useful to call the script directly from code:
 
 ```typescript
-import { createSitemap } from 'svelte-sitemap/src/index.js';
+// my-script.js
+import { createSitemap } from 'svelte-sitemap';
 
-createSitemap('https://example.com', { debug: true });
+createSitemap({ domain: 'https://example.com', debug: true });
 ```
 
-And now you can run your script like this: `node my-script.js`
+Run your script:
+
+```bash
+node my-script.js
+```
+
+---
 
 ## ⚙️ Options
 
-| Option                     | Description                                                                                                                     | Default | Example                                |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------- | -------------------------------------- |
-| `--domain`, `-d`           | Use your domain **[required]**                                                                                                  | -       | `-d https://mydomain.com`              |
-| `--out-dir`, `-o`          | Set custom build folder                                                                                                         | `build` | `-o dist`                              |
-| `--additional`, `-a`       | Additional pages outside of SvelteKit                                                                                           | -       | `-a my-page -a my-second-page`         |
-| `--ignore`, `-i`           | Ignore files or folders                                                                                                         | []      | `-i '**/admin/**' -i 'my-secret-page'` |
-| `--trailing-slashes`, `-t` | Add trailing slashes                                                                                                            | false   | `--trailing-slashes`                   |
-| `--reset-time`, `-r`       | Set lastModified time to now                                                                                                    | false   | `-r`                                   |
-| `--change-freq`, `-c`      | Set change frequency [Option](https://github.com/bartholomej/svelte-sitemap/blob/master/src/interfaces/global.interface.ts#L22) | -       | `--change-freq daily`                  |
-| `--help`, `-h`             | Display this usage info                                                                                                         | -       | `-h`                                   |
-| `--version`, `-v`          | Show version                                                                                                                    | -       | `-v`                                   |
-| `--debug`                  | Show some useful logs                                                                                                           | -       | `--debug`                              |
+Options are defined as **config file keys** (camelCase). Use it in your `svelte-sitemap.config.ts` file.
+_The same options are also available as **CLI flags** for legacy use._
+
+| Config key        | CLI flag                   | Description                                                                                                         | Default | Example                                     |
+| ----------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------- | ------------------------------------------- |
+| `domain`          | `--domain`, `-d`           | Your domain **[required]**                                                                                          | -       | `domain: 'https://mydomain.com'`            |
+| `outDir`          | `--out-dir`, `-o`          | Custom build folder                                                                                                 | `build` | `outDir: 'dist'`                            |
+| `additional`      | `--additional`, `-a`       | Additional pages outside of SvelteKit                                                                               | -       | `additional: ['my-page', 'my-second-page']` |
+| `ignore`          | `--ignore`, `-i`           | Ignore files or folders (glob patterns)                                                                             | `[]`    | `ignore: ['**/admin/**', 'my-secret-page']` |
+| `trailingSlashes` | `--trailing-slashes`, `-t` | Add trailing slashes                                                                                                | `false` | `trailingSlashes: true`                     |
+| `resetTime`       | `--reset-time`, `-r`       | Set lastModified time to now                                                                                        | `false` | `resetTime: true`                           |
+| `changeFreq`      | `--change-freq`, `-c`      | Set change frequency [options](https://github.com/bartholomej/svelte-sitemap/blob/master/src/dto/global.dto.ts#L23) | -       | `changeFreq: 'daily'`                       |
+| `debug`           | `--debug`                  | Show some useful logs                                                                                               | -       | `debug: true`                               |
+| -                 | `--help`, `-h`             | Display usage info                                                                                                  | -       | -                                           |
+| -                 | `--version`, `-v`          | Show version                                                                                                        | -       | -                                           |
 
 ## 🙋 FAQ
 
-### How to exclude directory?
+### 🙈 How to exclude a directory?
 
-> Let's say we want to ignore all `admin` folders and subfolders + just one exact page `pages/my-secret-page`
+Use `ignore` with glob patterns. For example, to ignore all `admin` folders and one specific page:
 
-```bash
-npx svelte-sitemap --domain https://www.example.com --ignore 'pages/my-secret-page' --ignore '**/admin/**'
+```typescript
+// svelte-sitemap.config.ts
+import type { OptionsSvelteSitemap } from 'svelte-sitemap';
+
+const config: OptionsSvelteSitemap = {
+  domain: 'https://www.example.com',
+  ignore: ['pages/my-secret-page', '**/admin/**']
+};
 ```
 
-### Ping Google Search Console
+---
 
-> Every time I deploy a new version, I want to inform Google that there is a new update.
+### 📡 Ping Google Search Console
 
+Every time you deploy a new version, you can inform Google that there's a new update.
 See this [discussion](https://github.com/bartholomej/svelte-sitemap/issues/23) with very useful tips.
 
-### Error: Missing folder
+---
 
-> × Folder 'build/' doesn't exist. Make sure you are using this library as 'postbuild' so 'build/' folder was successfully created before running this script.
+### ▲ Vercel adapter
 
-- Make sure your output folder exists. If it has other name than the default `build`, you can use the `outDir` `(--out-dir)` option.
+If you're using `adapter-vercel`, the output directory is different from the default `build/`:
 
-#### Vercel apdatper
+```typescript
+// svelte-sitemap.config.ts
+import type { OptionsSvelteSitemap } from 'svelte-sitemap';
 
-- If you are using Vercel hosting and `adapter-vercel` you'll probably want to use it like this:
-
-```bash
-npx svelte-sitemap --out-dir .vercel/output/static --domain https://www.example.com
+const config: OptionsSvelteSitemap = {
+  domain: 'https://www.example.com',
+  outDir: '.vercel/output/static'
+};
 ```
 
 Or check out [other solutions](https://github.com/bartholomej/svelte-sitemap/issues/16#issuecomment-961414454) and join the discussion.
 
-#### Cloudflare adapter
+---
 
-- If you're using `@sveltejs/adapter-cloudflare` to deploy your app to Cloudflare Pages, you'll need to add some options to your adapter in `svelte.config.js`:
+### 🟠 Cloudflare adapter
+
+If you're using `@sveltejs/adapter-cloudflare`, you need to exclude `sitemap.xml` from Cloudflare's routing in `svelte.config.js`:
 
 ```diff
 -import adapter from '@sveltejs/adapter-auto';
@@ -118,11 +174,31 @@ const config = {
 export default config;
 ```
 
-### Error: Missing html files
+---
 
-> × There is no static html file in your 'build/' folder. Are you sure you are using Svelte adapter-static with prerender option?
+## 🐞 Common issues
 
-This library is intended for the static adapter and `prerender` option (SSG). So if there are no static files, then my library will not work for you :/
+### ❌ Error: Missing folder
+
+```
+× Folder 'build/' doesn't exist. Make sure you are using this library as 'postbuild'
+  so 'build/' folder was successfully created before running this script.
+```
+
+Make sure the output folder exists. If your build outputs to a different folder than `build/`, use the `outDir` option in your config file.
+
+---
+
+### ❌ Error: Missing html files
+
+```
+× There is no static html file in your 'build/' folder.
+  Are you sure you are using Svelte adapter-static with prerender option?
+```
+
+This library is intended for `adapter-static` with the `prerender` option (SSG). If there are no static HTML files in your build folder, this library won't work for you :'(
+
+---
 
 ## ⭐️ Show your support
 
@@ -146,7 +222,7 @@ Pull requests for any improvements would be great!
 
 Feel free to check [issues page](https://github.com/bartholomej/svelte-sitemap/issues).
 
-### Developing and debugging this library
+### 🛠️ Developing and debugging this library
 
 ```bash
 git clone git@github.com:bartholomej/svelte-sitemap.git
@@ -165,13 +241,13 @@ yarn demo
 
 ## 🙏 Credits
 
-- svelte-sitemap is workaround for [this official SvelteKit issue](https://github.com/sveltejs/kit/issues/1142)
+- svelte-sitemap is a workaround for [this official SvelteKit issue](https://github.com/sveltejs/kit/issues/1142)
 - Brand new version is inspired by [Richard's article](https://r-bt.com/learning/sveltekit-sitemap/)
 - Thanks to [@auderer](https://github.com/auderer) because [his issue](https://github.com/bartholomej/svelte-sitemap/issues/1) changed the direction of this library
 
 ## 📝 License
 
-Copyright &copy; 2024 [Lukas Bartak](http://bartweb.cz)
+Copyright &copy; 2026 [Lukas Bartak](http://bartweb.cz)
 
 Proudly powered by nature 🗻, wind 💨, tea 🍵 and beer 🍺 ;)
 

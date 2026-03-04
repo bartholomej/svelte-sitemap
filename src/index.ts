@@ -1,22 +1,24 @@
-import { prepareData, writeSitemap } from './helpers/global.helper';
-import { cliColors, errorMsgWrite } from './helpers/vars.helper';
-import { Options } from './interfaces/global.interface';
-import { DOMAIN, OUT_DIR } from './vars';
+import { OUT_DIR } from './const.js';
+import type { OptionsSvelteSitemap } from './dto/index.js';
+import { prepareData, writeSitemap } from './helpers/global.helper.js';
+import { cliColors, errorMsgWrite } from './helpers/vars.helper.js';
 
-export const createSitemap = async (domain: string = DOMAIN, options?: Options): Promise<void> => {
+export const createSitemap = async (options: OptionsSvelteSitemap): Promise<void> => {
   if (options?.debug) {
     console.log('OPTIONS', options);
   }
 
-  const json = await prepareData(domain, options);
+  const json = await prepareData(options.domain, options);
 
   if (options?.debug) {
     console.log('RESULT', json);
   }
 
   if (json.length) {
-    writeSitemap(json, options, domain);
+    writeSitemap(json, options, options.domain);
   } else {
     console.error(cliColors.red, errorMsgWrite(options.outDir ?? OUT_DIR, 'sitemap.xml'));
   }
 };
+
+export type * from './dto/index.js';

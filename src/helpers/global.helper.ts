@@ -1,17 +1,19 @@
 import fg from 'fast-glob';
 import fs from 'fs';
 import { create } from 'xmlbuilder2';
-import { XMLBuilder } from 'xmlbuilder2/lib/interfaces';
-import { version } from '../../package.json';
-import { changeFreq, ChangeFreq, Options, PagesJson } from '../interfaces/global.interface';
-import { APP_NAME, CHUNK, OUT_DIR } from '../vars';
+import type { XMLBuilder } from 'xmlbuilder2/lib/interfaces.js';
+import pkg from '../../package.json' with { type: 'json' };
+import { CHANGE_FREQ, CHUNK, OUT_DIR } from '../const.js';
+import type { ChangeFreq, Options, OptionsSvelteSitemap, PagesJson } from './../dto/index.js';
 import {
   cliColors,
   errorMsgFolder,
   errorMsgHtmlFiles,
   errorMsgWrite,
   successMsg
-} from './vars.helper';
+} from './vars.helper.js';
+
+const version = pkg.version;
 
 const getUrl = (url: string, domain: string, options: Options) => {
   let slash: '' | '/' = getSlash(domain);
@@ -41,8 +43,6 @@ export const removeHtml = (fileName: string) => {
 };
 
 export async function prepareData(domain: string, options?: Options): Promise<PagesJson[]> {
-  console.log(cliColors.cyanAndBold, `> Using ${APP_NAME}`);
-
   const FOLDER = options?.outDir ?? OUT_DIR;
 
   const ignore = prepareIgnored(options?.ignore, options?.outDir);
@@ -174,7 +174,7 @@ const prepareChangeFreq = (options: Options): ChangeFreq => {
   let result: ChangeFreq = null;
 
   if (options?.changeFreq) {
-    if (changeFreq.includes(options.changeFreq)) {
+    if (CHANGE_FREQ.includes(options.changeFreq)) {
       result = options.changeFreq;
     } else {
       console.log(

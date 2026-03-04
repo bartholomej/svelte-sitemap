@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
-    "target": "es2017",
-    "lib": ["dom"],
+    "target": "es2022",
+    "lib": ["es2022", "dom"],
     "types": ["node"],
     "baseUrl": "./src",
     "esModuleInterop": true,
-    "module": "commonjs",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "strictNullChecks": false,
     "sourceMap": false,
     "outDir": "./dist",
@@ -16,8 +17,9 @@
     "resolveJsonModule": true,
     "alwaysStrict": true,
     "noImplicitAny": true,
-    "noImplicitReturns": true
+    "noImplicitReturns": true,
+    "rootDir": "./src"
   },
-  "include": ["src", "index.ts"],
-  "exclude": ["dist/**/*", "*/tests/**/*"]
+  "include": ["src"],
+  "exclude": ["dist/**/*", "*/tests/**/*", "svelte-sitemap.config.ts"]
 }
