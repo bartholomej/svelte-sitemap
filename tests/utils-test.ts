@@ -11,7 +11,8 @@ export const optionsTest = options;
 
 console.log('JEST OPTIONS:', optionsTest);
 
-export const sortbyPage = (json: PagesJson[]) => json.sort((a, b) => a.page.localeCompare(b.page));
+export const sortbyPage = (json: PagesJson[]) =>
+  json.sort((a, b) => (a.page || a.loc || '').localeCompare(b.page || b.loc || ''));
 
 export const deleteFolderIfExist = () => {
   if (existsSync('build-test')) {
