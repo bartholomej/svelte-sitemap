@@ -56,6 +56,10 @@ export interface Options {
    * @example `additional: ['my-page', 'my-second-page']`
    */
   additional?: string[];
+  transform?: (
+    config: OptionsSvelteSitemap,
+    path: string
+  ) => Promise<SitemapField | null> | SitemapField | null;
 }
 
 export interface OptionsSvelteSitemap extends Options {
@@ -65,11 +69,24 @@ export interface OptionsSvelteSitemap extends Options {
   domain: string;
 }
 
+export interface SitemapFieldAlternateRef {
+  href: string;
+  hreflang: string;
+}
+
+export interface SitemapField {
+  loc: string;
+  lastmod?: string;
+  changefreq?: ChangeFreq;
+  priority?: number | string;
+  alternateRefs?: Array<SitemapFieldAlternateRef>;
+}
+
 export interface PagesJson {
   /**
    * The path or URL of the page.
    */
-  page: string;
+  page?: string;
   /**
    * How frequently the page content is likely to change.
    */
