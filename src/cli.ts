@@ -4,7 +4,7 @@ import pkg from './../package.json' with { type: 'json' };
 import { APP_NAME, CONFIG_FILES, REPO_URL } from './const.js';
 import type { ChangeFreq, OptionsSvelteSitemap } from './dto/index.js';
 import { defaultConfig, loadConfig, withDefaultConfig } from './helpers/config.js';
-import { cliColors } from './helpers/vars.helper.js';
+import { cliColors, errorMsgGeneration } from './helpers/vars.helper.js';
 import { createSitemap } from './index.js';
 const version = pkg.version;
 
@@ -41,8 +41,8 @@ const main = async () => {
     },
     unknown: (err: string) => {
       if (config && Object.keys(config).length > 0) return false;
-      console.log('⚠ Those arguments are not supported:', err);
-      console.log('Use: `svelte-sitemap --help` for more options.\n');
+      console.log(cliColors.yellow, '  ⚠ This argument is not supported:', err);
+      // console.log(cliColors.yellow, '  Use: `svelte-sitemap --help` for more options.');
       stop = true;
       return false;
     }
@@ -78,7 +78,8 @@ const main = async () => {
     );
     process.exit(0);
   } else if (stop) {
-    // Do nothing if there is something suspicious
+    console.error(cliColors.red, errorMsgGeneration);
+    process.exit(0);
   } else {
     const domain: string = args.domain ? args.domain : undefined;
     const debug: boolean = args.debug === '' || args.debug === true ? true : false;
@@ -115,17 +116,22 @@ const main = async () => {
         `  ℹ Hint: Configuration file is now the preferred method to set up svelte-sitemap. See ${REPO_URL}?tab=readme-ov-file#-usage`
       );
       console.log(cliColors.cyanAndBold, `  ✔ Using CLI options. Config file not found.`);
-      createSitemap(optionsCli);
+      try {
+        await createSitemap(optionsCli);
+      } catch (err) {
+        console.error(cliColors.red, errorMsgGeneration, err);
+        process.exit(0);
+      }
     } else {
       const hasCliOptions = process.argv.slice(2).length > 0;
-      console.log(cliColors.green, `  ✔ Loading config file...`);
+      console.log(cliColors.green, `  ✔ Reading config file...`);
 
       const allowedKeys = Object.keys(defaultConfig);
       const invalidKeys = Object.keys(config).filter((key) => !allowedKeys.includes(key));
       if (invalidKeys.length > 0) {
         console.log(
-          cliColors.red,
-          `  ⚠ Invalid properties in config file: ${invalidKeys.join(', ')}`
+          cliColors.yellow,
+          `  ⚠ Invalid properties in config file, so I ignore them: ${invalidKeys.join(', ')}`
         );
       }
 
@@ -135,7 +141,12 @@ const main = async () => {
           `  ⚠ You have also set CLI options (arguments with '--'), but they are ignored because your config file 'svelte-sitemap.config.ts' is used.`
         );
       }
-      createSitemap(withDefaultConfig(config));
+      try {
+        await createSitemap(withDefaultConfig(config));
+      } catch (err) {
+        console.error(cliColors.red, errorMsgGeneration, err);
+        process.exit(0);
+      }
     }
   }
 };

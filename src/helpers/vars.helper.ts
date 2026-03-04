@@ -11,6 +11,8 @@ export const successMsg = (outDir: string, filename: string) =>
 export const errorMsgWrite = (outDir: string, filename: string) =>
   `  × File '${outDir}/${filename}' could not be created.`;
 
+export const errorMsgGeneration = `  × Sitemap generation failed.`;
+
 export const errorMsgFolder = (outDir: string) =>
   `  × Folder '${outDir}/' doesn't exist.\n    Make sure you are using this library as 'postbuild' so '${outDir}/' folder was successfully created before running this script. Or are you using Vercel? See https://github.com/bartholomej/svelte-sitemap#error-missing-folder`;
 
