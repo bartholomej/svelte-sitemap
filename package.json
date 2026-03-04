@@ -7,7 +7,7 @@
   "bin": "cli.js",
   "scripts": {
     "start": "tsc -w",
-    "build": "tsdown --config-loader unrun",
+    "build": "tsdown --config-loader unrun && cp README.md ./dist/README.md",
     "demo": "tsx demo",
     "lint": "eslint ./src/**/**/* --fix",
     "test": "vitest --watch=false",
