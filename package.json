@@ -73,6 +73,28 @@
   "engines": {
     "node": ">= 14.17.0"
   },
+   "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/bartholomej"
+    },
+    {
+      "type": "ko_fi",
+      "url": "https://ko-fi.com/bartholomej"
+    },
+    {
+      "type": "buy_me_a_coffee",
+      "url": "https://www.buymeacoffee.com/bartholomej"
+    },
+    {
+      "type": "paypal",
+      "url": "https://www.paypal.me/bartholomej"
+    },
+    {
+      "type": "thanks_dev",
+      "url": "https://thanks.dev/u/gh/bartholomej"
+    }
+  ],
   "license": "MIT",
   "packageManager": "yarn@4.12.0",
   "types": "./dist/index.d.ts",
