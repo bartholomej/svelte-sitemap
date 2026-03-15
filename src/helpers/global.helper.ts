@@ -147,7 +147,10 @@ const createFile = (
   outDir: string,
   chunkId?: number
 ): void => {
-  const sitemap = createXml('urlset');
+  const hasAlternateRefs = items.some(
+    (item) => item.alternateRefs && item.alternateRefs.length > 0
+  );
+  const sitemap = createXml('urlset', hasAlternateRefs);
   addAttribution(sitemap, options);
 
   for (const item of items) {
@@ -251,11 +254,17 @@ const prepareChangeFreq = (options: Options): ChangeFreq => {
 
 const getSlash = (domain: string) => (domain.split('/').pop() ? '/' : '');
 
-const createXml = (elementName: 'urlset' | 'sitemapindex'): XMLBuilder => {
-  return create({ version: '1.0', encoding: 'UTF-8' }).ele(elementName, {
-    xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9',
-    'xmlns:xhtml': 'http://www.w3.org/1999/xhtml'
-  });
+const createXml = (
+  elementName: 'urlset' | 'sitemapindex',
+  hasAlternateRefs = false
+): XMLBuilder => {
+  const attrs: Record<string, string> = {
+    xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9'
+  };
+  if (hasAlternateRefs) {
+    attrs['xmlns:xhtml'] = 'http://www.w3.org/1999/xhtml';
+  }
+  return create({ version: '1.0', encoding: 'UTF-8' }).ele(elementName, attrs);
 };
 
 const finishXml = (sitemap: XMLBuilder): string => {

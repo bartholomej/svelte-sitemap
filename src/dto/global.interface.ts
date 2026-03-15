@@ -37,7 +37,7 @@ export interface SitemapField {
   alternateRefs?: Array<SitemapFieldAlternateRef>;
 }
 
-export interface PagesJson {
+export interface PagesJson extends SitemapField {
   page?: string;
   changeFreq?: ChangeFreq;
   lastMod?: string;
