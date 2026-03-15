@@ -7,7 +7,7 @@
   "bin": "cli.js",
   "scripts": {
     "start": "tsc -w",
-    "build": "tsdown --config-loader unrun && cp README.md ./dist/README.md",
+    "build": "tsdown --config-loader unrun",
     "demo": "tsx demo",
     "lint": "eslint ./src/**/**/* --fix",
     "test": "vitest --watch=false",
@@ -44,6 +44,7 @@
     "husky": "^9.1.7",
     "prettier": "^3.8.1",
     "pretty-quick": "^4.2.2",
+    "rolldown-plugin-dist-package": "^1.0.0",
     "tsdown": "^0.21.3",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",

@@ -1,5 +1,5 @@
+import { distPackage } from 'rolldown-plugin-dist-package';
 import { defineConfig } from 'tsdown';
-import { copyAndFixPackageJson } from './package-json-fix.rolldown';
 
 const outDir = 'dist';
 
@@ -16,9 +16,11 @@ export default defineConfig([
     unbundle: true,
     fixedExtension: false,
     plugins: [
-      copyAndFixPackageJson({
+      distPackage({
         outDir,
-        removeFields: ['packageManager', 'lint-staged', 'devDependencies', 'scripts']
+        removeFields: ['packageManager', 'lint-staged', 'devDependencies', 'scripts'],
+        copyFiles: ['README.md', 'LICENSE'],
+        validate: true
       })
     ]
   }
