@@ -1,4 +1,5 @@
-import { describe, expect, test } from 'vitest';
+import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
+import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import { prepareData } from '../src/helpers/global.helper';
 import { optionsTest, sortbyPage } from './utils-test';
 
@@ -480,6 +481,46 @@ describe('Trailing slashes', () => {
           changeFreq: null,
           lastMod: today
         }
+      ])
+    );
+  });
+});
+
+describe('URI encoding', () => {
+  const SPACE_DIR = 'build-test-spaces';
+
+  beforeAll(() => {
+    if (!existsSync(SPACE_DIR)) mkdirSync(SPACE_DIR);
+    mkdirSync(`${SPACE_DIR}/malware analysis`, { recursive: true });
+    writeFileSync(`${SPACE_DIR}/malware analysis/index.html`, '');
+    writeFileSync(`${SPACE_DIR}/index.html`, '');
+  });
+
+  afterAll(() => {
+    if (existsSync(SPACE_DIR)) rmSync(SPACE_DIR, { recursive: true, force: true });
+  });
+
+  test('Spaces in paths are encoded as %20', async () => {
+    const json = await prepareData('https://example.com', { outDir: SPACE_DIR });
+
+    expect(sortbyPage(json)).toMatchObject(
+      sortbyPage([
+        { page: 'https://example.com', changeFreq: null, lastMod: '' },
+        { page: 'https://example.com/malware%20analysis', changeFreq: null, lastMod: '' }
+      ])
+    );
+  });
+
+  test('Spaces in paths with trailing slashes are encoded as %20', async () => {
+    const json = await prepareData('https://example.com/', {
+      outDir: SPACE_DIR,
+      trailingSlashes: true
+    });
+
+    expect(sortbyPage(json)).toMatchObject(
+      sortbyPage([
+        { page: 'https://example.com/', changeFreq: null, lastMod: '' },
+        { page: 'https://example.com/malware%20analysis/', changeFreq: null, lastMod: '' }
       ])
     );
   });

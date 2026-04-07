@@ -32,6 +32,20 @@ const getUrl = (url: string, domain: string, options: Options) => {
     trimmed = trimmed.endsWith('/') ? trimmed.slice(0, -1) : trimmed;
     slash = trimmed ? slash : '';
   }
+
+  // URI-encode each path segment to handle special characters (e.g. spaces → %20).
+  // Decode first to avoid double-encoding already percent-encoded segments.
+  trimmed = trimmed
+    .split('/')
+    .map((segment) => {
+      try {
+        return encodeURIComponent(decodeURIComponent(segment));
+      } catch {
+        return encodeURIComponent(segment);
+      }
+    })
+    .join('/');
+
   return `${domain}${slash}${trimmed}`;
 };
 
