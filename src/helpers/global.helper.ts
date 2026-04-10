@@ -65,6 +65,8 @@ export async function prepareData(domain: string, options?: Options): Promise<Pa
 
   if (options?.additional) pages.push(...options.additional);
 
+  pages.sort();
+
   const results: PagesJson[] = [];
 
   for (const page of pages) {
@@ -105,7 +107,11 @@ export async function prepareData(domain: string, options?: Options): Promise<Pa
       if (item.loc && !item.loc.startsWith('http')) {
         const base = domain.endsWith('/') ? domain.slice(0, -1) : domain;
         if (item.loc.startsWith('/')) {
-          item.loc = `${base}${item.loc}`;
+          if (item.loc === '/' && !options?.trailingSlashes) {
+            item.loc = base;
+          } else {
+            item.loc = `${base}${item.loc}`;
+          }
         } else {
           const slash = getSlash(domain);
           item.loc = `${domain}${slash}${item.loc}`;
