@@ -491,8 +491,8 @@ describe('URI encoding', () => {
 
   beforeAll(() => {
     if (!existsSync(SPACE_DIR)) mkdirSync(SPACE_DIR);
-    mkdirSync(`${SPACE_DIR}/malware analysis`, { recursive: true });
-    writeFileSync(`${SPACE_DIR}/malware analysis/index.html`, '');
+    mkdirSync(`${SPACE_DIR}/with space`, { recursive: true });
+    writeFileSync(`${SPACE_DIR}/with space/index.html`, '');
     writeFileSync(`${SPACE_DIR}/index.html`, '');
   });
 
@@ -506,7 +506,7 @@ describe('URI encoding', () => {
     expect(sortbyPage(json)).toMatchObject(
       sortbyPage([
         { page: 'https://example.com', changeFreq: null, lastMod: '' },
-        { page: 'https://example.com/malware%20analysis', changeFreq: null, lastMod: '' }
+        { page: 'https://example.com/with%20space', changeFreq: null, lastMod: '' }
       ])
     );
   });
@@ -520,7 +520,7 @@ describe('URI encoding', () => {
     expect(sortbyPage(json)).toMatchObject(
       sortbyPage([
         { page: 'https://example.com/', changeFreq: null, lastMod: '' },
-        { page: 'https://example.com/malware%20analysis/', changeFreq: null, lastMod: '' }
+        { page: 'https://example.com/with%20space/', changeFreq: null, lastMod: '' }
       ])
     );
   });
