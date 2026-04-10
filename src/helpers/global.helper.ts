@@ -87,7 +87,11 @@ export async function prepareData(domain: string, options?: Options): Promise<Pa
 
     if (options?.transform) {
       const transformed = await options.transform(options as OptionsSvelteSitemap, path);
-      item = transformed ? { ...defaultItem, ...transformed } : null;
+      if (transformed === null) {
+        item = null;
+      } else {
+        item = transformed ? { ...defaultItem, ...transformed } : defaultItem;
+      }
     } else {
       item = defaultItem;
     }

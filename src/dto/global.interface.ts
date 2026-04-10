@@ -17,7 +17,7 @@ export interface Options {
   transform?: (
     config: OptionsSvelteSitemap,
     path: string
-  ) => Promise<SitemapField | null> | SitemapField | null;
+  ) => Promise<SitemapField | null | undefined> | SitemapField | null | undefined;
 }
 
 export interface OptionsSvelteSitemap extends Options {
