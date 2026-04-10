@@ -488,11 +488,16 @@ describe('Trailing slashes', () => {
 
 describe('URI encoding', () => {
   const SPACE_DIR = 'build-test-spaces';
+  const specialDirs = ['with+plus&and', '100% done', 'eq=sign', 'comma,name', 'already%20encoded'];
 
   beforeAll(() => {
     if (!existsSync(SPACE_DIR)) mkdirSync(SPACE_DIR);
     mkdirSync(`${SPACE_DIR}/with space`, { recursive: true });
     writeFileSync(`${SPACE_DIR}/with space/index.html`, '');
+    for (const dir of specialDirs) {
+      mkdirSync(`${SPACE_DIR}/${dir}`, { recursive: true });
+      writeFileSync(`${SPACE_DIR}/${dir}/index.html`, '');
+    }
     writeFileSync(`${SPACE_DIR}/index.html`, '');
   });
 
@@ -502,13 +507,10 @@ describe('URI encoding', () => {
 
   test('Spaces in paths are encoded as %20', async () => {
     const json = await prepareData('https://example.com', { outDir: SPACE_DIR });
+    const pages = json.map((item) => item.page);
 
-    expect(sortbyPage(json)).toMatchObject(
-      sortbyPage([
-        { page: 'https://example.com', changeFreq: null, lastMod: '' },
-        { page: 'https://example.com/with%20space', changeFreq: null, lastMod: '' }
-      ])
-    );
+    expect(pages).toContain('https://example.com');
+    expect(pages).toContain('https://example.com/with%20space');
   });
 
   test('Spaces in paths with trailing slashes are encoded as %20', async () => {
@@ -516,11 +518,24 @@ describe('URI encoding', () => {
       outDir: SPACE_DIR,
       trailingSlashes: true
     });
+    const pages = json.map((item) => item.page);
+
+    expect(pages).toContain('https://example.com/');
+    expect(pages).toContain('https://example.com/with%20space/');
+  });
+
+  test('Special characters in paths are percent-encoded', async () => {
+    const json = await prepareData('https://example.com', { outDir: SPACE_DIR });
 
     expect(sortbyPage(json)).toMatchObject(
       sortbyPage([
-        { page: 'https://example.com/', changeFreq: null, lastMod: '' },
-        { page: 'https://example.com/with%20space/', changeFreq: null, lastMod: '' }
+        { page: 'https://example.com', changeFreq: null, lastMod: '' },
+        { page: 'https://example.com/with%20space', changeFreq: null, lastMod: '' },
+        { page: 'https://example.com/with%2Bplus%26and', changeFreq: null, lastMod: '' },
+        { page: 'https://example.com/100%25%20done', changeFreq: null, lastMod: '' },
+        { page: 'https://example.com/eq%3Dsign', changeFreq: null, lastMod: '' },
+        { page: 'https://example.com/comma%2Cname', changeFreq: null, lastMod: '' },
+        { page: 'https://example.com/already%20encoded', changeFreq: null, lastMod: '' }
       ])
     );
   });
