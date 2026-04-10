@@ -2843,9 +2843,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rolldown-plugin-dist-package@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "rolldown-plugin-dist-package@npm:1.0.0"
+"rolldown-plugin-dist-package@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "rolldown-plugin-dist-package@npm:1.0.1"
   peerDependencies:
     rolldown: ^1.0.0
     rollup: ^3.0.0 || ^4.0.0
@@ -2855,7 +2855,7 @@ __metadata:
       optional: true
     rollup:
       optional: true
-  checksum: 10c0/36fa3705505232c533d2c34bd8c89f14550828ad6fc79dac258bd1b075a2abf59182034198338461d34b9202f39690736594a4dc20543bb61a6b3275d623cea8
+  checksum: 10c0/abb4107d2a30a4a6b5290f9d84806d17ee3a6df81d9113bffd8a5d65634a731819bcdac243b514e9429b29f2984c542bb08a9dcd63be11a3495ed203dc723902
   languageName: node
   linkType: hard
 
@@ -3160,7 +3160,7 @@ __metadata:
     minimist: "npm:^1.2.8"
     prettier: "npm:^3.8.2"
     pretty-quick: "npm:^4.2.2"
-    rolldown-plugin-dist-package: "npm:^1.0.0"
+    rolldown-plugin-dist-package: "npm:^1.0.1"
     tsdown: "npm:^0.21.7"
     tsx: "npm:^4.21.0"
     typescript: "npm:^6.0.2"
