@@ -72,19 +72,22 @@ export async function prepareData(domain: string, options?: Options): Promise<Pa
     const pathUrl = getUrl(page, '', options);
     const path = pathUrl.startsWith('/') ? pathUrl : `/${pathUrl}`;
 
+    const defaultItem: PagesJson = {
+      loc: url,
+      page: url,
+      changeFreq: changeFreq,
+      changefreq: changeFreq,
+      lastMod: options?.resetTime ? new Date().toISOString().split('T')[0] : '',
+      lastmod: options?.resetTime ? new Date().toISOString().split('T')[0] : ''
+    };
+
     let item: PagesJson | null = null;
 
     if (options?.transform) {
-      item = await options.transform(options as OptionsSvelteSitemap, path);
+      const transformed = await options.transform(options as OptionsSvelteSitemap, path);
+      item = transformed ? { ...defaultItem, ...transformed } : null;
     } else {
-      item = {
-        loc: url,
-        page: url,
-        changeFreq: changeFreq,
-        changefreq: changeFreq,
-        lastMod: options?.resetTime ? new Date().toISOString().split('T')[0] : '',
-        lastmod: options?.resetTime ? new Date().toISOString().split('T')[0] : ''
-      };
+      item = defaultItem;
     }
 
     if (item) {
