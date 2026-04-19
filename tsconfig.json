@@ -3,7 +3,6 @@
     "target": "es2022",
     "lib": ["es2022", "dom"],
     "types": ["node"],
-    "baseUrl": "./src",
     "esModuleInterop": true,
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
