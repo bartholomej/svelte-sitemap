@@ -112,6 +112,89 @@ _The same options are also available as **CLI flags** for legacy use._
 | -                 | `--help`, `-h`             | Display usage info                                                                                                  | -       | -                                           |
 | -                 | `--version`, `-v`          | Show version                                                                                                        | -       | -                                           |
 
+## 🔄 Transform
+
+The `transform` option gives you full control over each sitemap entry. It receives the config and the page path, and returns a `SitemapField` object (or `null` to skip the page).
+
+This is useful for setting per-page `priority`, `changefreq`, or adding `alternateRefs` for multilingual sites.
+
+```typescript
+// svelte-sitemap.config.ts
+import type { OptionsSvelteSitemap } from 'svelte-sitemap';
+
+const config: OptionsSvelteSitemap = {
+  domain: 'https://example.com',
+  transform: async (config, path) => {
+    return {
+      loc: path,
+      changefreq: 'weekly',
+      priority: path === '/' ? 1.0 : 0.7,
+      lastmod: new Date().toISOString().split('T')[0]
+    };
+  }
+};
+
+export default config;
+```
+
+### Excluding pages via transform
+
+Return `null` to exclude a page from the sitemap:
+
+```typescript
+transform: async (config, path) => {
+  if (path.startsWith('/admin')) {
+    return null;
+  }
+  return { loc: path };
+};
+```
+
+### Alternate refs (hreflang) for multilingual sites
+
+Use `alternateRefs` inside `transform` to add `<xhtml:link rel="alternate" />` entries for each language version of a page. The `xmlns:xhtml` namespace is automatically added to the sitemap only when alternateRefs are present.
+
+```typescript
+// svelte-sitemap.config.ts
+import type { OptionsSvelteSitemap } from 'svelte-sitemap';
+
+const config: OptionsSvelteSitemap = {
+  domain: 'https://example.com',
+  transform: async (config, path) => {
+    return {
+      loc: path,
+      changefreq: 'daily',
+      priority: 0.7,
+      alternateRefs: [
+        { href: `https://example.com${path}`, hreflang: 'en' },
+        { href: `https://es.example.com${path}`, hreflang: 'es' },
+        { href: `https://fr.example.com${path}`, hreflang: 'fr' }
+      ]
+    };
+  }
+};
+
+export default config;
+```
+
+This produces:
+
+```xml
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://example.com/</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://example.com/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://es.example.com/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fr.example.com/" />
+  </url>
+</urlset>
+```
+
+> **Tip:** Following Google's guidelines, each URL should include an alternate link pointing to itself as well.
+
 ## 🙋 FAQ
 
 ### 🙈 How to exclude a directory?
