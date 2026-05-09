@@ -9,7 +9,7 @@
 ---
 
 - ➡️ Designed for SvelteKit `adapter-static` with `prerender` option (SSG)
-- 🔷 TypeScript, JavaScript, CLI version
+- 🔷 TypeScript, JavaScript, CLI and **Vite plugin** version
 - 🔧 Useful [options](#%EF%B8%8F-options) for customizing your sitemap
 - 📡 [Ping](#-ping-google-search-console) Google Search Console after deploy
 - 🗂️ Support for [sitemap index](https://developers.google.com/search/docs/crawling-indexing/sitemaps/large-sitemaps) for large sites (50K+ pages)
@@ -26,7 +26,7 @@ npm install svelte-sitemap --save-dev
 
 ## 🚀 Usage
 
-> There are three ways to use this library. Pick the one that suits you best.
+> There are four ways to use this library. Pick the one that suits you best.
 
 ### ✨ Method 1: Config file (recommended)
 
@@ -91,6 +91,30 @@ Run your script:
 ```bash
 node my-script.js
 ```
+
+---
+
+### ⚡ Method 4: Vite plugin
+
+If you're using SvelteKit with Vite (which is the default), you can integrate the sitemap generation directly into the Vite build pipeline — no extra `postbuild` script needed.
+
+Add the plugin to your `vite.config.ts`:
+
+```typescript
+// vite.config.ts
+import { sveltekit } from '@sveltejs/kit/vite';
+import { svelteSitemap } from 'svelte-sitemap/vite'; // <-- Add svelte-sitemap vite plugin
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+  plugins: [
+    sveltekit(),
+    svelteSitemap({ domain: 'https://example.com' }) // <-- Configure the plugin with your options
+  ]
+});
+```
+
+The sitemap is generated automatically at the end of every `vite build`. All [options](#%EF%B8%8F-options) are supported.
 
 ---
 

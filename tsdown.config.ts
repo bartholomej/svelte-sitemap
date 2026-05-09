@@ -5,7 +5,7 @@ const outDir = 'dist';
 
 export default defineConfig([
   {
-    entry: ['src/index.ts', './src/cli.ts'],
+    entry: ['src/index.ts', './src/cli.ts', './src/vite.ts'],
     format: ['esm'],
     target: 'es2022',
     dts: true,
