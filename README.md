@@ -26,9 +26,34 @@ npm install svelte-sitemap --save-dev
 
 ## 🚀 Usage
 
-> There are four ways to use this library. Pick the one that suits you best.
+We recommend using the **Vite plugin** (Method 1) as it integrates directly into your build pipeline. For other setups, you can use a config file, CLI, or the JS API.
 
-### ✨ Method 1: Config file (recommended)
+### ⚡ Method 1: Vite plugin (Recommended)
+
+If you're using SvelteKit with Vite (which is the default), you can integrate the sitemap generation directly into the Vite build pipeline.
+
+Add the plugin to your `vite.config.ts`:
+
+```typescript
+// vite.config.ts
+import { sveltekit } from '@sveltejs/kit/vite';
+import { svelteSitemap } from 'svelte-sitemap/vite'; // <-- Add svelte-sitemap vite plugin
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+  plugins: [
+    sveltekit(),
+    svelteSitemap({ domain: 'https://example.com' }) // <-- Configure the plugin with your options
+  ]
+});
+```
+
+The sitemap is generated automatically at the end of every `vite build`. All [options](#%EF%B8%8F-options) are supported.
+
+---
+
+<details>
+<summary><b>✨ Method 2: Config file (Alternative)</b></summary>
 
 Create a config file `svelte-sitemap.config.ts` in the root of your project:
 
@@ -57,9 +82,10 @@ Then add `svelte-sitemap` as a `postbuild` script in `package.json`:
 
 That's it. After every `build`, the sitemap is automatically generated in your `build/` folder.
 
----
+</details>
 
-### ⌨️ Method 2: CLI (legacy)
+<details>
+<summary><b>⌨️ Method 3: CLI (legacy)</b></summary>
 
 Pass options directly as CLI flags — no config file needed:
 
@@ -73,9 +99,10 @@ Pass options directly as CLI flags — no config file needed:
 
 See all available flags in the [Options](#%EF%B8%8F-options) table below.
 
----
+</details>
 
-### 🔧 Method 3: JavaScript / TypeScript API
+<details>
+<summary><b>🔧 Method 4: JavaScript / TypeScript API</b></summary>
 
 Sometimes it's useful to call the script directly from code:
 
@@ -92,29 +119,7 @@ Run your script:
 node my-script.js
 ```
 
----
-
-### ⚡ Method 4: Vite plugin
-
-If you're using SvelteKit with Vite (which is the default), you can integrate the sitemap generation directly into the Vite build pipeline — no extra `postbuild` script needed.
-
-Add the plugin to your `vite.config.ts`:
-
-```typescript
-// vite.config.ts
-import { sveltekit } from '@sveltejs/kit/vite';
-import { svelteSitemap } from 'svelte-sitemap/vite'; // <-- Add svelte-sitemap vite plugin
-import { defineConfig } from 'vite';
-
-export default defineConfig({
-  plugins: [
-    sveltekit(),
-    svelteSitemap({ domain: 'https://example.com' }) // <-- Configure the plugin with your options
-  ]
-});
-```
-
-The sitemap is generated automatically at the end of every `vite build`. All [options](#%EF%B8%8F-options) are supported.
+</details>
 
 ---
 
