@@ -14,7 +14,11 @@ export const errorMsgWrite = (outDir: string, filename: string) =>
 export const errorMsgGeneration = `  × Sitemap generation failed.`;
 
 export const errorMsgFolder = (outDir: string) =>
-  `  × Folder '${outDir}/' doesn't exist.\n    Make sure you are using this library as 'postbuild' so '${outDir}/' folder was successfully created before running this script. Or are you using Vercel? See https://github.com/bartholomej/svelte-sitemap#error-missing-folder`;
+  `  × Folder '${outDir}/' doesn't exist.\n` +
+  `    Make sure your build completed successfully and the output folder was created.\n` +
+  `    If you are using SvelteKit, ensure you are using adapter-static and your outDir matches the adapter's output folder. See https://github.com/bartholomej/svelte-sitemap#-error-missing-folder`;
 
 export const errorMsgHtmlFiles = (outDir: string) =>
-  `  × There is no static html file in your '${outDir}/' folder. Are you sure you are using Svelte adapter-static with prerender option? See https://github.com/bartholomej/svelte-sitemap#error-missing-html-files`;
+  `  × There is no static html file in your '${outDir}/' folder.\n` +
+  `    This generator requires static HTML files to scan. If you are using adapter-static, make sure you have prerendering enabled.\n` +
+  `    If you are building a fully dynamic SSR site, you should generate your sitemap dynamically (e.g., via a +server.ts route) instead. See https://github.com/bartholomej/svelte-sitemap#-error-missing-html-files`;

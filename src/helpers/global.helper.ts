@@ -73,20 +73,26 @@ export async function prepareData(domain: string, options?: Options): Promise<Pa
     };
   });
 
-  detectErrors({
-    folder: !fs.existsSync(FOLDER),
-    htmlFiles: !pages.length
-  });
+  detectErrors(
+    {
+      folder: !fs.existsSync(FOLDER),
+      htmlFiles: !pages.length
+    },
+    FOLDER
+  );
 
   return results;
 }
 
-export const detectErrors = ({ folder, htmlFiles }: { folder: boolean; htmlFiles: boolean }) => {
+export const detectErrors = (
+  { folder, htmlFiles }: { folder: boolean; htmlFiles: boolean },
+  outDir: string = OUT_DIR
+) => {
   if (folder && htmlFiles) {
-    console.error(cliColors.red, errorMsgFolder(OUT_DIR));
+    console.error(cliColors.red, errorMsgFolder(outDir));
   } else if (htmlFiles) {
     // If no page exists, then the static adapter is probably not used
-    console.error(cliColors.red, errorMsgHtmlFiles(OUT_DIR));
+    console.error(cliColors.red, errorMsgHtmlFiles(outDir));
   }
 };
 
