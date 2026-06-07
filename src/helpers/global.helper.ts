@@ -81,6 +81,8 @@ export async function prepareData(domain: string, options?: Options): Promise<Pa
     FOLDER
   );
 
+  await checkPrerenderRoutes(pages, FOLDER, options);
+
   return results;
 }
 
@@ -93,6 +95,29 @@ export const detectErrors = (
   } else if (htmlFiles) {
     // If no page exists, then the static adapter is probably not used
     console.error(cliColors.red, errorMsgHtmlFiles(outDir));
+  }
+};
+
+export const checkPrerenderRoutes = async (pages: string[], outDir: string, options?: Options) => {
+  // Check if it's a SvelteKit build by checking for the '_app' directory in output folder
+  const appDirExists = fs.existsSync(`${outDir}/_app`);
+
+  if (appDirExists) {
+    const hasOnlyRootOrFallback = pages.every((page) => {
+      const basename = page.split('/').pop();
+      return basename === 'index.html' || basename === 'fallback.html';
+    });
+
+    const hasNoAdditional = !options?.additional || options.additional.length === 0;
+
+    if (hasOnlyRootOrFallback && hasNoAdditional) {
+      console.warn(
+        cliColors.yellow,
+        `  ⚠️ Warning: Only the homepage or fallback page was found in '${outDir}/'.\n` +
+          `    If your SvelteKit site has multiple routes, make sure you enabled prerendering for them.\n` +
+          `    For SPA (Single Page Apps), you can add routes manually using the 'additional' option.`
+      );
+    }
   }
 };
 
