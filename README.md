@@ -108,10 +108,7 @@ See all available flags in the [Options](#%EF%B8%8F-options) table below.
 </details>
 
 <details>
-<summary><b>🔧 JavaScript / TypeScript API (Deprecated)</b></summary>
-
-> [!WARNING]
-> Calling the generator programmatically is deprecated. We recommend migrating to the **Vite plugin** instead.
+<summary><b>🔧 JavaScript / TypeScript API</b></summary>
 
 Sometimes it's useful to call the script directly from code:
 
@@ -149,6 +146,47 @@ _The same options are also available as **CLI flags** for legacy use._
 | `debug`           | `--debug`                  | Show some useful logs                                                                                               | -       | `debug: true`                               |
 | -                 | `--help`, `-h`             | Display usage info                                                                                                  | -       | -                                           |
 | -                 | `--version`, `-v`          | Show version                                                                                                        | -       | -                                           |
+
+## 🔄 Migration to Vite Plugin
+
+Migrating from the CLI or config file to the Vite plugin is quick and straightforward:
+
+1. **Remove `svelte-sitemap` from `package.json` scripts:**
+
+   ```diff
+   {
+     "scripts": {
+   -   "postbuild": "npx svelte-sitemap"
+     }
+   }
+   ```
+
+2. **Copy options from your config file** (e.g., `svelte-sitemap.config.ts`) if you have one, and then **delete it**.
+
+3. **Register the plugin in `vite.config.ts`:**
+   Import `svelteSitemap` and configure your options directly inside the plugin. The options object is 100% compatible, so you can copy and paste your configuration directly into `svelteSitemap({...})`:
+
+   ```typescript
+   // vite.config.ts
+   import { sveltekit } from '@sveltejs/kit/vite';
+   import { svelteSitemap } from 'svelte-sitemap/vite';
+   import { defineConfig } from 'vite';
+
+   export default defineConfig({
+     plugins: [
+       sveltekit(),
+       svelteSitemap({
+         domain: 'https://example.com'
+         // Paste your options object from svelte-sitemap.config.ts here.
+         // Note: If migrating from CLI flags, convert kebab-case flags to camelCase options:
+         // e.g. --ignore -> ignore: ['**/admin/**']
+         //      --out-dir -> outDir: 'dist'
+       })
+     ]
+   });
+   ```
+
+---
 
 ## 🙋 FAQ
 
