@@ -5,12 +5,10 @@ import { APP_NAME, CONFIG_FILES, REPO_URL } from './const.js';
 import type { ChangeFreq, OptionsSvelteSitemap } from './dto/index.js';
 import { defaultConfig, loadConfig, withDefaultConfig } from './helpers/config.js';
 import { cliColors, errorMsgGeneration } from './helpers/vars.helper.js';
-import { createSitemap } from './index.js';
+import { createSitemap, printIntro } from './index.js';
 const version = pkg.version;
 
 const main = async () => {
-  console.log(cliColors.cyanAndBold, `> Using ${APP_NAME}`);
-
   let stop = false;
 
   const config = await loadConfig(CONFIG_FILES);
@@ -67,7 +65,11 @@ const main = async () => {
     log('  --debug                 Debug mode');
     log(' ');
     process.exit(args.help ? 0 : 1);
-  } else if (config && Object.keys(config).length > 0) {
+  }
+
+  printIntro();
+
+  if (config && Object.keys(config).length > 0) {
     // --- CONFIG FILE PATH ---
     const hasCliOptions = process.argv.slice(2).length > 0;
     console.log(cliColors.green, `  ✔ Reading config file...`);
@@ -168,7 +170,7 @@ const main = async () => {
 
     console.log(
       cliColors.yellow,
-      `  ℹ Hint: Configuration file is now the preferred method to set up svelte-sitemap. See ${REPO_URL}?tab=readme-ov-file#-usage`
+      `  ℹ Hint: Vite plugin is now the preferred method to set up svelte-sitemap. See ${REPO_URL}#-method-1-vite-plugin-recommended`
     );
     console.log(cliColors.cyanAndBold, `  ✔ Using CLI options. Config file not found.`);
     try {

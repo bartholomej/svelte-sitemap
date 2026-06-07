@@ -1,9 +1,20 @@
-import { OUT_DIR } from './const.js';
+import { APP_NAME, OUT_DIR } from './const.js';
 import type { OptionsSvelteSitemap } from './dto/index.js';
 import { prepareData, writeSitemap } from './helpers/global.helper.js';
 import { cliColors, errorMsgWrite } from './helpers/vars.helper.js';
 
+let introPrinted = false;
+
+export const printIntro = (): void => {
+  if (!introPrinted) {
+    console.log(cliColors.cyanAndBold, `> Using ${APP_NAME}`);
+    introPrinted = true;
+  }
+};
+
 export const createSitemap = async (options: OptionsSvelteSitemap): Promise<void> => {
+  printIntro();
+
   if (options?.debug) {
     console.log('OPTIONS', options);
   }
