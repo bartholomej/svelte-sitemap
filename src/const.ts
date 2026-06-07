@@ -31,3 +31,12 @@ export const CHANGE_FREQ = [
   'yearly',
   'never'
 ] as const;
+
+export const INTEGRATION_METHODS = {
+  VITE: 'Vite plugin',
+  CLI_CONFIG: 'CLI with config',
+  CLI: 'CLI',
+  API: 'API'
+} as const;
+
+export type IntegrationMethod = (typeof INTEGRATION_METHODS)[keyof typeof INTEGRATION_METHODS];

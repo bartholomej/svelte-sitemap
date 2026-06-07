@@ -1,4 +1,5 @@
 import type { Plugin } from 'vite';
+import { INTEGRATION_METHODS } from './const.js';
 import type { OptionsSvelteSitemap } from './dto/index.js';
 import { createSitemap } from './index.js';
 
@@ -20,7 +21,7 @@ export function svelteSitemap(options: OptionsSvelteSitemap): Plugin {
       if (isSvelteKit && !isSSR) {
         return;
       }
-      await createSitemap(options);
+      await createSitemap(options, INTEGRATION_METHODS.VITE);
     }
   };
 }

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import minimist from 'minimist';
 import pkg from './../package.json' with { type: 'json' };
-import { CONFIG_FILES, REPO_URL } from './const.js';
+import { CONFIG_FILES, INTEGRATION_METHODS, REPO_URL } from './const.js';
 import type { ChangeFreq, OptionsSvelteSitemap } from './dto/index.js';
 import { defaultConfig, loadConfig, withDefaultConfig } from './helpers/config.js';
 import { cliColors, errorMsgGeneration } from './helpers/vars.helper.js';
@@ -67,16 +67,11 @@ const main = async () => {
     process.exit(args.help ? 0 : 1);
   }
 
-  printIntro();
-
   if (config && Object.keys(config).length > 0) {
+    printIntro(INTEGRATION_METHODS.CLI_CONFIG);
     // --- CONFIG FILE PATH ---
     const hasCliOptions = process.argv.slice(2).length > 0;
     console.log(cliColors.green, `  ✔ Reading config file...`);
-    console.log(
-      cliColors.yellow,
-      `  ⚠ Deprecated: Running svelte-sitemap via CLI is deprecated. Please use the Vite plugin instead. See ${REPO_URL}#-usage`
-    );
 
     const allowedKeys = Object.keys(defaultConfig);
     const invalidKeys = Object.keys(config).filter((key) => !allowedKeys.includes(key));
@@ -113,12 +108,13 @@ const main = async () => {
     }
 
     try {
-      await createSitemap(withDefaultConfig(config));
+      await createSitemap(withDefaultConfig(config), INTEGRATION_METHODS.CLI_CONFIG);
     } catch (err) {
       console.error(cliColors.red, errorMsgGeneration, err);
       process.exit(0);
     }
   } else {
+    printIntro(INTEGRATION_METHODS.CLI);
     // --- CLI ARGUMENTS PATH ---
     if (stop) {
       console.error(cliColors.red, errorMsgGeneration);
@@ -172,13 +168,9 @@ const main = async () => {
       additional
     };
 
-    console.log(
-      cliColors.yellow,
-      `  ⚠ Deprecated: Passing options directly via CLI flags is deprecated and will be removed in a future version. Please use the Vite plugin (recommended) or a config file. See ${REPO_URL}#-usage`
-    );
     console.log(cliColors.cyanAndBold, `  ✔ Using CLI options. Config file not found.`);
     try {
-      await createSitemap(optionsCli);
+      await createSitemap(optionsCli, INTEGRATION_METHODS.CLI);
     } catch (err) {
       console.error(cliColors.red, errorMsgGeneration, err);
       process.exit(0);

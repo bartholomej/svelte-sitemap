@@ -1,4 +1,6 @@
-import { CHANGE_FREQ } from '../const.js';
+import { CHANGE_FREQ, IntegrationMethod } from '../const.js';
+
+export type { IntegrationMethod };
 
 export interface Arguments {
   domain: string;

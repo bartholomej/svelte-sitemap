@@ -1,19 +1,34 @@
-import { APP_NAME, OUT_DIR } from './const.js';
-import type { OptionsSvelteSitemap } from './dto/index.js';
+import { APP_NAME, INTEGRATION_METHODS, OUT_DIR } from './const.js';
+import type { IntegrationMethod, OptionsSvelteSitemap } from './dto/index.js';
 import { prepareData, writeSitemap } from './helpers/global.helper.js';
-import { cliColors, errorMsgWrite } from './helpers/vars.helper.js';
+import {
+  cliColors,
+  errorMsgWrite,
+  getDeprecationWarning,
+  methodMsg
+} from './helpers/vars.helper.js';
 
 let introPrinted = false;
 
-export const printIntro = (): void => {
+export const printIntro = (method?: IntegrationMethod): void => {
   if (!introPrinted) {
     console.log(cliColors.cyanAndBold, `> Using ${APP_NAME}`);
+    if (method) {
+      console.log(methodMsg(method));
+      const warning = getDeprecationWarning(method);
+      if (warning) {
+        console.log(cliColors.yellow, warning);
+      }
+    }
     introPrinted = true;
   }
 };
 
-export const createSitemap = async (options: OptionsSvelteSitemap): Promise<void> => {
-  printIntro();
+export const createSitemap = async (
+  options: OptionsSvelteSitemap,
+  method: IntegrationMethod = INTEGRATION_METHODS.API
+): Promise<void> => {
+  printIntro(method);
 
   if (options?.debug) {
     console.log('OPTIONS', options);
