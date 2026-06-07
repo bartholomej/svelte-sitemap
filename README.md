@@ -26,11 +26,7 @@ npm install svelte-sitemap --save-dev
 
 ## 🚀 Usage
 
-We recommend using the **Vite plugin** (Method 1) as it integrates directly into your build pipeline. For other setups, you can use a config file, CLI, or the JS API.
-
-### ⚡ Method 1: Vite plugin (Recommended)
-
-If you're using SvelteKit with Vite (which is the default), you can integrate the sitemap generation directly into the Vite build pipeline.
+> If you're using SvelteKit with Vite (which is the default), you can integrate the sitemap generation directly into the Vite build pipeline.
 
 Add the plugin to your `vite.config.ts`:
 
@@ -52,8 +48,15 @@ The sitemap is generated automatically at the end of every `vite build`. All [op
 
 ---
 
+### Alternative Methods
+
+For other setups, the following methods are still supported but are deprecated in favor of the Vite plugin.
+
 <details>
-<summary><b>✨ Method 2: Config file (Alternative)</b></summary>
+<summary><b>✨ Config file</b></summary>
+
+> [!WARNING]
+> Running the generator via CLI is an alternative. We recommend migrating to the **Vite plugin** instead.
 
 Create a config file `svelte-sitemap.config.ts` in the root of your project:
 
@@ -80,12 +83,15 @@ Then add `svelte-sitemap` as a `postbuild` script in `package.json`:
 }
 ```
 
-That's it. After every `build`, the sitemap is automatically generated in your `build/` folder.
+After every `build`, the sitemap is generated in your `build/` folder.
 
 </details>
 
 <details>
-<summary><b>⌨️ Method 3: CLI (legacy)</b></summary>
+<summary><b>⌨️ CLI flags (Deprecated)</b></summary>
+
+> [!WARNING]
+> Passing configuration options directly as CLI flags is deprecated and will be removed in a future version. Please use the **Vite plugin** or a **config file** instead.
 
 Pass options directly as CLI flags — no config file needed:
 
@@ -102,7 +108,10 @@ See all available flags in the [Options](#%EF%B8%8F-options) table below.
 </details>
 
 <details>
-<summary><b>🔧 Method 4: JavaScript / TypeScript API</b></summary>
+<summary><b>🔧 JavaScript / TypeScript API (Deprecated)</b></summary>
+
+> [!WARNING]
+> Calling the generator programmatically is deprecated. We recommend migrating to the **Vite plugin** instead.
 
 Sometimes it's useful to call the script directly from code:
 

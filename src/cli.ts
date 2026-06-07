@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import minimist from 'minimist';
 import pkg from './../package.json' with { type: 'json' };
-import { APP_NAME, CONFIG_FILES, REPO_URL } from './const.js';
+import { CONFIG_FILES, REPO_URL } from './const.js';
 import type { ChangeFreq, OptionsSvelteSitemap } from './dto/index.js';
 import { defaultConfig, loadConfig, withDefaultConfig } from './helpers/config.js';
 import { cliColors, errorMsgGeneration } from './helpers/vars.helper.js';
@@ -73,6 +73,10 @@ const main = async () => {
     // --- CONFIG FILE PATH ---
     const hasCliOptions = process.argv.slice(2).length > 0;
     console.log(cliColors.green, `  ✔ Reading config file...`);
+    console.log(
+      cliColors.yellow,
+      `  ⚠ Deprecated: Running svelte-sitemap via CLI is deprecated. Please use the Vite plugin instead. See ${REPO_URL}#-usage`
+    );
 
     const allowedKeys = Object.keys(defaultConfig);
     const invalidKeys = Object.keys(config).filter((key) => !allowedKeys.includes(key));
@@ -170,7 +174,7 @@ const main = async () => {
 
     console.log(
       cliColors.yellow,
-      `  ℹ Hint: Vite plugin is now the preferred method to set up svelte-sitemap. See ${REPO_URL}#-method-1-vite-plugin-recommended`
+      `  ⚠ Deprecated: Passing options directly via CLI flags is deprecated and will be removed in a future version. Please use the Vite plugin (recommended) or a config file. See ${REPO_URL}#-usage`
     );
     console.log(cliColors.cyanAndBold, `  ✔ Using CLI options. Config file not found.`);
     try {
