@@ -21,4 +21,5 @@ export const createSitemap = async (options: OptionsSvelteSitemap): Promise<void
   }
 };
 
+export { svelteSitemap } from './vite.js';
 export type * from './dto/index.js';
