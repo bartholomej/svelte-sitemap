@@ -1,5 +1,6 @@
 import fg from 'fast-glob';
 import fs from 'fs';
+import path from 'path';
 import { create } from 'xmlbuilder2';
 import type { XMLBuilder } from 'xmlbuilder2/lib/interfaces.js';
 import pkg from '../../package.json' with { type: 'json' };
@@ -100,12 +101,12 @@ export const detectErrors = (
 
 export const checkPrerenderRoutes = async (pages: string[], outDir: string, options?: Options) => {
   // Check if it's a SvelteKit build by checking for the '_app' directory in output folder
-  const appDirExists = fs.existsSync(`${outDir}/_app`);
+  const appDirExists = fs.existsSync(path.join(outDir, '_app'));
 
-  if (appDirExists) {
+  if (appDirExists && pages.length > 0) {
     const hasOnlyRootOrFallback = pages.every((page) => {
-      const basename = page.split('/').pop();
-      return basename === 'index.html' || basename === 'fallback.html';
+      const relative = path.relative(outDir, page);
+      return relative === 'index.html' || relative === 'fallback.html';
     });
 
     const hasNoAdditional = !options?.additional || options.additional.length === 0;
