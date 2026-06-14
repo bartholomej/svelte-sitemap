@@ -74,6 +74,8 @@ export async function prepareData(domain: string, options?: Options): Promise<Pa
     };
   });
 
+  results.sort((a, b) => a.page.localeCompare(b.page));
+
   detectErrors(
     {
       folder: !fs.existsSync(FOLDER),

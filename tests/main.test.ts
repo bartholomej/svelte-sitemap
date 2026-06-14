@@ -540,3 +540,12 @@ describe('URI encoding', () => {
     );
   });
 });
+
+describe('Sorting', () => {
+  test('Sitemap is sorted alphabetically by default (from root to deepest)', async () => {
+    const json = await prepareData('https://example.com', { ...optionsTest });
+    const pages = json.map((item) => item.page);
+    const sortedPages = [...pages].sort((a, b) => a.localeCompare(b));
+    expect(pages).toEqual(sortedPages);
+  });
+});
