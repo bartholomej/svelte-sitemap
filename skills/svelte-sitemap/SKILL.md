@@ -68,14 +68,16 @@ If the project already runs `svelte-sitemap` as a `postbuild` script or uses `sv
 | `domain`          | Required. Full production URL.                                                                                                             |
 | `outDir`          | Folder with the prerendered HTML. Default `build`.                                                                                         |
 | `trailingSlashes` | `true` when SvelteKit uses `trailingSlash: 'always'`.                                                                                      |
-| `ignore`          | Glob patterns relative to `outDir`, matched against HTML **files**, e.g. `['404.html', '**/admin/**']`.                                    |
+| `ignore`          | Pages to leave out, relative to `outDir`: names or glob patterns, e.g. `['404', 'admin', '**/drafts/**']`.                                 |
 | `additional`      | Extra paths that have no prerendered file, e.g. SPA routes: `['contact', 'pricing']`.                                                      |
 | `changeFreq`      | Default change frequency: `always`, `hourly`, `daily`, `weekly`, `monthly`, `yearly`, `never`.                                             |
 | `resetTime`       | `true` sets `lastmod` of every page to the build date.                                                                                     |
 | `transform`       | Function to customize or exclude each page (priority, per-page lastmod, hreflang). See [references/transform.md](references/transform.md). |
 | `debug`           | Logs options and the generated entries.                                                                                                    |
 
-`ignore` gotcha: with SvelteKit's default `trailingSlash`, pages are flat files (`build/about.html`), so `ignore: ['about']` does **not** match. Use `about.html`, or exclude by URL path in `transform` (`return null`), which works regardless of the file layout.
+`ignore` and versions: since 4.1.1 a plain name like `ignore: ['admin']` removes the page itself (`admin.html` or `admin/index.html`) and everything under `admin/`. Before 4.1.1 it didn't match flat page files (`build/admin.html`, SvelteKit's default `trailingSlash`), so on older versions use `admin.html`, or exclude by URL in `transform` (`return null`), which works on any version.
+
+To keep `/admin` but drop the pages under it, use `transform` (`path.startsWith('/admin/')`). `ignore: ['admin/**']` only does that with the default `trailingSlash`; with `trailingSlash: 'always'` the page is `admin/index.html` and gets removed too.
 
 ## 5. Verify
 

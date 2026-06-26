@@ -50,7 +50,7 @@ svelteSitemap({
 });
 ```
 
-Prefer this over `ignore` when excluding by URL: `ignore` matches files, and with SvelteKit's default `trailingSlash` a page is a flat file (`build/admin.html`), so `ignore: ['admin']` doesn't remove it.
+Use this when the decision needs logic (prefixes, data). For plain names, `ignore: ['404', 'admin']` does the same since 4.1.1; older versions don't match flat page files like `build/admin.html` with `ignore`, but `transform` works on any version.
 
 ### `lastmod` from a CMS or content files
 

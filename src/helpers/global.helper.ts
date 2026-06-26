@@ -289,12 +289,28 @@ const prepareIgnored = (
   ignored: string | string[],
   outDir: string = OUT_DIR
 ): string[] | undefined => {
-  let ignore: string[] | undefined;
-  if (ignored) {
-    ignore = Array.isArray(ignored) ? ignored : [ignored];
-    ignore = ignore.map((ignoredPage) => `${outDir}/${ignoredPage}`);
+  if (!ignored) return undefined;
+
+  const list = Array.isArray(ignored) ? ignored : [ignored];
+  const patterns = new Set<string>();
+
+  for (const raw of list) {
+    if (!raw) continue;
+
+    const entry = raw.replace(/^\/+/, '').replace(/\/+$/, '');
+    if (!entry) continue;
+
+    const prefixed = `${outDir}/${entry}`;
+    patterns.add(prefixed);
+    patterns.add(`${prefixed}/**`);
+
+    // Flat route files (trailingSlash: false, e.g. build/404.html) aren't matched by the folder pattern
+    if (!entry.endsWith('.html')) {
+      patterns.add(`${prefixed}.html`);
+    }
   }
-  return ignore;
+
+  return patterns.size ? [...patterns] : undefined;
 };
 
 const prepareChangeFreq = (options: Options): ChangeFreq => {
