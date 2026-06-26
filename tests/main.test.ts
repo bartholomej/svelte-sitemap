@@ -338,6 +338,51 @@ test('Sitemap ignore Page1', async () => {
     ])
   );
 });
+
+// Regression: with `trailingSlash: false` (the SvelteKit default) routes are
+// built as flat `name.html` files. A `404` fallback or a `/test` route then
+// lives at `build/404.html` / `build/test.html`, which the bare folder ignore
+// pattern did not match. See GitHub issue about `-i 404` / `-i test`.
+test('Sitemap ignore flat html route (trailing slash false)', async () => {
+  const json = await prepareData('https://example.com', {
+    ...optionsTest,
+    ignore: 'flat',
+    debug: true
+  });
+
+  const pages = json.map((item) => item.page);
+  expect(pages).not.toContain('https://example.com/flat');
+  expect(pages).toContain('https://example.com');
+  expect(pages).toContain('https://example.com/page1');
+});
+
+test('Sitemap ignore flat html route with leading slash', async () => {
+  const json = await prepareData('https://example.com', {
+    ...optionsTest,
+    ignore: '/flat',
+    debug: true
+  });
+
+  const pages = json.map((item) => item.page);
+  expect(pages).not.toContain('https://example.com/flat');
+  expect(pages).toContain('https://example.com');
+});
+
+test('Sitemap ignore array of flat file and folder', async () => {
+  const json = await prepareData('https://example.com', {
+    ...optionsTest,
+    ignore: ['flat', 'page1'],
+    debug: true
+  });
+
+  const pages = json.map((item) => item.page);
+  expect(pages).not.toContain('https://example.com/flat');
+  expect(pages).not.toContain('https://example.com/page1');
+  expect(pages).not.toContain('https://example.com/page1/flat1');
+  expect(pages).not.toContain('https://example.com/page1/subpage1');
+  expect(pages).toContain('https://example.com/page2');
+});
+
 describe('Trailing slashes', () => {
   test('Add trailing slashes', async () => {
     const json = await prepareData('https://example.com/', {
