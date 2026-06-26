@@ -210,12 +210,38 @@ const prepareIgnored = (
   ignored: string | string[],
   outDir: string = OUT_DIR
 ): string[] | undefined => {
-  let ignore: string[] | undefined;
-  if (ignored) {
-    ignore = Array.isArray(ignored) ? ignored : [ignored];
-    ignore = ignore.map((ignoredPage) => `${outDir}/${ignoredPage}`);
+  if (!ignored) return undefined;
+
+  const list = Array.isArray(ignored) ? ignored : [ignored];
+  const patterns = new Set<string>();
+
+  for (const raw of list) {
+    if (!raw) continue;
+
+    // Normalise: drop leading/trailing slashes so `/test`, `test/` and `test`
+    // all behave the same way.
+    const entry = raw.replace(/^\/+/, '').replace(/\/+$/, '');
+    if (!entry) continue;
+
+    const prefixed = `${outDir}/${entry}`;
+
+    // Keep the user's pattern as-is. For a folder name this ignores everything
+    // inside the folder (e.g. `build/test/index.html`).
+    patterns.add(prefixed);
+
+    // Explicitly ignore everything nested under the route folder.
+    patterns.add(`${prefixed}/**`);
+
+    // Also ignore the flat html file for this route. With `trailingSlash: false`
+    // (the SvelteKit default) a route like `/test` or a `404` fallback is built
+    // as `build/test.html` / `build/404.html`, which the bare folder pattern
+    // above does NOT match. Without this, `-i 404` / `-i test` had no effect.
+    if (!entry.endsWith('.html')) {
+      patterns.add(`${prefixed}.html`);
+    }
   }
-  return ignore;
+
+  return patterns.size ? [...patterns] : undefined;
 };
 
 const prepareChangeFreq = (options: Options): ChangeFreq => {
