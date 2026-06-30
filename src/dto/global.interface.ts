@@ -56,6 +56,19 @@ export interface Options {
    * @example `additional: ['my-page', 'my-second-page']`
    */
   additional?: string[];
+  /**
+   * Custom transform function that is called for each page entry.
+   * It allows you to dynamically modify or filter page attributes (such as priority, changefreq, lastmod, alternateRefs).
+   * Returning `null` or `undefined` excludes the page from the generated sitemap.
+   *
+   * @param config The resolved configuration object.
+   * @param path The relative path of the page being processed.
+   * @returns The modified sitemap field, or null/undefined to skip.
+   */
+  transform?: (
+    config: OptionsSvelteSitemap,
+    path: string
+  ) => Promise<SitemapField | null | undefined> | SitemapField | null | undefined;
 }
 
 export interface OptionsSvelteSitemap extends Options {
@@ -65,11 +78,46 @@ export interface OptionsSvelteSitemap extends Options {
   domain: string;
 }
 
+export interface SitemapFieldAlternateRef {
+  /**
+   * The alternative URL for the page (e.g. for different language versions).
+   */
+  href: string;
+  /**
+   * The language code (e.g. 'en', 'es') or 'x-default' for the alternate URL.
+   */
+  hreflang: string;
+}
+
+export interface SitemapField {
+  /**
+   * The location/URL of the page.
+   */
+  loc: string;
+  /**
+   * The last modified date/time of the page in ISO format.
+   */
+  lastmod?: string;
+  /**
+   * How frequently the page content is likely to change.
+   * @see {@link ChangeFreq}
+   */
+  changefreq?: ChangeFreq;
+  /**
+   * The priority of this URL relative to other URLs on your site. Valid values range from 0.0 to 1.0.
+   */
+  priority?: number | string;
+  /**
+   * Alternative translations or language versions of the page.
+   */
+  alternateRefs?: Array<SitemapFieldAlternateRef>;
+}
+
 export interface PagesJson {
   /**
    * The path or URL of the page.
    */
-  page: string;
+  page?: string;
   /**
    * How frequently the page content is likely to change.
    */
