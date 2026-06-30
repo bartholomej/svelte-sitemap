@@ -11,7 +11,6 @@
 - ➡️ Designed for SvelteKit `adapter-static` with `prerender` option (SSG)
 - 🔷 TypeScript, JavaScript, CLI and **Vite plugin** version
 - 🔧 Useful [options](#%EF%B8%8F-options) for customizing your sitemap
-- 📡 [Ping](#-ping-google-search-console) Google Search Console after deploy
 - 🗂️ Support for [sitemap index](https://developers.google.com/search/docs/crawling-indexing/sitemaps/large-sitemaps) for large sites (50K+ pages)
 - ▲ 🟠 Works with [Vercel](#-vercel-adapter) and [Cloudflare](#-cloudflare-adapter) adapters and more...
 
@@ -203,13 +202,6 @@ const config: OptionsSvelteSitemap = {
   ignore: ['pages/my-secret-page', '**/admin/**']
 };
 ```
-
----
-
-### 📡 Ping Google Search Console
-
-Every time you deploy a new version, you can inform Google that there's a new update.
-See this [discussion](https://github.com/bartholomej/svelte-sitemap/issues/23) with very useful tips.
 
 ---
 
