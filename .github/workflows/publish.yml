@@ -30,6 +30,12 @@ jobs:
       - name: 📦 Install dependencies
         run: yarn install --immutable
 
+      - name: 🧹 Lint
+        run: yarn eslint .
+
+      - name: 🔎 Typecheck
+        run: yarn typecheck
+
       - name: 🏗️ Build app
         run: yarn build
 

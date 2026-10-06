@@ -1,5 +1,6 @@
 import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import type { ChangeFreq } from '../src/dto';
 import { prepareData } from '../src/helpers/global.helper';
 import { optionsTest, sortbyPage } from './utils-test';
 
@@ -251,7 +252,7 @@ test('Sitemap ignore **/page2', async () => {
 test('Sitemap bad cahngeFreq', async () => {
   const json = await prepareData('https://example.com', {
     ...optionsTest,
-    changeFreq: 'veryverybadchoice' as unknown as any,
+    changeFreq: 'veryverybadchoice' as ChangeFreq,
     debug: true
   });
 

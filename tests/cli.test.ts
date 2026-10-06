@@ -1,4 +1,4 @@
-import { execSync } from 'child_process';
+import { execSync, type SpawnSyncReturns } from 'child_process';
 import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { describe, expect, test } from 'vitest';
@@ -10,11 +10,12 @@ function runCli(args: string, cwd?: string) {
   try {
     const stdout = execSync(`${TSX_CMD} ${args}`, { cwd, stdio: 'pipe' });
     return { stdout: stdout.toString(), stderr: '', status: 0 };
-  } catch (e: any) {
+  } catch (e) {
+    const { stdout, stderr, status } = e as SpawnSyncReturns<Buffer>;
     return {
-      stdout: e.stdout?.toString() || '',
-      stderr: e.stderr?.toString() || '',
-      status: e.status
+      stdout: stdout?.toString() || '',
+      stderr: stderr?.toString() || '',
+      status
     };
   }
 }
@@ -118,6 +119,25 @@ describe('CLI tests', () => {
       expect(out).toContain(
         'Invalid properties in config file, so I ignore them: invalidProp, nope'
       );
+    } finally {
+      rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  test('should not warn on additional property in config file', () => {
+    const tempDir = join(__dirname, 'temp-cli-test-additional-prop');
+    if (!existsSync(tempDir)) mkdirSync(tempDir);
+    try {
+      writeFileSync(
+        join(tempDir, 'svelte-sitemap.config.js'),
+        `export default { domain: 'https://example.com', additional: ['my-page'] }`
+      );
+
+      const { stdout, stderr } = runCli('', tempDir);
+      const out = stdout + stderr;
+
+      expect(out).toContain('Reading config file');
+      expect(out).not.toContain('Invalid properties in config file');
     } finally {
       rmSync(tempDir, { recursive: true, force: true });
     }

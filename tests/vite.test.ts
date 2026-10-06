@@ -1,3 +1,4 @@
+import type { ResolvedConfig } from 'vite';
 import { describe, expect, test, vi } from 'vitest';
 import * as indexModule from '../src/index';
 import { svelteSitemap } from '../src/vite';
@@ -29,11 +30,10 @@ describe('Vite plugin', () => {
       plugin.configResolved({
         plugins: [],
         build: { ssr: false }
-      } as any);
+      } as unknown as ResolvedConfig);
     }
 
     if (typeof plugin.closeBundle === 'function') {
-      // @ts-ignore
       await plugin.closeBundle();
     }
 
@@ -51,11 +51,10 @@ describe('Vite plugin', () => {
       plugin.configResolved({
         plugins: [{ name: 'vite-plugin-sveltekit' }],
         build: { ssr: false }
-      } as any);
+      } as unknown as ResolvedConfig);
     }
 
     if (typeof plugin.closeBundle === 'function') {
-      // @ts-ignore
       await plugin.closeBundle();
     }
 
@@ -73,11 +72,10 @@ describe('Vite plugin', () => {
       plugin.configResolved({
         plugins: [{ name: 'vite-plugin-sveltekit' }],
         build: { ssr: true }
-      } as any);
+      } as unknown as ResolvedConfig);
     }
 
     if (typeof plugin.closeBundle === 'function') {
-      // @ts-ignore
       await plugin.closeBundle();
     }
 

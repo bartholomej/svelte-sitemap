@@ -17,6 +17,7 @@ export const defaultConfig: OptionsSvelteSitemap = {
   changeFreq: null,
   resetTime: false,
   outDir: OUT_DIR,
+  additional: null,
   attribution: true,
   ignore: null,
   trailingSlashes: false,
