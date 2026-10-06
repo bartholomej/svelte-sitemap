@@ -6,6 +6,12 @@ import { createSitemap } from './index.js';
 export function svelteSitemap(options: OptionsSvelteSitemap): Plugin {
   let isSvelteKit = false;
   let isSSR = false;
+  let generated = false;
+
+  const generate = async () => {
+    generated = true;
+    await createSitemap(options, INTEGRATION_METHODS.VITE);
+  };
 
   return {
     name: 'svelte-sitemap',
@@ -21,7 +27,17 @@ export function svelteSitemap(options: OptionsSvelteSitemap): Plugin {
       if (isSvelteKit && !isSSR) {
         return;
       }
-      await createSitemap(options, INTEGRATION_METHODS.VITE);
+      await generate();
+    },
+    // SvelteKit 3 builds all environments in its own buildApp hook and runs the adapter in a 'post' one
+    buildApp: {
+      order: 'post',
+      handler: async (builder) => {
+        const isBuilt = Object.values(builder.environments).some((env) => env.isBuilt);
+        if (isSvelteKit && isBuilt && !generated) {
+          await generate();
+        }
+      }
     }
   };
 }
