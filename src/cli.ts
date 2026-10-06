@@ -46,25 +46,32 @@ const main = async () => {
     }
   });
 
-  if (args.help || args.version === '' || args.version === true) {
-    const log = args.help ? console.log : console.error;
-    log('Svelte `sitemap.xml` generator');
-    log('');
-    log(`svelte-sitemap ${version} (check updates: ${REPO_URL})`);
-    log('');
-    log('Options:');
-    log('');
-    log('  -d, --domain            Use your domain (eg. https://example.com)');
-    log('  -o, --out-dir           Custom output dir');
-    log('  -i, --ignore            Exclude some pages or folders');
-    log('  -a, --additional        Additional pages outside of SvelteKit (e.g. /, /contact)');
-    log('  -t, --trailing-slashes  Do you like trailing slashes?');
-    log('  -r, --reset-time        Set modified time to now');
-    log('  -c, --change-freq       Set change frequency `weekly` | `daily` | …');
-    log('  -v, --version           Show version');
-    log('  --debug                 Debug mode');
-    log(' ');
-    process.exit(args.help ? 0 : 1);
+  if (args.version) {
+    console.log(`svelte-sitemap ${version}`);
+    process.exit(0);
+  }
+
+  if (args.help) {
+    console.log('Svelte `sitemap.xml` generator');
+    console.log('');
+    console.log(`svelte-sitemap ${version} (check updates: ${REPO_URL})`);
+    console.log('');
+    console.log('Options:');
+    console.log('');
+    console.log('  -d, --domain            Use your domain (eg. https://example.com)');
+    console.log('  -o, --out-dir           Custom output dir');
+    console.log('  -i, --ignore            Exclude some pages or folders');
+    console.log(
+      '  -a, --additional        Additional pages outside of SvelteKit (e.g. /, /contact)'
+    );
+    console.log('  -t, --trailing-slashes  Do you like trailing slashes?');
+    console.log('  -r, --reset-time        Set modified time to now');
+    console.log('  -c, --change-freq       Set change frequency `weekly` | `daily` | …');
+    console.log('  -v, --version           Show version');
+    console.log('  -h, --help              Show this help');
+    console.log('  --debug                 Debug mode');
+    console.log(' ');
+    process.exit(0);
   }
 
   if (config && Object.keys(config).length > 0) {

@@ -22,14 +22,23 @@ function runCli(args: string, cwd?: string) {
 
 describe('CLI tests', () => {
   test('should show help when --help is passed', () => {
-    const { stdout, stderr } = runCli('--help');
-    expect(stdout + stderr).toContain('Svelte `sitemap.xml` generator');
-    expect(stdout + stderr).toContain('Options:');
+    const { stdout, status } = runCli('--help');
+    expect(status).toBe(0);
+    expect(stdout).toContain('Svelte `sitemap.xml` generator');
+    expect(stdout).toContain('Options:');
+    expect(stdout).toContain('-h, --help');
   });
 
-  test('should show version when --version is passed', () => {
-    const { stdout, stderr } = runCli('--version');
-    expect(stdout + stderr).toMatch(/svelte-sitemap \d+\.\d+\.\d+/);
+  test('should show only version when --version is passed', () => {
+    const { stdout, status } = runCli('--version');
+    expect(status).toBe(0);
+    expect(stdout.trim()).toMatch(/^svelte-sitemap \d+\.\d+\.\d+$/);
+  });
+
+  test('should show only version when -v is passed', () => {
+    const { stdout, status } = runCli('-v');
+    expect(status).toBe(0);
+    expect(stdout.trim()).toMatch(/^svelte-sitemap \d+\.\d+\.\d+$/);
   });
 
   test('should fail when no domain is provided (CLI)', () => {
