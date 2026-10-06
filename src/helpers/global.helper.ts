@@ -5,7 +5,7 @@ import { create } from 'xmlbuilder2';
 import type { XMLBuilder } from 'xmlbuilder2/lib/interfaces.js';
 import pkg from '../../package.json' with { type: 'json' };
 import { CHANGE_FREQ, CHUNK, OUT_DIR } from '../const.js';
-import type { ChangeFreq, Options, PagesJson } from './../dto/index.js';
+import type { ChangeFreq, Options, OptionsSvelteSitemap, PagesJson } from './../dto/index.js';
 import {
   cliColors,
   errorMsgFolder,
@@ -84,7 +84,7 @@ export async function prepareData(domain: string, options?: Options): Promise<Pa
       lastmod: options?.resetTime ? new Date().toISOString().split('T')[0] : ''
     };
 
-    let item: PagesJson | null = null;
+    let item: PagesJson | null;
 
     if (options?.transform) {
       const transformed = await options.transform(options as OptionsSvelteSitemap, path);
@@ -222,14 +222,14 @@ const createFile = (
       page.ele('loc').txt(loc);
     }
 
-    const changefreq = item.changefreq || item.changeFreq;
-    if (changefreq) {
-      page.ele('changefreq').txt(changefreq);
-    }
-
     const lastmod = item.lastmod || item.lastMod;
     if (lastmod) {
       page.ele('lastmod').txt(lastmod);
+    }
+
+    const changefreq = item.changefreq || item.changeFreq;
+    if (changefreq) {
+      page.ele('changefreq').txt(changefreq);
     }
 
     if (item.priority !== undefined && item.priority !== null) {

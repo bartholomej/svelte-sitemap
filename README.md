@@ -133,24 +133,25 @@ node my-script.js
 Options are defined as camelCase properties. Use them directly in your Vite plugin configuration in `vite.config.ts`.
 _The same options are also available as config file keys or CLI flags for legacy use._
 
-| Config key        | CLI flag                   | Description                                                                               | Default | Example                                     |
-| ----------------- | -------------------------- | ----------------------------------------------------------------------------------------- | ------- | ------------------------------------------- |
-| `domain`          | `--domain`, `-d`           | Your domain **[required]**                                                                | -       | `domain: 'https://mydomain.com'`            |
-| `outDir`          | `--out-dir`, `-o`          | Custom build folder                                                                       | `build` | `outDir: 'dist'`                            |
-| `additional`      | `--additional`, `-a`       | Additional pages outside of SvelteKit                                                     | -       | `additional: ['my-page', 'my-second-page']` |
-| `ignore`          | `--ignore`, `-i`           | Ignore files or folders (glob patterns)                                                   | `[]`    | `ignore: ['**/admin/**', 'my-secret-page']` |
-| `trailingSlashes` | `--trailing-slashes`, `-t` | Add trailing slashes                                                                      | `false` | `trailingSlashes: true`                     |
-| `resetTime`       | `--reset-time`, `-r`       | Set lastModified time to now                                                              | `false` | `resetTime: true`                           |
-| `changeFreq`      | `--change-freq`, `-c`      | Set change frequency: `always`, `hourly`, `daily`, `weekly`, `monthly`, `yearly`, `never` | -       | `changeFreq: 'daily'`                       |
-| `debug`           | `--debug`                  | Show some useful logs                                                                     | -       | `debug: true`                               |
-| -                 | `--help`, `-h`             | Display usage info                                                                        | -       | -                                           |
-| -                 | `--version`, `-v`          | Show version                                                                              | -       | -                                           |
+| Config key        | CLI flag                   | Description                                                                               | Default | Example                                            |
+| ----------------- | -------------------------- | ----------------------------------------------------------------------------------------- | ------- | -------------------------------------------------- |
+| `domain`          | `--domain`, `-d`           | Your domain **[required]**                                                                | -       | `domain: 'https://mydomain.com'`                   |
+| `outDir`          | `--out-dir`, `-o`          | Custom build folder                                                                       | `build` | `outDir: 'dist'`                                   |
+| `additional`      | `--additional`, `-a`       | Additional pages outside of SvelteKit                                                     | -       | `additional: ['my-page', 'my-second-page']`        |
+| `ignore`          | `--ignore`, `-i`           | Ignore files or folders (glob patterns)                                                   | `[]`    | `ignore: ['**/admin/**', 'my-secret-page']`        |
+| `trailingSlashes` | `--trailing-slashes`, `-t` | Add trailing slashes                                                                      | `false` | `trailingSlashes: true`                            |
+| `resetTime`       | `--reset-time`, `-r`       | Set lastModified time to now                                                              | `false` | `resetTime: true`                                  |
+| `changeFreq`      | `--change-freq`, `-c`      | Set change frequency: `always`, `hourly`, `daily`, `weekly`, `monthly`, `yearly`, `never` | -       | `changeFreq: 'daily'`                              |
+| `debug`           | `--debug`                  | Show some useful logs                                                                     | -       | `debug: true`                                      |
+| `transform`       | -                          | Customize or exclude each page, see [Transform](#-transform)                              | -       | `transform: (config, path) => ({ priority: 0.8 })` |
+| -                 | `--help`, `-h`             | Display usage info                                                                        | -       | -                                                  |
+| -                 | `--version`, `-v`          | Show version                                                                              | -       | -                                                  |
 
-## 🔄 Transform
+## 🪄 Transform
 
-The `transform` option gives you full control over each sitemap entry. It receives the config and the page path, and returns a `SitemapField` object (or `null` to skip the page).
+The `transform` option gives you full control over each sitemap entry. It is called for every page with your options (`config`) and the page `path`, and returns the fields you want to change.
 
-This is useful for setting per-page `priority`, `changefreq`, or adding `alternateRefs` for multilingual sites.
+This is useful for setting per-page `priority`, `changefreq` or `lastmod`, or adding `alternateRefs` for multilingual sites.
 
 ```typescript
 // vite.config.ts
@@ -163,76 +164,81 @@ export default defineConfig({
     sveltekit(),
     svelteSitemap({
       domain: 'https://example.com',
-      transform: async (config, path) => {
-        return {
-          loc: path,
-          changefreq: 'weekly',
-          priority: path === '/' ? 1.0 : 0.7,
-          lastmod: new Date().toISOString().split('T')[0]
-        };
+      changeFreq: 'monthly',
+      transform: (config, path) => {
+        if (path === '/') {
+          return { priority: 1.0, changefreq: 'daily' };
+        }
+        if (path.startsWith('/blog')) {
+          return { priority: 0.8, changefreq: 'weekly' };
+        }
+        // Other pages keep the defaults
       }
     })
   ]
 });
 ```
 
+How it works:
+
+- `path` is the page path without the domain, e.g. `/`, `/about` or `/blog/my-post` (`/about/` with `trailingSlashes: true`). Pages from `additional` are passed too.
+- Returned fields are **merged with the defaults** (`changeFreq`, `lastmod` from `resetTime`), so return only what you want to change.
+- Return nothing (`undefined`) to keep the page as it is, or `null` to exclude it from the sitemap.
+- `transform` can be `async`, so you can fetch data (e.g. from your CMS) before returning.
+- It works in the Vite plugin, the config file and the API. There is no CLI flag for it.
+
+Fields you can return:
+
+| Field           | Description                                                                                   | Example                                            |
+| --------------- | --------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| `loc`           | Page URL. Defaults to the page URL. A relative path (e.g. `/about`) is prefixed with `domain` | `loc: '/about-us'`                                 |
+| `lastmod`       | Last modification date                                                                        | `lastmod: '2026-10-06'`                            |
+| `changefreq`    | Change frequency, overrides `changeFreq`                                                      | `changefreq: 'weekly'`                             |
+| `priority`      | Priority from `0.0` to `1.0`                                                                  | `priority: 0.8`                                    |
+| `alternateRefs` | Language versions of the page, see [below](#alternate-refs-hreflang-for-multilingual-sites)   | `alternateRefs: [{ href: '...', hreflang: 'es' }]` |
+
 ### Excluding pages via transform
 
-Return `null` to exclude a page from the sitemap:
+Return `null` to exclude a page from the sitemap. For fixed paths, the [`ignore`](#-how-to-exclude-a-directory) option is simpler. `transform` is handy when the decision needs some logic:
 
 ```typescript
-transform: async (config, path) => {
-  if (path.startsWith('/admin')) {
-    return null;
+svelteSitemap({
+  domain: 'https://example.com',
+  transform: async (config, path) => {
+    const drafts = await getDraftSlugs();
+    if (drafts.some((slug) => path === `/blog/${slug}`)) {
+      return null;
+    }
   }
-  return { loc: path };
-};
+});
 ```
 
 ### Alternate refs (hreflang) for multilingual sites
 
-Use `alternateRefs` inside `transform` to add `<xhtml:link rel="alternate" />` entries for each language version of a page. The `xmlns:xhtml` namespace is automatically added to the sitemap only when alternateRefs are present.
+Use `alternateRefs` to add `<xhtml:link rel="alternate" />` entries for each language version of a page. The `xmlns:xhtml` namespace is added to the sitemap automatically, only when some page has `alternateRefs`.
 
 ```typescript
-// vite.config.ts
-import { sveltekit } from '@sveltejs/kit/vite';
-import { svelteSitemap } from 'svelte-sitemap/vite';
-import { defineConfig } from 'vite';
-
-export default defineConfig({
-  plugins: [
-    sveltekit(),
-    svelteSitemap({
-      domain: 'https://example.com',
-      transform: async (config, path) => {
-        return {
-          loc: path,
-          changefreq: 'daily',
-          priority: 0.7,
-          alternateRefs: [
-            { href: `https://example.com${path}`, hreflang: 'en' },
-            { href: `https://es.example.com${path}`, hreflang: 'es' },
-            { href: `https://fr.example.com${path}`, hreflang: 'fr' }
-          ]
-        };
-      }
-    })
-  ]
+svelteSitemap({
+  domain: 'https://example.com',
+  transform: (config, path) => ({
+    alternateRefs: [
+      { href: `${config.domain}${path}`, hreflang: 'en' },
+      { href: `https://es.example.com${path}`, hreflang: 'es' },
+      { href: `https://fr.example.com${path}`, hreflang: 'fr' }
+    ]
+  })
 });
 ```
 
-This produces:
+This produces (for the `/about` page):
 
 ```xml
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://example.com/</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://example.com/" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://es.example.com/" />
-    <xhtml:link rel="alternate" hreflang="fr" href="https://fr.example.com/" />
+    <loc>https://example.com/about</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://example.com/about" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://es.example.com/about" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://fr.example.com/about" />
   </url>
 </urlset>
 ```

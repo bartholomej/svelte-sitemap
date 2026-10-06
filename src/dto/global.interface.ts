@@ -59,11 +59,12 @@ export interface Options {
   /**
    * Custom transform function that is called for each page entry.
    * It allows you to dynamically modify or filter page attributes (such as priority, changefreq, lastmod, alternateRefs).
-   * Returning `null` or `undefined` excludes the page from the generated sitemap.
+   * Returned fields are merged with the default values of the page.
+   * Returning `null` excludes the page, returning `undefined` keeps the page with its default values.
    *
-   * @param config The resolved configuration object.
-   * @param path The relative path of the page being processed.
-   * @returns The modified sitemap field, or null/undefined to skip.
+   * @param config The sitemap options.
+   * @param path The path of the page being processed, e.g. `/` or `/about` (`/about/` with `trailingSlashes`).
+   * @returns Fields to override, `null` to skip the page, or `undefined` to keep the defaults.
    */
   transform?: (
     config: OptionsSvelteSitemap,
@@ -91,9 +92,10 @@ export interface SitemapFieldAlternateRef {
 
 export interface SitemapField {
   /**
-   * The location/URL of the page.
+   * The location/URL of the page. Defaults to the page URL.
+   * A relative path (e.g. `/about`) is prefixed with the domain.
    */
-  loc: string;
+  loc?: string;
   /**
    * The last modified date/time of the page in ISO format.
    */
@@ -113,7 +115,7 @@ export interface SitemapField {
   alternateRefs?: Array<SitemapFieldAlternateRef>;
 }
 
-export interface PagesJson {
+export interface PagesJson extends SitemapField {
   /**
    * The path or URL of the page.
    */
