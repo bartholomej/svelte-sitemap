@@ -2,6 +2,7 @@ import { execSync, type SpawnSyncReturns } from 'child_process';
 import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { describe, expect, test } from 'vitest';
+import { version } from '../package.json';
 
 const CLI_PATH = join(__dirname, '../src/cli.ts');
 const TSX_CMD = `npx tsx ${CLI_PATH}`;
@@ -32,13 +33,13 @@ describe('CLI tests', () => {
   test('should show only version when --version is passed', () => {
     const { stdout, status } = runCli('--version');
     expect(status).toBe(0);
-    expect(stdout.trim()).toMatch(/^svelte-sitemap \d+\.\d+\.\d+$/);
+    expect(stdout.trim()).toBe(`svelte-sitemap ${version}`);
   });
 
   test('should show only version when -v is passed', () => {
     const { stdout, status } = runCli('-v');
     expect(status).toBe(0);
-    expect(stdout.trim()).toMatch(/^svelte-sitemap \d+\.\d+\.\d+$/);
+    expect(stdout.trim()).toBe(`svelte-sitemap ${version}`);
   });
 
   test('should fail when no domain is provided (CLI)', () => {
