@@ -4,7 +4,7 @@ import path from 'path';
 import { create } from 'xmlbuilder2';
 import type { XMLBuilder } from 'xmlbuilder2/lib/interfaces.js';
 import pkg from '../../package.json' with { type: 'json' };
-import { CHANGE_FREQ, CHUNK, OUT_DIR } from '../const.js';
+import { CHANGE_FREQ, CHUNK, FILE_NAME, OUT_DIR } from '../const.js';
 import type { ChangeFreq, Options, OptionsSvelteSitemap, PagesJson } from './../dto/index.js';
 import {
   cliColors,
@@ -180,9 +180,10 @@ export const checkPrerenderRoutes = async (pages: string[], outDir: string, opti
 
 export const writeSitemap = (items: PagesJson[], options: Options, domain: string): void => {
   const outDir = options?.outDir ?? OUT_DIR;
+  const fileName = prepareFileName(options);
 
   if (items?.length <= CHUNK.maxSize) {
-    createFile(items, options, outDir);
+    createFile(items, options, outDir, fileName);
   } else {
     // If the number of pages is greater than the chunk size, then we split the sitemap into multiple files
     // and create an index file that links to all of them
@@ -191,14 +192,14 @@ export const writeSitemap = (items: PagesJson[], options: Options, domain: strin
 
     console.log(
       cliColors.cyanAndBold,
-      `> Oh, your site is huge! Writing sitemap in chunks of ${numberOfChunks} pages and its index sitemap.xml`
+      `> Oh, your site is huge! Writing sitemap in chunks of ${numberOfChunks} pages and its index ${fileName}`
     );
 
     for (let i = 0; i < items.length; i += CHUNK.maxSize) {
       const chunk = items.slice(i, i + CHUNK.maxSize);
-      createFile(chunk, options, outDir, i / CHUNK.maxSize + 1);
+      createFile(chunk, options, outDir, getChunkFileName(fileName, i / CHUNK.maxSize + 1));
     }
-    createIndexFile(numberOfChunks, outDir, options, domain);
+    createIndexFile(numberOfChunks, outDir, options, domain, fileName);
   }
 };
 
@@ -206,7 +207,7 @@ const createFile = (
   items: PagesJson[],
   options: Options,
   outDir: string,
-  chunkId?: number
+  fileName: string
 ): void => {
   const hasAlternateRefs = items.some(
     (item) => item.alternateRefs && item.alternateRefs.length > 0
@@ -249,8 +250,6 @@ const createFile = (
 
   const xml = finishXml(sitemap);
 
-  const fileName = chunkId ? `sitemap-${chunkId}.xml` : 'sitemap.xml';
-
   try {
     fs.writeFileSync(`${outDir}/${fileName}`, xml);
     console.log(cliColors.green, successMsg(outDir, fileName));
@@ -263,26 +262,46 @@ const createIndexFile = (
   numberOfChunks: number,
   outDir: string,
   options: Options,
-  domain: string
+  domain: string,
+  fileName: string
 ): void => {
-  const FILENAME = 'sitemap.xml';
   const slash = getSlash(domain);
 
   const sitemap = createXml('sitemapindex');
   addAttribution(sitemap, options);
 
   for (let i = 1; i <= numberOfChunks; i++) {
-    sitemap.ele('sitemap').ele('loc').txt(`${domain}${slash}sitemap-${i}.xml`);
+    sitemap
+      .ele('sitemap')
+      .ele('loc')
+      .txt(`${domain}${slash}${getChunkFileName(fileName, i)}`);
   }
 
   const xml = finishXml(sitemap);
 
   try {
-    fs.writeFileSync(`${outDir}/${FILENAME}`, xml);
-    console.log(cliColors.green, successMsg(outDir, FILENAME));
+    fs.writeFileSync(`${outDir}/${fileName}`, xml);
+    console.log(cliColors.green, successMsg(outDir, fileName));
   } catch (e) {
-    console.error(cliColors.red, errorMsgWrite(outDir, FILENAME), e);
+    console.error(cliColors.red, errorMsgWrite(outDir, fileName), e);
   }
+};
+
+const getChunkFileName = (fileName: string, chunkId: number): string =>
+  `${fileName.replace(/\.xml$/, '')}-${chunkId}.xml`;
+
+export const prepareFileName = (options: Options): string => {
+  const fileName = options?.fileName;
+  if (!fileName) return FILE_NAME;
+
+  if (!/^[^/\\]+\.xml$/.test(fileName)) {
+    console.log(
+      cliColors.red,
+      `  × Option \`fileName: '${fileName}'\` is not valid. Use a plain file name ending with .xml (e.g. 'sitemap-main.xml'). Using '${FILE_NAME}' instead.`
+    );
+    return FILE_NAME;
+  }
+  return fileName;
 };
 
 const prepareIgnored = (

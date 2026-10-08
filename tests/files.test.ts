@@ -221,4 +221,52 @@ describe('Creating files', () => {
 
     cleanMap(f);
   });
+
+  test('Sitemap with custom fileName', async () => {
+    CHUNK.maxSize = 50_000;
+    const f = 'build-test-9';
+    cleanMap(f);
+    mkdirSync(f);
+    writeSitemap(json, { outDir: f, fileName: 'sitemap-main.xml' }, 'https://example.com');
+
+    expect(existsSync(`${f}/sitemap.xml`)).toBe(false);
+    const fileContent = readFileSync(`${f}/sitemap-main.xml`, { encoding: 'utf-8' });
+    expect((fileContent.match(/<url>/g) || []).length).toEqual(8);
+
+    cleanMap(f);
+  });
+
+  test('Sitemap with custom fileName in chunks', async () => {
+    CHUNK.maxSize = 5;
+    const f = 'build-test-10';
+    cleanMap(f);
+    mkdirSync(f);
+    writeSitemap(json, { outDir: f, fileName: 'sitemap-main.xml' }, 'https://example.com');
+
+    expect(existsSync(`${f}/sitemap.xml`)).toBe(false);
+    expect(existsSync(`${f}/sitemap-main-1.xml`)).toBe(true);
+    expect(existsSync(`${f}/sitemap-main-2.xml`)).toBe(true);
+
+    const fileContent = readFileSync(`${f}/sitemap-main.xml`, { encoding: 'utf-8' });
+    expect(fileContent).toContain('<sitemapindex');
+    expect(fileContent).toContain('<loc>https://example.com/sitemap-main-1.xml</loc>');
+    expect(fileContent).toContain('<loc>https://example.com/sitemap-main-2.xml</loc>');
+
+    cleanMap(f);
+  });
+
+  test.each(['sitemaps/main.xml', 'sitemap-main', '.xml'])(
+    'Invalid fileName %s falls back to sitemap.xml',
+    async (fileName) => {
+      CHUNK.maxSize = 50_000;
+      const f = 'build-test-11';
+      cleanMap(f);
+      mkdirSync(f);
+      writeSitemap(json, { outDir: f, fileName }, 'https://example.com');
+
+      expect(existsSync(`${f}/sitemap.xml`)).toBe(true);
+
+      cleanMap(f);
+    }
+  );
 });

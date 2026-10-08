@@ -1,4 +1,4 @@
-import { OUT_DIR } from '../const.js';
+import { FILE_NAME, OUT_DIR } from '../const.js';
 import type { OptionsSvelteSitemap } from '../dto/index.js';
 import { loadFile } from './file.js';
 
@@ -17,6 +17,7 @@ export const defaultConfig: OptionsSvelteSitemap = {
   changeFreq: null,
   resetTime: false,
   outDir: OUT_DIR,
+  fileName: FILE_NAME,
   additional: null,
   attribution: true,
   ignore: null,
