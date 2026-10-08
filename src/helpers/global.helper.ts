@@ -16,15 +16,10 @@ import {
 
 const version = pkg.version;
 
-const getUrl = (url: string, domain: string, options: Options) => {
+const getUrl = (page: string, domain: string, options: Options) => {
   let slash: '' | '/' = getSlash(domain);
 
-  let trimmed = url
-    .split((options?.outDir ?? OUT_DIR) + '/')
-    .pop()
-    .replace('index.html', '');
-
-  trimmed = removeHtml(trimmed);
+  let trimmed = removeHtml(page.replace(/^\/+/, '').replace(/(^|\/)index\.html$/, '$1'));
 
   // Add all traling slashes
   if (options?.trailingSlashes) {
@@ -60,9 +55,9 @@ export const removeHtml = (fileName: string) => {
 export async function prepareData(domain: string, options?: Options): Promise<PagesJson[]> {
   const FOLDER = options?.outDir ?? OUT_DIR;
 
-  const ignore = prepareIgnored(options?.ignore, options?.outDir);
+  const ignore = prepareIgnored(options?.ignore);
   const changeFreq = prepareChangeFreq(options);
-  const pages: string[] = await fg(`${FOLDER}/**/*.html`, { ignore });
+  const pages: string[] = await fg('**/*.html', { cwd: FOLDER, ignore });
 
   if (options?.additional) pages.push(...options.additional);
 
@@ -160,10 +155,9 @@ export const checkPrerenderRoutes = async (pages: string[], outDir: string, opti
   const appDirExists = fs.existsSync(path.join(outDir, '_app'));
 
   if (appDirExists && pages.length > 0) {
-    const hasOnlyRootOrFallback = pages.every((page) => {
-      const relative = path.relative(outDir, page);
-      return relative === 'index.html' || relative === 'fallback.html';
-    });
+    const hasOnlyRootOrFallback = pages.every(
+      (page) => page === 'index.html' || page === 'fallback.html'
+    );
 
     const hasNoAdditional = !options?.additional || options.additional.length === 0;
 
@@ -285,10 +279,7 @@ const createIndexFile = (
   }
 };
 
-const prepareIgnored = (
-  ignored: string | string[],
-  outDir: string = OUT_DIR
-): string[] | undefined => {
+const prepareIgnored = (ignored: string | string[]): string[] | undefined => {
   if (!ignored) return undefined;
 
   const list = Array.isArray(ignored) ? ignored : [ignored];
@@ -300,13 +291,12 @@ const prepareIgnored = (
     const entry = raw.replace(/^\/+/, '').replace(/\/+$/, '');
     if (!entry) continue;
 
-    const prefixed = `${outDir}/${entry}`;
-    patterns.add(prefixed);
-    patterns.add(`${prefixed}/**`);
+    patterns.add(entry);
+    patterns.add(`${entry}/**`);
 
     // Flat route files (trailingSlash: false, e.g. build/404.html) aren't matched by the folder pattern
     if (!entry.endsWith('.html')) {
-      patterns.add(`${prefixed}.html`);
+      patterns.add(`${entry}.html`);
     }
   }
 

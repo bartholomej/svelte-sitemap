@@ -3,9 +3,7 @@ import { prepareData } from '../src/helpers/global.helper';
 
 // Mock fast-glob to return a few predictable files
 vi.mock('fast-glob', () => ({
-  default: vi
-    .fn()
-    .mockResolvedValue(['build/index.html', 'build/about/index.html', 'build/contact/index.html'])
+  default: vi.fn().mockResolvedValue(['index.html', 'about/index.html', 'contact/index.html'])
 }));
 
 // Mock fs.existsSync to always return true for build folder

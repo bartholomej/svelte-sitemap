@@ -584,6 +584,88 @@ describe('URI encoding', () => {
   });
 });
 
+describe('Page paths', () => {
+  const DIR = 'build-test-paths';
+  const files = [
+    'index.html',
+    'search-index.html',
+    'reindex.html',
+    'rebuild/guide/index.html',
+    `docs/${DIR}/index.html`
+  ];
+
+  beforeAll(() => {
+    for (const file of files) {
+      mkdirSync(`${DIR}/${file}`.split('/').slice(0, -1).join('/'), { recursive: true });
+      writeFileSync(`${DIR}/${file}`, '');
+    }
+  });
+
+  afterAll(() => {
+    if (existsSync(DIR)) rmSync(DIR, { recursive: true, force: true });
+  });
+
+  const expected = [
+    'https://example.com',
+    `https://example.com/docs/${DIR}`,
+    'https://example.com/rebuild/guide',
+    'https://example.com/reindex',
+    'https://example.com/search-index'
+  ];
+
+  test('Flat pages ending with "index" keep their name', async () => {
+    const json = await prepareData('https://example.com', { outDir: DIR });
+
+    expect(json.map((item) => item.page)).toEqual(expected);
+  });
+
+  test.each([`./${DIR}`, `${DIR}/`])('outDir %s gives the same URLs', async (outDir) => {
+    const json = await prepareData('https://example.com', { outDir });
+
+    expect(json.map((item) => item.page)).toEqual(expected);
+  });
+
+  test('Ignore patterns are relative to outDir', async () => {
+    const json = await prepareData('https://example.com', {
+      outDir: `./${DIR}/`,
+      ignore: ['reindex', '**/guide/**']
+    });
+
+    expect(json.map((item) => item.page)).toEqual([
+      'https://example.com',
+      `https://example.com/docs/${DIR}`,
+      'https://example.com/search-index'
+    ]);
+  });
+
+  test('Additional pages with a leading slash', async () => {
+    const json = await prepareData('https://example.com', {
+      outDir: DIR,
+      ignore: ['**'],
+      additional: ['/contact', '/blog/']
+    });
+
+    expect(json.map((item) => item.page)).toEqual([
+      'https://example.com/blog',
+      'https://example.com/contact'
+    ]);
+  });
+
+  test('Additional pages with a leading slash and trailing slashes', async () => {
+    const json = await prepareData('https://example.com', {
+      outDir: DIR,
+      ignore: ['**'],
+      additional: ['/contact', '/'],
+      trailingSlashes: true
+    });
+
+    expect(json.map((item) => item.page)).toEqual([
+      'https://example.com/',
+      'https://example.com/contact/'
+    ]);
+  });
+});
+
 describe('Sorting', () => {
   test('Sitemap is sorted alphabetically by default (from root to deepest)', async () => {
     const json = await prepareData('https://example.com', { ...optionsTest });

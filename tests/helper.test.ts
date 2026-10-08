@@ -35,7 +35,7 @@ describe('checkPrerenderRoutes', () => {
     const existsSyncSpy = vi.spyOn(fs, 'existsSync').mockReturnValue(true);
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
-    await checkPrerenderRoutes(['build/index.html'], 'build');
+    await checkPrerenderRoutes(['index.html'], 'build');
 
     expect(warnSpy).toHaveBeenCalled();
 
@@ -47,7 +47,7 @@ describe('checkPrerenderRoutes', () => {
     const existsSyncSpy = vi.spyOn(fs, 'existsSync').mockReturnValue(true);
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
-    await checkPrerenderRoutes(['build/index.html', 'build/about/index.html'], 'build');
+    await checkPrerenderRoutes(['index.html', 'about/index.html'], 'build');
 
     expect(warnSpy).not.toHaveBeenCalled();
 
