@@ -137,19 +137,20 @@ node my-script.js
 Options are defined as camelCase properties. Use them directly in your Vite plugin configuration in `vite.config.ts`.
 _The same options are also available as config file keys or CLI flags for legacy use._
 
-| Config key        | CLI flag                   | Description                                                                               | Default | Example                                            |
-| ----------------- | -------------------------- | ----------------------------------------------------------------------------------------- | ------- | -------------------------------------------------- |
-| `domain`          | `--domain`, `-d`           | Your domain **[required]**                                                                | -       | `domain: 'https://mydomain.com'`                   |
-| `outDir`          | `--out-dir`, `-o`          | Custom build folder                                                                       | `build` | `outDir: 'dist'`                                   |
-| `additional`      | `--additional`, `-a`       | Additional pages outside of SvelteKit                                                     | -       | `additional: ['my-page', 'my-second-page']`        |
-| `ignore`          | `--ignore`, `-i`           | Ignore files or folders (glob patterns)                                                   | `[]`    | `ignore: ['**/admin/**', 'my-secret-page']`        |
-| `trailingSlashes` | `--trailing-slashes`, `-t` | Add trailing slashes                                                                      | `false` | `trailingSlashes: true`                            |
-| `resetTime`       | `--reset-time`, `-r`       | Set lastModified time to now                                                              | `false` | `resetTime: true`                                  |
-| `changeFreq`      | `--change-freq`, `-c`      | Set change frequency: `always`, `hourly`, `daily`, `weekly`, `monthly`, `yearly`, `never` | -       | `changeFreq: 'daily'`                              |
-| `debug`           | `--debug`                  | Show some useful logs                                                                     | -       | `debug: true`                                      |
-| `transform`       | -                          | Customize or exclude each page, see [Transform](#-transform)                              | -       | `transform: (config, path) => ({ priority: 0.8 })` |
-| -                 | `--help`, `-h`             | Display usage info                                                                        | -       | -                                                  |
-| -                 | `--version`, `-v`          | Show version                                                                              | -       | -                                                  |
+| Config key        | CLI flag                   | Description                                                                               | Default       | Example                                            |
+| ----------------- | -------------------------- | ----------------------------------------------------------------------------------------- | ------------- | -------------------------------------------------- |
+| `domain`          | `--domain`, `-d`           | Your domain **[required]**                                                                | -             | `domain: 'https://mydomain.com'`                   |
+| `outDir`          | `--out-dir`, `-o`          | Custom build folder                                                                       | `build`       | `outDir: 'dist'`                                   |
+| `fileName`        | -                          | Name of the generated file, e.g. when `sitemap.xml` is your own sitemap index             | `sitemap.xml` | `fileName: 'sitemap-main.xml'`                     |
+| `additional`      | `--additional`, `-a`       | Additional pages outside of SvelteKit                                                     | -             | `additional: ['my-page', 'my-second-page']`        |
+| `ignore`          | `--ignore`, `-i`           | Ignore files or folders (glob patterns)                                                   | `[]`          | `ignore: ['**/admin/**', 'my-secret-page']`        |
+| `trailingSlashes` | `--trailing-slashes`, `-t` | Add trailing slashes                                                                      | `false`       | `trailingSlashes: true`                            |
+| `resetTime`       | `--reset-time`, `-r`       | Set lastModified time to now                                                              | `false`       | `resetTime: true`                                  |
+| `changeFreq`      | `--change-freq`, `-c`      | Set change frequency: `always`, `hourly`, `daily`, `weekly`, `monthly`, `yearly`, `never` | -             | `changeFreq: 'daily'`                              |
+| `debug`           | `--debug`                  | Show some useful logs                                                                     | -             | `debug: true`                                      |
+| `transform`       | -                          | Customize or exclude each page, see [Transform](#-transform)                              | -             | `transform: (config, path) => ({ priority: 0.8 })` |
+| -                 | `--help`, `-h`             | Display usage info                                                                        | -             | -                                                  |
+| -                 | `--version`, `-v`          | Show version                                                                              | -             | -                                                  |
 
 ## 🪄 Transform
 

@@ -67,6 +67,7 @@ If the project already runs `svelte-sitemap` as a `postbuild` script or uses `sv
 | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | `domain`          | Required. Full production URL.                                                                                                             |
 | `outDir`          | Folder with the prerendered HTML. Default `build`.                                                                                         |
+| `fileName`        | Output file name. Default `sitemap.xml`. Set e.g. `sitemap-main.xml` when `sitemap.xml` is a hand-written sitemap index that links to it.  |
 | `trailingSlashes` | `true` when SvelteKit uses `trailingSlash: 'always'`.                                                                                      |
 | `ignore`          | Pages to leave out, relative to `outDir`: names or glob patterns, e.g. `['404', 'admin', '**/drafts/**']`.                                 |
 | `additional`      | Extra paths that have no prerendered file, e.g. SPA routes: `['contact', 'pricing']`.                                                      |

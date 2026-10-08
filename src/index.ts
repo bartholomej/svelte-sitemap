@@ -1,6 +1,6 @@
 import { APP_NAME, INTEGRATION_METHODS, OUT_DIR } from './const.js';
 import type { IntegrationMethod, OptionsSvelteSitemap } from './dto/index.js';
-import { prepareData, writeSitemap } from './helpers/global.helper.js';
+import { prepareData, prepareFileName, writeSitemap } from './helpers/global.helper.js';
 import {
   cliColors,
   errorMsgWrite,
@@ -43,7 +43,10 @@ export const createSitemap = async (
   if (json.length) {
     writeSitemap(json, options, options.domain);
   } else {
-    console.error(cliColors.red, errorMsgWrite(options.outDir ?? OUT_DIR, 'sitemap.xml'));
+    console.error(
+      cliColors.red,
+      errorMsgWrite(options.outDir ?? OUT_DIR, prepareFileName(options))
+    );
   }
 };
 
