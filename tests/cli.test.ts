@@ -126,9 +126,7 @@ describe('CLI tests', () => {
       const out = stdout + stderr;
 
       expect(out).toContain('Reading config file');
-      expect(out).toContain(
-        'Invalid properties in config file, so I ignore them: invalidProp, nope'
-      );
+      expect(out).toContain('Unknown options, so I ignore them: invalidProp, nope');
     } finally {
       rmSync(tempDir, { recursive: true, force: true });
     }
@@ -147,7 +145,7 @@ describe('CLI tests', () => {
       const out = stdout + stderr;
 
       expect(out).toContain('Reading config file');
-      expect(out).not.toContain('Invalid properties in config file');
+      expect(out).not.toContain('Unknown options');
     } finally {
       rmSync(tempDir, { recursive: true, force: true });
     }

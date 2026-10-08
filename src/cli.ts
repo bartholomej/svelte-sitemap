@@ -3,7 +3,7 @@ import minimist from 'minimist';
 import pkg from './../package.json' with { type: 'json' };
 import { CONFIG_FILES, INTEGRATION_METHODS, REPO_URL } from './const.js';
 import type { ChangeFreq, OptionsSvelteSitemap } from './dto/index.js';
-import { defaultConfig, loadConfig, withDefaultConfig } from './helpers/config.js';
+import { loadConfig, withDefaultConfig } from './helpers/config.js';
 import { cliColors, errorMsgGeneration } from './helpers/vars.helper.js';
 import { createSitemap, printIntro } from './index.js';
 const version = pkg.version;
@@ -79,15 +79,6 @@ const main = async () => {
     // --- CONFIG FILE PATH ---
     const hasCliOptions = process.argv.slice(2).length > 0;
     console.log(cliColors.green, `  ✔ Reading config file...`);
-
-    const allowedKeys = Object.keys(defaultConfig);
-    const invalidKeys = Object.keys(config).filter((key) => !allowedKeys.includes(key));
-    if (invalidKeys.length > 0) {
-      console.log(
-        cliColors.yellow,
-        `  ⚠ Invalid properties in config file, so I ignore them: ${invalidKeys.join(', ')}`
-      );
-    }
 
     if (hasCliOptions) {
       console.log(

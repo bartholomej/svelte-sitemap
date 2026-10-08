@@ -1,5 +1,6 @@
 import { APP_NAME, INTEGRATION_METHODS, OUT_DIR } from './const.js';
 import type { IntegrationMethod, OptionsSvelteSitemap } from './dto/index.js';
+import { validateOptions } from './helpers/config.js';
 import { prepareData, writeSitemap } from './helpers/global.helper.js';
 import {
   cliColors,
@@ -30,20 +31,22 @@ export const createSitemap = async (
 ): Promise<void> => {
   printIntro(method);
 
-  if (options?.debug) {
-    console.log('OPTIONS', options);
+  const config = validateOptions(options);
+
+  if (config.debug) {
+    console.log('OPTIONS', config);
   }
 
-  const json = await prepareData(options.domain, options);
+  const json = await prepareData(config.domain, config);
 
-  if (options?.debug) {
+  if (config.debug) {
     console.log('RESULT', json);
   }
 
   if (json.length) {
-    writeSitemap(json, options, options.domain);
+    writeSitemap(json, config, config.domain);
   } else {
-    console.error(cliColors.red, errorMsgWrite(options.outDir ?? OUT_DIR, 'sitemap.xml'));
+    console.error(cliColors.red, errorMsgWrite(config.outDir ?? OUT_DIR, 'sitemap.xml'));
   }
 };
 
