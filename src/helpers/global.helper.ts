@@ -8,6 +8,7 @@ import { CHANGE_FREQ, CHUNK, OUT_DIR } from '../const.js';
 import type { ChangeFreq, Options, OptionsSvelteSitemap, PagesJson } from './../dto/index.js';
 import {
   cliColors,
+  errorMsgAllExcluded,
   errorMsgFolder,
   errorMsgHtmlFiles,
   errorMsgWrite,
@@ -53,7 +54,7 @@ export const removeHtml = (fileName: string) => {
 };
 
 export async function prepareData(domain: string, options?: Options): Promise<PagesJson[]> {
-  const FOLDER = options?.outDir ?? OUT_DIR;
+  const FOLDER = getOutDir(options);
 
   const ignore = prepareIgnored(options?.ignore);
   const changeFreq = prepareChangeFreq(options);
@@ -128,10 +129,15 @@ export async function prepareData(domain: string, options?: Options): Promise<Pa
   detectErrors(
     {
       folder: !fs.existsSync(FOLDER),
-      htmlFiles: !pages.length
+      htmlFiles: !pages.length,
+      ignored: !pages.length && !!ignore && (await fg('**/*.html', { cwd: FOLDER })).length > 0
     },
     FOLDER
   );
+
+  if (pages.length && !results.length) {
+    console.error(cliColors.red, errorMsgAllExcluded('transform'));
+  }
 
   await checkPrerenderRoutes(pages, FOLDER, options);
 
@@ -139,11 +145,13 @@ export async function prepareData(domain: string, options?: Options): Promise<Pa
 }
 
 export const detectErrors = (
-  { folder, htmlFiles }: { folder: boolean; htmlFiles: boolean },
+  { folder, htmlFiles, ignored }: { folder: boolean; htmlFiles: boolean; ignored?: boolean },
   outDir: string = OUT_DIR
 ) => {
   if (folder && htmlFiles) {
     console.error(cliColors.red, errorMsgFolder(outDir));
+  } else if (htmlFiles && ignored) {
+    console.error(cliColors.red, errorMsgAllExcluded('ignore'));
   } else if (htmlFiles) {
     // If no page exists, then the static adapter is probably not used
     console.error(cliColors.red, errorMsgHtmlFiles(outDir));
@@ -173,7 +181,7 @@ export const checkPrerenderRoutes = async (pages: string[], outDir: string, opti
 };
 
 export const writeSitemap = (items: PagesJson[], options: Options, domain: string): void => {
-  const outDir = options?.outDir ?? OUT_DIR;
+  const outDir = getOutDir(options);
 
   if (items?.length <= CHUNK.maxSize) {
     createFile(items, options, outDir);
@@ -185,7 +193,7 @@ export const writeSitemap = (items: PagesJson[], options: Options, domain: strin
 
     console.log(
       cliColors.cyanAndBold,
-      `> Oh, your site is huge! Writing sitemap in chunks of ${numberOfChunks} pages and its index sitemap.xml`
+      `> Oh, your site is huge! Writing ${numberOfChunks} sitemaps of up to ${CHUNK.maxSize} pages and their index sitemap.xml`
     );
 
     for (let i = 0; i < items.length; i += CHUNK.maxSize) {
@@ -312,12 +320,15 @@ const prepareChangeFreq = (options: Options): ChangeFreq => {
     } else {
       console.log(
         cliColors.red,
-        `  × Option \`--change-freq ${options.changeFreq}\` is not a valid value. Allowed values: ${CHANGE_FREQ.join(', ')}`
+        `  × Change frequency '${options.changeFreq}' is not valid, so I ignore it. Allowed values: ${CHANGE_FREQ.join(', ')}`
       );
     }
   }
   return result;
 };
+
+const getOutDir = (options: Options): string =>
+  path.normalize(options?.outDir ?? OUT_DIR).replace(/(.)[\\/]+$/, '$1');
 
 const getSlash = (domain: string) => (domain.split('/').pop() ? '/' : '');
 

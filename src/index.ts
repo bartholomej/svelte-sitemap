@@ -1,13 +1,8 @@
-import { APP_NAME, INTEGRATION_METHODS, OUT_DIR } from './const.js';
+import { APP_NAME, INTEGRATION_METHODS } from './const.js';
 import type { IntegrationMethod, OptionsSvelteSitemap } from './dto/index.js';
 import { validateOptions } from './helpers/config.js';
 import { prepareData, writeSitemap } from './helpers/global.helper.js';
-import {
-  cliColors,
-  errorMsgWrite,
-  getDeprecationWarning,
-  methodMsg
-} from './helpers/vars.helper.js';
+import { cliColors, getDeprecationWarning, methodMsg } from './helpers/vars.helper.js';
 
 let introPrinted = false;
 
@@ -45,8 +40,6 @@ export const createSitemap = async (
 
   if (json.length) {
     writeSitemap(json, config, config.domain);
-  } else {
-    console.error(cliColors.red, errorMsgWrite(config.outDir ?? OUT_DIR, 'sitemap.xml'));
   }
 };
 

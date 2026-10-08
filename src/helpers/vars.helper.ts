@@ -1,3 +1,4 @@
+import path from 'path';
 import type { IntegrationMethod } from '../const.js';
 import { INTEGRATION_METHODS, REPO_URL } from '../const.js';
 
@@ -8,13 +9,18 @@ export const cliColors = {
   yellow: '\x1b[33m%s\x1b[0m'
 };
 
-export const successMsg = (outDir: string, filename: string) =>
-  `  ✔ Done. Check your new sitemap here: ./${outDir}/${filename}`;
+export const successMsg = (outDir: string, filename: string) => {
+  const file = path.join(outDir, filename);
+  return `  ✔ Done. Check your new sitemap here: ${path.isAbsolute(file) ? file : `./${file}`}`;
+};
 
 export const errorMsgWrite = (outDir: string, filename: string) =>
   `  × File '${outDir}/${filename}' could not be created.`;
 
 export const errorMsgGeneration = `  × Sitemap generation failed.`;
+
+export const errorMsgAllExcluded = (option: 'ignore' | 'transform') =>
+  `  × All pages were excluded by the '${option}' option, so the sitemap was not created.`;
 
 export const errorMsgFolder = (outDir: string) =>
   `  × Folder '${outDir}/' doesn't exist.\n` +
