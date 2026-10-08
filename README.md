@@ -23,6 +23,8 @@ npm install svelte-sitemap --save-dev
 # bun add -d svelte-sitemap
 ```
 
+Requires Node.js 20+ and SvelteKit 2 or 3. The Vite plugin needs Vite 5+.
+
 ## 🚀 Usage
 
 > If you're using SvelteKit with Vite (which is the default), you can integrate the sitemap generation directly into the Vite build pipeline.
@@ -44,6 +46,8 @@ export default defineConfig({
 ```
 
 The sitemap is generated automatically at the end of every `vite build`. All [options](#%EF%B8%8F-options) are supported.
+
+> **SvelteKit 3:** keep your `sveltekit({ adapter: … })` options as they are and just add `svelteSitemap()` after it. Examples in this README use plain `sveltekit()` for brevity.
 
 ---
 
@@ -338,22 +342,43 @@ Or check out [other solutions](https://github.com/bartholomej/svelte-sitemap/iss
 
 ### 🟠 Cloudflare adapter
 
-If you're using `@sveltejs/adapter-cloudflare`, you need to exclude `sitemap.xml` from Cloudflare's routing in `svelte.config.js`:
+`@sveltejs/adapter-cloudflare` writes prerendered pages to `.svelte-kit/cloudflare`, so set `outDir` to it and ignore the `404.html` page the adapter creates:
 
-```diff
--import adapter from '@sveltejs/adapter-auto';
-+import adapter from '@sveltejs/adapter-cloudflare';
+```typescript
+// vite.config.ts
+import { sveltekit } from '@sveltejs/kit/vite';
+import { svelteSitemap } from 'svelte-sitemap/vite';
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+  plugins: [
+    sveltekit(),
+    svelteSitemap({
+      domain: 'https://www.example.com',
+      outDir: '.svelte-kit/cloudflare',
+      ignore: ['404.html']
+    })
+  ]
+});
+```
+
+Then exclude `sitemap.xml` from Cloudflare's routing in `svelte.config.js`:
+
+```javascript
+// svelte.config.js
+import adapter from '@sveltejs/adapter-cloudflare';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-    kit: {
--       adapter: adapter()
-+       adapter: adapter({ routes: { include: ['/*'], exclude: ['<all>', '/sitemap.xml'] }})
-    }
+  kit: {
+    adapter: adapter({ routes: { include: ['/*'], exclude: ['<all>', '/sitemap.xml'] } })
+  }
 };
 
 export default config;
 ```
+
+> **SvelteKit 3** no longer uses `svelte.config.js`. Pass the adapter to the Vite plugin instead: `sveltekit({ adapter: adapter({ routes: { … } }) })`.
 
 ---
 
