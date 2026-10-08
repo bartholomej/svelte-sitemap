@@ -290,6 +290,16 @@ Migrating from the CLI or config file to the Vite plugin is quick and straightfo
    });
    ```
 
+## 🤖 AI agents
+
+This repo ships an [Agent Skill](https://agentskills.io) that teaches coding agents (Claude Code, Cursor, Codex and others) how to set up `svelte-sitemap`: it checks your SvelteKit version and adapter, configures the plugin and verifies the generated sitemap.
+
+```bash
+npx skills add bartholomej/svelte-sitemap
+```
+
+Then ask your agent, e.g. _"Add a sitemap to my SvelteKit app"_.
+
 ## 🙋 FAQ
 
 ### 🙈 How to exclude a directory?
