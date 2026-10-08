@@ -638,6 +638,24 @@ describe('Page paths', () => {
     ]);
   });
 
+  test('Additional pages that are already prerendered are listed once', async () => {
+    const json = await prepareData('https://example.com', {
+      outDir: DIR,
+      additional: ['reindex', '/search-index/', '/']
+    });
+
+    expect(json.map((item) => item.page)).toEqual(expected);
+  });
+
+  test('Pages that transform maps to the same loc are listed once', async () => {
+    const json = await prepareData('https://example.com', {
+      outDir: DIR,
+      transform: () => ({ loc: '/same' })
+    });
+
+    expect(json.map((item) => item.loc)).toEqual(['https://example.com/same']);
+  });
+
   test('Additional pages with a leading slash', async () => {
     const json = await prepareData('https://example.com', {
       outDir: DIR,

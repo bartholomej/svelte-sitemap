@@ -65,6 +65,7 @@ export async function prepareData(domain: string, options?: Options): Promise<Pa
   pages.sort();
 
   const results: PagesJson[] = [];
+  const seen = new Set<string>();
 
   for (const page of pages) {
     const url = getUrl(page, domain, options);
@@ -120,6 +121,8 @@ export async function prepareData(domain: string, options?: Options): Promise<Pa
         item.page = item.loc;
       }
 
+      if (seen.has(item.loc)) continue;
+      seen.add(item.loc);
       results.push(item);
     }
   }
